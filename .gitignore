@@ -1,1 +1,11 @@
-.DS_store
+# OS
+.DS_Store
+
+# Obsidian - 端末固有設定は除外（テーマ・プラグイン設定は追跡する）
+.obsidian/workspace.json
+.obsidian/workspace-mobile.json
+.obsidian/cache
+.obsidian/plugins/*/data.json
+
+# Trash
+.trash/
