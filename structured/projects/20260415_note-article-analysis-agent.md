@@ -49,6 +49,7 @@
 * **非公式API v3 をメインに採用**: 公式APIが存在しないため。スキ数・有料フラグ・フォロワー数など豊富なデータが取得可能
 * **スクレイピングはフォールバック**: 利用規約で明示禁止はないが、API優先で負荷を最小化
 * **レート制限対策**: 1〜3秒ディレイ設定で対応
+* **定期実行基盤として GitHub Actions を採用**: Cloudflare Workers・Vercel・GAS・Google Colab と比較検討の上で決定。理由は「4. 学びとナレッジ > 定期実行基盤 技術選定メモ」参照
 
 ---
 
@@ -90,6 +91,28 @@
 * robots.txt では `/n/*`（記事）`/m/*`（マガジン）のクロールは許可されている
 * 有料記事の本文は購入ユーザー権限が必要なため、タイトル・冒頭部分のみ取得可能
 * RSS はユーザー別のみで、タグ別・人気記事別のフィードは存在しない
+
+#### 定期実行基盤 技術選定メモ（2026/04/15）
+
+| 選択肢 | 実行時間上限 | 言語 | 無料cron頻度 | 今回の評価 |
+|---|---|---|---|---|
+| **GitHub Actions** | 6時間 | 何でも可 | 制限なし（Public は完全無料） | **採用** |
+| Cloudflare Workers | 30秒（無料）/ 15分（有料） | JS/TS のみ | 可 | 実行時間・言語がネック |
+| Vercel | 10秒（無料）/ 60秒（Pro） | JS/TS 主体 | 1日1回（無料） | 実行時間・コストがネック |
+| Google Apps Script | 6分/回 | JS のみ | 可（無料） | JS のみ・6分制限がネック |
+| Google Colab | セッション依存 | Python | 非対応（手動） | 自動化に不向き |
+
+**決定理由**
+* このエージェントは「rate limit ディレイ込みの API フェッチ（20件）+ Claude API 呼び出し」で 1〜2分かかる見込み
+* Cloudflare Workers（30秒）・Vercel（10秒）・GAS（6分）は実行時間がネック
+* Colab は自動化非対応
+* GitHub Actions は Public リポジトリなら完全無料・Python ネイティブ・6時間制限で余裕
+
+**コスト試算（毎日1回実行）**
+* GitHub Actions: $0（Public リポジトリ）
+* Claude Haiku（テーマ判定 × 20件）: 約45円/月
+* Claude Sonnet（通知文生成 × 10件）: 約135円/月
+* **合計: 約180円/月**
 
 ---
 
@@ -144,10 +167,22 @@
 
 `#生成AI` `#ChatGPT` `#LLM` `#Claude` `#AI活用` `#組織変革` `#経営` `#マーケティング`
 
-### スコアリング式（案）
+### スコアリング設計（確定版・2軸）
 
-```
-スコア = (スキ数 × 0.3) + (コメント数 × 0.3) + (フォロワー数 × 0.2) + (有料判定 × 0.2)
+```python
+# バズスコア: 1日あたりの engagement 速度
+days = max((now - published_at).days + 0.5, 0.5)
+engagement_weight = likes + comments * 2
+buzz_score = (engagement_weight / days) * (1.2 if is_paid else 1.0)
+
+# エンゲージメント率スコア: フォロワー規模比（無名クリエイターの良記事を拾う）
+eng_score = (engagement_weight / max(creator_followers, 100)) * (1.2 if is_paid else 1.0)
+
+# LLM テーマ判定（Claude Haiku）でテーマ適合スコア 0.0〜1.0 を取得し乗算
+final_buzz = buzz_score * theme_score
+final_eng  = eng_score  * theme_score
+
+# 各軸上位5件の Union（重複除去）→ 最大10件を配信
 ```
 
 ### 主要APIエンドポイント
@@ -211,3 +246,4 @@ GET https://note.com/api/v2/creators/{creator_id}
 | 日時 | 更新内容の概要 |
 |---|---|
 | 2026/04/15 | ファイル作成（init）— 壁打ちセッションの調査結果・方針を初期投入 |
+| 2026/04/15 | 技術選定メモ追記（実行基盤比較・スコアリング確定版・コスト試算） |
