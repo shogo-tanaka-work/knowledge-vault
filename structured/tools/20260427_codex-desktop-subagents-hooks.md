@@ -153,7 +153,48 @@ command = "/Volumes/PortableSSD/Documents/AIツールPoCの場所/Codex/scripts/
 
 ---
 
-## 6. 学びとナレッジ
+## 6. コンテキストウィンドウ比較（アクセス経路別）
+
+### モデル別・経路別サイズ（2026年4月現在）
+
+| アクセス経路 | GPT-5.4 | GPT-5.5 | gpt-5.4-mini |
+|---|---|---|---|
+| **API** | 1,050,000 | 1,050,000 | 400,000 |
+| **ChatGPT（ブラウザ/アプリ）** | 1,050,000 | 1,050,000 | 400,000 |
+| **Codex Desktop** | 400,000 | 400,000 | — |
+| **Codex CLI（公称）** | 400,000 | 400,000 | — |
+| **Codex CLI（実効値）** | ~258,400 | ~258,400 | — |
+
+### 重要な発見
+
+**Codexは上限が400Kに制限されている**
+APIやChatGPTでは1,050,000トークン使えるが、Codex Desktop・CLIはモデル仕様の約1/3に絞られている。
+
+**Codex CLIの実効値はさらに低い（既知のバグ）**
+CLIが「272K入力 + 128K出力 = 400K」という分割値を誤認し、実際には約258,400トークンしか使えない状態。GitHubで修正要求のIssueが上がっている（[#19319](https://github.com/openai/codex/issues/19319)）。
+
+**GPT-5.5リリース後、Codexでの1M設定が機能しなくなった**
+GPT-5.4のときはconfig.tomlで1M設定が動いていたケースがあったが、5.5リリース後に機能しなくなったとの報告多数（[#19208](https://github.com/openai/codex/issues/19208)）。
+
+### サブエージェント必要性との関係
+
+Codexはコンテキストが意図的に絞られているため、大規模プロジェクトほどサブエージェントで分割処理する必要性が高い。
+
+```
+ChatGPT/API : 1,050,000トークン（本の約800ページ分）
+Codex Desktop:   400,000トークン（約300ページ分）
+Codex CLI実効:   258,400トークン（約200ページ分）
+```
+
+### 参考URL
+- [GPT-5.4 Model | OpenAI API Docs](https://developers.openai.com/api/docs/models/gpt-5.4)
+- [GPT-5.5 Model | OpenAI API Docs](https://developers.openai.com/api/docs/models/gpt-5.5)
+- [Issue #19319: Codex CLIのコンテキスト誤認バグ](https://github.com/openai/codex/issues/19319)
+- [Issue #19208: GPT-5.5リリース後に1M設定が機能しない](https://github.com/openai/codex/issues/19208)
+
+---
+
+## 7. 学びとナレッジ
 
 ### サブエージェント
 - `.codex/agents/` にtomlを置くだけ。設定ファイル不要で即使える
@@ -168,6 +209,7 @@ command = "/Volumes/PortableSSD/Documents/AIツールPoCの場所/Codex/scripts/
 ### ビジネス活用観点
 - サブエージェントは「複数担当者を同時アサインする感覚」
 - Hooksは「AIの行動にコンプライアンス・承認・ログを自動連動させる仕組み」
+- Codexはコンテキストが400K（実効258K）に制限されているため、大規模タスクではサブエージェント分割が必須
 - コンテキストウィンドウが大きくても並列処理が有効な理由：各エージェントが専用のクリーンなコンテキストで集中できるため品質が上がる
 
 ---
