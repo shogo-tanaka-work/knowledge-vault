@@ -1,19 +1,32 @@
-# STT API 比較・使い分けガイド
+# STT API 比較・使い分けガイド（決定版）
 
-**最終更新**: 2026-05-01（全体最新化・データプライバシーポリシー追記）
+**最終更新**: 2026-05-01  
+**対象読者**: 音声認識（STT）APIを選定・導入したい開発者・受講生
 
 ---
 
 ## このドキュメントの読み方
 
 ```
-個人情報・医療カルテ等を音声処理する予定がない場合
-→ セクション4〜9は読み飛ばしてOK
-→「1. クラウドSTT API比較」→「2. 推薦：OpenAI APIを選ぶ理由」→「3. ユースケース別推薦」だけ読めば十分
+個人情報・医療カルテ等を扱わない場合
+→ セクション1〜3だけ読めばOK
 
 個人情報・カルテデータを扱う場合
-→「4. ローカルLLMが必要な判断基準」→「8. データプライバシー・学習利用ポリシー」も必読
+→ セクション4〜8も必読
 ```
+
+---
+
+## 結論（2026年5月時点）
+
+| 目的 | 推薦サービス |
+|-----|------------|
+| **新規プロジェクト・日本語精度重視** | **ElevenLabs Scribe v2** |
+| OpenAI互換のまま安くしたい | Groq Whisper v3 Turbo |
+| 個人情報・カルテを含む音声 | ローカルOSSまたは国産オンプレ |
+
+> **ゼロベースで始めるなら ElevenLabs Scribe v2 が現時点のベストチョイス。**  
+> 日本語WER 2.2%（業界最高）、コスト $0.0037/分、リアルタイム150ms、日本語「Excellent」公式保証。
 
 ---
 
@@ -21,97 +34,106 @@
 
 ### コスト（1分あたり）
 
-| サービス                              | バッチ     | ストリーミング | 備考                     |
-| --------------------------------- | ------- | ------- | ---------------------- |
-| **OpenAI whisper-1**              | $0.006  | ✕ 非対応   | バッチ処理専用                |
-| **OpenAI gpt-4o-mini-transcribe** | $0.003  | $0.003  | 2025年12月〜。最安OpenAI     |
-| **OpenAI gpt-4o-transcribe**      | $0.006  | $0.006  | バッチ・ストリーミング両対応。現行推薦モデル |
-| **Google STT v2 (Dynamic Batch)** | $0.003  | $0.016  | 大量バッチに有利               |
-| **Azure Speech**                  | $0.006  | $0.0167 | 5時間/月無料枠あり             |
-| **Amazon Transcribe**             | $0.024  | $0.024  | 15秒最低課金・割高             |
-| **Deepgram Nova-3**               | $0.0043 | $0.0077 | 低レイテンシ特化               |
-| **AssemblyAI Universal-2**        | $0.0045 | $0.0025 | 機能追加は別料金               |
-| **Rev.ai**                        | $0.003  | —       | 日本語はForeignモデル($0.005) |
+| サービス | バッチ | ストリーミング | 備考 |
+|---------|:-----:|:-----------:|------|
+| **ElevenLabs Scribe v2** | $0.0037 | ✕ | バッチ専用。精度業界最高 |
+| **ElevenLabs Scribe v2 Realtime** | — | $0.0065 | リアルタイム専用。150ms |
+| **Groq Whisper v3 Turbo** | $0.00067 | ✕ | OpenAI完全互換。最安バッチクラス |
+| **fal.ai Wizper** | $0.0005 | ✕ | 最安値。バッチ特化 |
+| **Deepgram Nova-3** | $0.0043 | $0.0077 | 低レイテンシ・日英混在対応 |
+| **AssemblyAI Universal-2** | $0.0045 | $0.0025 | 話者分離等機能追加は別料金 |
+| **Gladia Solaria-1** | $0.0041〜 | $0.0042〜 | ミーティング文字起こし特化 |
+| **OpenAI gpt-4o-transcribe** | $0.006 | $0.006 | バッチ・ストリーミング両対応 |
+| **OpenAI gpt-4o-mini-transcribe** | $0.003 | $0.003 | 2025年12月以降に改善済み |
+| **OpenAI whisper-1** | $0.006 | ✕ | レガシー。新規開発では非推奨 |
+| **Google STT v2 (Dynamic Batch)** | $0.003 | $0.016 | 大量バッチに有利 |
+| **Azure Speech** | $0.006 | $0.0167 | 5時間/月無料枠。日本リージョンあり |
+| **Amazon Transcribe** | $0.024 | $0.024 | 割高・15秒最低課金。学習利用に注意 |
+| **Rev.ai** | $0.003 | — | 日本語は外国語モデル扱い ($0.005) |
 
-### レイテンシー（ストリーミング）
+### レイテンシー（ストリーミング対応サービス）
 
-| サービス | 参考レイテンシー | ストリーミング |
-|---------|--------------|:-----------:|
-| Deepgram Nova-3 | <300ms（最速クラス） | ◎ |
+| サービス | レイテンシー | 品質 |
+|---------|:---------:|:---:|
+| **Gladia Solaria-1** | **103ms**（partials） | ◎ |
+| **ElevenLabs Scribe v2 Realtime** | **150ms** | ◎ |
 | OpenAI Realtime API | ~232ms（不安定報告あり） | ○ |
+| Deepgram Nova-3 | <300ms | ◎ |
+| AssemblyAI | ~300ms | ○ |
 | Google STT v2 | ~350ms | ◎ |
 | Azure Speech | ~450ms | ◎ |
-| AssemblyAI | ~300ms | ○ |
 | Amazon Transcribe | 600〜800ms | ○ |
-| **whisper-1** | **N/A（バッチのみ）** | ✕ |
 
 ### 日本語精度（WER：低いほど高精度）
 
-Soniox社ベンチマーク2025年版（YouTube実音声・二重チェック済み）
-
-| サービス | 日本語WER |
-|---------|:--------:|
-| Soniox | 8.7%（自社主催バイアス注意） |
-| Deepgram Nova-3 | 11.7% |
-| **OpenAI gpt-4o-transcribe** | **13.8%** |
-| Azure Speech | 14.0% |
-| Google STT | 14.2% |
-| AssemblyAI | 14.8% |
-| Amazon Transcribe | 16.2% |
+| サービス | 日本語WER | 出典 |
+|---------|:--------:|------|
+| **ElevenLabs Scribe v2** | **2.2%** | Artificial Analysis 2025〜2026年 |
+| Soniox | 8.7% | 自社主催ベンチマーク（バイアス注意） |
+| Groq / fal.ai Wizper | ~5〜8% | Whisper large-v3相当 |
+| Deepgram Nova-3 | 11.7% | Soniox 2025年版 |
+| OpenAI gpt-4o-transcribe | 13.8% | Soniox 2025年版 |
+| Azure Speech | 14.0% | Soniox 2025年版 |
+| Google STT | 14.2% | Soniox 2025年版 |
+| AssemblyAI | 14.8% | Soniox 2025年版 |
+| Amazon Transcribe | 16.2% | Soniox 2025年版 |
 
 ---
 
-## 2. 推薦：OpenAI API（gpt-4o-transcribe）を選ぶ理由
-
-> **2026年5月時点の推薦モデル**:  
-> - 精度重視 → `gpt-4o-transcribe`（whisper-1と同価格でWER約22%向上）  
-> - コスト重視 → `gpt-4o-mini-transcribe`（2025年12月スナップショット以降に改善済み。OpenAI公式推奨）  
-> - `whisper-1` はレガシー扱い。新規開発では非推奨。  
-> - GPT-5系・o3/o4系の専用STTモデルは2026年5月時点で存在しない。
+## 2. 推薦：ElevenLabs Scribe v2 を選ぶ理由
 
 ### 強み
 
 | 観点 | 評価 | 補足 |
 |------|:----:|------|
-| コスト | ◎ | $0.006/分。Amazonの75%安。Azure・Googleと同水準 |
-| 日本語対応 | ◎ | 100+言語対応、日英混在コンテンツに強い |
-| 導入の容易さ | ◎ | REST API一本。SDK充実。インフラ不要 |
-| 精度進化 | ◎ | gpt-4o-transcribeでWER 5.3%→4.1%（約22%改善）。同価格 |
-| エコシステム | ◎ | 日本語コミュニティ・事例が最も豊富 |
+| 日本語精度 | ◎ | WER 2.2%。業界最高。「Excellent（WER≤5%）」を公式保証 |
+| コスト | ◎ | $0.0037/分。OpenAI比40%安、Amazon比85%安 |
+| リアルタイム | ◎ | Scribe v2 Realtime で150ms（2025年11月〜） |
+| 話者分離 | ◎ | 最大32名まで対応。追加料金なし |
+| 多言語 | ◎ | 99言語対応 |
 
 ### 弱み・トレードオフ
 
 | 観点 | 評価 | 補足 |
 |------|:----:|------|
-| レイテンシー | △ | gpt-4o-transcribeは~1,598ms。whisper-1(~857ms)より遅い。リアルタイム用途は別途検討 |
+| OpenAI互換 | ✕ | 独自APIスキーマ。既存のOpenAI SDKコードは移行作業が必要 |
 | データ処理地 | ✕ | 日本リージョンなし。音声データは米国処理 |
-| 最高精度 | △ | 日本語WER 13.8%。Deepgram(11.7%)には劣る。Qwen3-ASR-1.7bがCERで上回り始めている |
-| ハルシネーション | △ | 無音・BGM区間で誤変換が発生しうる。VAD前処理で緩和可能（Calm-Whisperで研究段階では80%超削減されたがAPI反映は未確認） |
+| エコシステム | △ | OpenAIと比べて日本語の事例・記事が少ない |
+| 個人情報・医療データ | ✕ | 通常プランはNG。→ セクション4・7参照 |
 
-### 一言まとめ
+### OpenAI APIとの比較まとめ
 
-> **最安でも最高精度でもないが、コスト・品質・使いやすさのどの観点でも合格点を出せる唯一の選択肢。**  
-> 特定要件（超低レイテンシ・国内処理必須・最高精度）がなければ、最初に選ぶべき標準解。  
-> 同価格で精度が高い `gpt-4o-transcribe` への移行が現時点での推奨。
+| 観点 | ElevenLabs Scribe v2 | OpenAI gpt-4o-transcribe |
+|-----|:------------------:|:----------------------:|
+| 日本語WER | **2.2%** | 13.8% |
+| バッチコスト | **$0.0037** | $0.006 |
+| リアルタイムレイテンシー | **150ms** | ~1,598ms |
+| OpenAI互換 | ✕ | ◎ |
+| 日本語品質の公式保証 | **◎ 明示** | △ 言及なし |
+
+> **ゼロベースの新規実装であれば、すべての観点でElevenLabsが上回る。**  
+> 既存コードがOpenAI SDK前提の場合は、Groq Whisper（OpenAI互換・$0.00067/分）への移行が現実的。
 
 ---
 
 ## 3. ユースケース別推薦
 
-| ユースケース             | 推薦                                | 理由                            |
-| ------------------ | --------------------------------- | ----------------------------- |
-| 汎用バッチ文字起こし（個人情報なし） | **OpenAI gpt-4o-transcribe**      | 同価格でwhisper-1より精度22%向上        |
-| コスト重視 | **OpenAI gpt-4o-mini-transcribe** | $0.003/分。2025年12月スナップショット以降に改善済み・OpenAI公式推奨 |
-| リアルタイム会話・コールセンター   | **Deepgram Nova-3**               | <300msレイテンシ、日英混在対応            |
-| 大量バッチ（コスト最優先）      | **Google STT v2 Dynamic Batch**   | $0.003/分で最安水準                 |
-| 日本国内データ処理必須        | **Azure Speech (Japan East)**     | APPI対応・国内処理明確                 |
-| 日本語精度最優先           | **Deepgram Nova-3**               | WER 11.7%                     |
+| ユースケース | 推薦 | 理由 |
+|------------|------|------|
+| **新規・日本語精度重視（個人情報なし）** | **ElevenLabs Scribe v2** | WER 2.2%・コスト・リアルタイム全方位最良 |
+| OpenAI互換のまま移行したい | **Groq Whisper v3 Turbo** | $0.00067/分・エンドポイントURLを変えるだけ |
+| バッチ処理・コスト最安 | **fal.ai Wizper** | $0.0005/分・250x realtime速度 |
+| リアルタイム会話・コールセンター | **ElevenLabs Scribe v2 Realtime** | 150ms・話者分離32名 |
+| ミーティング・会議文字起こし | **Gladia Solaria-1** | partials 103ms・話者分離込み |
+| 大量バッチ（コスト最優先） | **Google STT v2 Dynamic Batch** | $0.003/分で最安水準 |
+| 日本国内データ処理必須 | **Azure Speech (Japan East)** | APPI対応・国内処理が最も明確 |
+| 個人情報・カルテ含む音声 | **ローカルOSS or 国産オンプレ** | → セクション4〜8参照 |
 
 ---
 
-## 4. ローカルLLMが必要な判断基準
+## 4. ローカルモデルが必要な判断基準
 
-> **個人情報・医療カルテ等を音声処理する予定がない場合、このセクションは読み飛ばしてOKです。**
+> **個人情報・医療カルテ等を扱わない場合、このセクション以降は読み飛ばしてOKです。**
 
 ### ローカルを選ぶべき3つのケース
 
@@ -123,7 +145,7 @@ Soniox社ベンチマーク2025年版（YouTube実音声・二重チェック済
    （厚労省ガイドライン第6.0版・APPI対応が必要）
 
 3. 月100時間以上の大量処理でTCO最小化したい
-   （クラウドAPIより安くなる分岐点）
+   （月100時間超でローカルGPUがクラウドAPIより安くなる）
 ```
 
 ### 法的根拠
@@ -135,30 +157,32 @@ Soniox社ベンチマーク2025年版（YouTube実音声・二重チェック済
 **APPI（個人情報保護法）改正動向**
 - 2025年審議中・**2027年施行見込み**
 - 音声データが「生体データ」として特別カテゴリに分類される可能性あり
-- 今から対応設計しておくことを推奨
+- ElevenLabs・OpenAI等すべての米国クラウドAPIが同様に規制対象
 
 ---
 
 ## 5. ローカルデプロイ可能なOSSモデル比較
 
+### GPU環境向け
+
 | モデル | 日本語精度(CER) | 速度 | 最小GPU | ライセンス | 特徴 |
-|--------|:-------------:|:----:|:------:|:--------:|------|
-| **Whisper large-v3** | 8.5% | 標準 | RTX 3060(12GB) | MIT | 精度最高水準、多言語 |
+|--------|:------------:|:----:|:------:|:--------:|------|
+| **Whisper large-v3** | 8.5% | 標準 | RTX 3060(12GB) | MIT | 精度最高水準・多言語 |
 | **Whisper large-v3-Turbo** | 8.8% | 5.4倍速 | RTX 3060(6GB) | MIT | 精度ほぼ同等・大幅高速化 |
-| **faster-whisper (INT8量子化)** | 同等 | 4倍速 | RTX 3060 | MIT | VRAM削減・実運用向け最適解 |
+| **faster-whisper (INT8量子化)** | 同等 | 4倍速 | RTX 3060 | MIT | VRAM削減・**実運用の推奨** |
 | **kotoba-whisper v2.2** | 9.2% | 6.3倍速 | RTX 3060(8GB) | Apache 2.0 | 日本語特化・話者分離統合。専門用語は要評価 |
-| **ReazonSpeech v2** | 高（詳細非公開） | 低速 | — | Apache 2.0 | 日本語720万件学習 |
+| **ReazonSpeech v2** | 高（非公開） | 低速 | — | Apache 2.0 | 日本語720万件学習 |
 
-**実運用の推奨（GPU環境）**: `faster-whisper large-v3 INT8` が精度・速度・VRAM効率のバランス最良
+**GPU環境での推奨**: `faster-whisper large-v3 INT8`
 
-### GPUなし環境（CPU / Apple Silicon）での動作
+### GPUなし環境（CPU / Apple Silicon）
 
-> **GPUがなくてもWhisper系は動く。ただしモデルサイズと環境によって速度差が大きい。**
+> **GPUがなくてもWhisper系は動く。環境によって速度差が大きい。**
 
-#### Apple Silicon（M1/M2/M3/M4）— 実用的、推奨
+#### Apple Silicon（M1以降）— 実用的
 
-| チップ | whisper.cpp Mediumモデル 10分音声の処理時間 | RTF |
-|--------|:-----------------------------------------:|:---:|
+| チップ | 10分音声の処理時間 | RTF |
+|--------|:---------------:|:---:|
 | M1（MacBook Air） | 約3分 | 0.30x |
 | M1 Pro | 約2分 | 0.20x |
 | M2（MacBook Air） | 約2.5分 | 0.25x |
@@ -167,39 +191,36 @@ Soniox社ベンチマーク2025年版（YouTube実音声・二重チェック済
 
 RTF < 1.0 = リアルタイムより速い。**M1でも十分実用的。**
 
-Apple Siliconでの推奨ツール：
-- **mlx-whisper**: M1 Pro で 29.7x realtime（最速）
-- **whisper.cpp（CoreML有効）**: Metal加速でさらに2〜3倍速
-- ※ faster-whisper は NVIDIA GPU 前提の実装のため Apple Silicon では非効率
+- 推奨ツール: **mlx-whisper**（M1 Pro で 29.7x realtime・最速）
+- faster-whisper は NVIDIA GPU 前提のため Apple Silicon では非効率
 
-#### x86 CPU（Windows/Linux）— 小モデルなら可
+#### x86 CPU（Windows/Linux）
 
-| モデル | CPU速度感 | 推奨度 |
-|--------|:--------:|:------:|
-| tiny / base | RTF < 0.1（超高速） | △ 精度が低い |
-| **small** | RTF ~0.1〜0.2 | ◎ **CPU専用の実用ライン** |
-| medium（量子化） | RTF ~0.3〜0.5 | △ ハイエンドCPUなら許容 |
-| large-v3（量子化なし） | RTF ~2.5以上 | ✕ CPU単独では非現実的 |
+| モデル | 推奨度 | 備考 |
+|--------|:-----:|------|
+| tiny / base | △ | 高速だが精度が低い |
+| **small** | ◎ | **CPU専用の実用ライン**（RTF ~0.1〜0.2） |
+| medium（量子化） | △ | ハイエンドCPUなら許容（RTF ~0.3〜0.5） |
+| large-v3（量子化なし） | ✕ | RTF ~2.5以上・CPU単独では非現実的 |
 
-ツール: `whisper.cpp`（AVX2/AVX-512対応CPUで高速、Windowsビルド済みバイナリあり）
+ツール: `whisper.cpp`（AVX2/AVX-512対応CPUで高速。Windowsビルド済みバイナリあり）
 
 #### 超低スペック端末（Raspberry Pi等）
 
 | ツール | 最小スペック | RTF | 特徴 |
-|-------|:----------:|:---:|------|
-| **Vosk** | Raspberry Pi 3B+ / CPU可 | ~1.0x | モデル50MB〜。精度はWhisperより劣る |
-| **sherpa-onnx** | Raspberry Pi 4 (1GB RAM) | <0.2x | int8モデルで200ms以下のレイテンシ達成 |
-| **Moonshine**（2026年2月〜） | 低リソース設計 | 未計測 | Whisper large-v3超の精度を主張。低リソース向け |
+|-------|:---------:|:---:|------|
+| **Vosk** | Raspberry Pi 3B+ | ~1.0x | 50MB〜。精度はWhisperより劣る |
+| **sherpa-onnx** | Raspberry Pi 4 (1GB RAM) | <0.2x | int8モデルで200ms以下 |
+| **Moonshine**（2026年2月〜） | 低リソース設計 | 未計測 | 低リソース向け・Whisper超精度を主張 |
 
 ### ローカル運用コスト目安（月500時間処理の場合）
 
 | 選択肢 | 月額コスト | 初期費用 |
 |-------|:--------:|:-------:|
-| OpenAI Whisper API | ~$1,800/月 | なし |
+| ElevenLabs Scribe v2 | ~$1,110/月 | なし |
+| OpenAI gpt-4o-transcribe | ~$1,800/月 | なし |
 | ローカル（RTX 4090購入） | 電気代+保守のみ | ~$2,000 |
 | GPUクラウドインスタンス借用 | ~$200〜250/月 | なし |
-
-→ **月100時間超でローカルGPUがTCO優位になる**
 
 ---
 
@@ -236,12 +257,11 @@ Apple Siliconでの推奨ツール：
 
 - `docker-compose up` 1コマンドで起動
 - OpenAIの `/v1/audio/transcriptions` と完全互換
-- **既存コードのエンドポイントURLを変えるだけで移行できる**
+- 既存のOpenAI SDKコードをエンドポイントURLの変更だけで流用可能
 
 ```python
 from openai import OpenAI
 
-# base_url をローカルに向けるだけ
 client = OpenAI(api_key="dummy", base_url="http://localhost:8000")
 
 with open("audio.mp3", "rb") as f:
@@ -257,52 +277,29 @@ print(result.text)
 | プラットフォーム | 特徴 | コスト目安 | 難易度 |
 |--------------|------|:--------:|:------:|
 | **RunPod** | 公式worker（`worker-faster_whisper`）あり | $0.0002〜/リクエスト | ★ |
-| **Modal.com** | Pythonコードだけでデプロイ、オートスケール | $0.0001〜/リクエスト | ★ |
-| **Replicate** | GUIでデプロイ、APIキーだけで呼べる | $0.0023/分 | ★（最簡単） |
+| **Modal.com** | Pythonコードだけでデプロイ・オートスケール | $0.0001〜/リクエスト | ★ |
+| **Replicate** | GUIでデプロイ・APIキーだけで呼べる | $0.0023/分 | ★ |
 | **Hugging Face Inference Endpoints** | GUIでモデル選んでデプロイ | $0.006〜/時間 | ★ |
 
-### ③ 大手クラウド（VPC内閉じた処理が可能）
+### ③ 大手クラウド（VPC内クローズド処理）
 
 | クラウド | サービス | 特徴 |
 |---------|---------|------|
-| **AWS** | SageMaker + JumpStart | Whisper large-v3が公式サポート済み。VPC内で閉じた処理可 |
-| **Azure** | Container Apps（Japan East） | Dockerイメージをそのままデプロイ可。APPI対応明確 |
+| **AWS** | SageMaker + JumpStart | Whisper large-v3が公式サポート済み。VPC内処理可 |
+| **Azure** | Container Apps（Japan East） | DockerイメージそのままデプロイOK。APPI対応明確 |
 | **GCP** | Cloud Run（GPU） | サーバーレスGPUで運用可 |
 
 ---
 
-## 7. 医療・個人情報用途の選択フロー
-
-```
-データを院外に出せない？
-├── YES（医療カルテ・要配慮個人情報等）
-│   ├── 自社サーバーあり
-│   │   → Speaches or whisper-asr-webservice をDockerデプロイ
-│   ├── クラウド内で閉じたい
-│   │   → AWS SageMaker in VPC / Azure Container Apps (Japan East)
-│   └── 国産サポート・SLAが必要
-│       → AmiVoice iNote / mocoVoice医療モデル（オンプレ専用）
-│
-└── NO（個人情報なし・教育/一般用途）
-    ├── 手軽に試したい → Replicate or Hugging Face Endpoints
-    ├── コスト最安    → RunPod or Modal（Serverless）
-    ├── 大量バッチ   → AWS SageMaker 非同期エンドポイント
-    └── 汎用バランス → OpenAI gpt-4o-transcribe ← 大抵これでOK（whisper-1より精度高く同価格）
-```
-
----
-
-## 8. データプライバシー・学習利用ポリシー
+## 7. データプライバシー・学習利用ポリシー
 
 ### 「API経由なら学習に使われない」は半分正しい
 
-| 観点 | OpenAI API のデフォルト |
-|-----|:-------------------:|
-| 学習への利用 | ✅ なし（明示的なオプトイン不要） |
-| ログの保持 | ⚠️ 最大30日間保持される |
-| ゼロ保持（ZDR） | Enterprise/Businessプランで申請可 |
-
-**学習には使われないが、30日間サーバーにログが残るのがデフォルト。**
+| 観点 | 実態 |
+|-----|------|
+| 学習への利用 | ✅ API経由はデフォルトで学習に使われない（OpenAI・ElevenLabs共通） |
+| ログの保持 | ⚠️ OpenAIはデフォルト最大30日間保持される |
+| ゼロ保持（ZDR） | OpenAI Enterprise/Businessプランで申請可 |
 
 ### 個人情報・カルテデータをAPIに送っていいか
 
@@ -312,14 +309,17 @@ print(result.text)
 | 氏名・連絡先程度が含まれる | ⚠️ APPI越境移転同意の確認が必要 |
 | 医療カルテ・診察音声 | ❌ 通常プランはNG。ZDR+BAA+APPI対応が必要 |
 
-### 医療データをクラウドSTT APIで合法的に扱う3条件（OpenAI）
+> **ElevenLabs・OpenAI・Groq等、すべての米国クラウドAPIでこの判断基準が同様に適用される。**
+
+### 医療データをクラウドAPIで合法的に扱う3条件
 
 ```
 ① ZDR（ゼロデータリテンション）を有効化
-   → Enterprise/Businessプランで個別申請（baa@openai.com）
+   → Enterprise/Businessプランで個別申請
 
 ② BAA（Business Associate Agreement）を締結
-   → 申請・審査が必要。ChatGPT（無料/Plus）は不可・API専用
+   → OpenAI: baa@openai.com に申請
+   → ElevenLabs: 要問い合わせ
 
 ③ 日本APPIの越境移転要件を満たす
    → 本人同意の取得、または十分な安全管理措置の整備
@@ -329,19 +329,46 @@ print(result.text)
 
 | サービス | デフォルト学習利用 | ログ保持 | 医療データ対応 |
 |---------|:--------------:|:-------:|:-----------:|
-| **OpenAI API** | なし | 30日（ZDRで0日） | 条件付き可（ZDR+BAA必要） |
-| **Azure Speech** | なし | リアルタイム処理のみ・非保存 | ◎ Japan East + BAA対応が最も整備 |
+| **OpenAI API** | なし | 30日（ZDRで0日） | 条件付き可 |
+| **ElevenLabs** | なし | 要確認 | BAA要問い合わせ |
+| **Azure Speech** | なし | リアルタイムは非保存 | ◎ Japan East + BAA整備済み |
 | **Google Cloud STT** | なし | 同期/ストリーミングは非保存 | △ 要個別確認 |
 | **AWS Transcribe** | **あり（要オプトアウト）** | 要確認 | △ HIPAA対応だが日本語医療は限定的 |
 
-> **AWS Transcribeは唯一「デフォルトで学習に使われる」**設定のため注意。オプトアウトはAWS Organizations ポリシーで組織単位に設定可能。
+> **AWSのみ「デフォルトで学習に使われる」設定。**オプトアウトはAWS Organizations ポリシーで可能。
 
 ### 日本法上の注意点（APPI）
 
-- APPI第28条：外国の第三者（OpenAI等）への個人データ移転は原則**本人の事前同意**が必要
+- APPI第28条：米国等の第三者への個人データ移転は原則**本人の事前同意**が必要
 - 個人情報保護委員会が2023年にOpenAIへ公式警告を発出済み
 - 音声データには声紋（生体情報）が含まれる場合があり、**要配慮個人情報**として一層厳格な規制対象
 - 2026〜2027年施行予定のAPPI改正で越境移転違反への**行政加算金**が新設予定
+
+---
+
+## 8. 医療・個人情報用途の選択フロー
+
+```
+音声データに個人情報・カルテ情報が含まれる？
+│
+├── YES
+│   ├── クラウドAPIで対応したい
+│   │   ├── ZDR + BAA 取得可能 → Azure Speech (Japan East) が最も整備済み
+│   │   └── 取得困難 or リスク回避 → ローカル or 国産オンプレへ
+│   │
+│   ├── 自社サーバーあり（オンプレ）
+│   │   → Speaches + faster-whisper をDockerデプロイ
+│   │
+│   └── 国産サポート・SLAが必要
+│       → AmiVoice iNote / mocoVoice医療モデル
+│
+└── NO（個人情報なし・一般用途）
+    ├── 新規・日本語精度重視 → ElevenLabs Scribe v2  ← 大抵これでOK
+    ├── OpenAI互換コード流用 → Groq Whisper v3 Turbo
+    ├── バッチ最安値 → fal.ai Wizper
+    ├── リアルタイム会話 → ElevenLabs Scribe v2 Realtime
+    └── ミーティング文字起こし → Gladia Solaria-1
+```
 
 ---
 
@@ -357,26 +384,25 @@ print(result.text)
 
 ## 参考リンク
 
+- [ElevenLabs Speech-to-Text 公式](https://elevenlabs.io/speech-to-text)
+- [ElevenLabs Scribe v2 Realtime](https://elevenlabs.io/realtime-speech-to-text)
+- [Artificial Analysis STT Leaderboard](https://artificialanalysis.ai/speech-to-text)
+- [Groq STT ドキュメント](https://console.groq.com/docs/speech-to-text)
+- [fal.ai Wizper モデルページ](https://fal.ai/models/fal-ai/wizper)
+- [Gladia リアルタイムSTT](https://www.gladia.io/product/real-time)
 - [Soniox STT Benchmarks 2025](https://soniox.com/benchmarks)
-- [VocaFuse STT API比較 2025](https://vocafuse.com/blog/best-speech-to-text-api-comparison-2025/)
 - [Zenn：2025年日本語STT比較](https://zenn.dev/hongbod/articles/def04f586cf168)
 - [Neosophie：2026年版IT用語ASRベンチマーク（Qwen3-ASR vs Whisper）](https://neosophie.com/ja/blog/20260414-it-asr-benchmark)
-- [Whisper-1 vs gpt-4o-transcribe 比較（2025）](https://www.promptt.dev/blog/whisper-1-vs-gpt-4o-transcribe-full-comparison-2025)
-- [gpt-4o-mini-transcribeの精度問題 - OpenAI Forum](https://community.openai.com/t/gpt-4o-mini-transcribe-and-gpt-4o-transcribe-not-as-good-as-whisper/1153905)
 - [Calm-Whisper：ハルシネーション80%削減（arXiv 2025-05）](https://arxiv.org/abs/2505.12969)
 - [Apple Silicon Whisper速度ベンチマーク](https://www.voicci.com/blog/apple-silicon-whisper-performance.html)
 - [mlx-whisper vs faster-whisper on Apple Silicon](https://medium.com/@GenerationAI/streaming-with-whisper-in-mlx-vs-faster-whisper-vs-insanely-fast-whisper-37cebcfc4d27)
 - [GitHub - speaches-ai/speaches](https://github.com/speaches-ai/speaches)
-- [GitHub - ahmetoner/whisper-asr-webservice](https://github.com/ahmetoner/whisper-asr-webservice)
 - [GitHub - whisper.cpp](https://github.com/ggml-org/whisper.cpp)
 - [sherpa-onnx（エッジデバイス向けSTT）](https://www.blog.brightcoding.dev/2025/09/11/sherpa-onnx-unified-speech-recognition-synthesis-and-audio-processing-for-every-platform/)
-- [AWS: Host Whisper on SageMaker](https://aws.amazon.com/blogs/machine-learning/host-the-whisper-model-on-amazon-sagemaker-exploring-inference-options/)
 - [kotoba-whisper-v2.2 on Hugging Face](https://huggingface.co/kotoba-tech/kotoba-whisper-v2.2)
-- [厚労省 医療情報システム安全管理ガイドライン第6.0版](https://www.mhlw.go.jp/stf/shingi/0000516275_00006.html)
-- [Red Hat: Private transcription with Whisper（2026/03）](https://developers.redhat.com/articles/2026/03/06/private-transcription-whisper-red-hat-ai)
 - [OpenAI データ管理ポリシー（公式）](https://developers.openai.com/api/docs/guides/your-data)
 - [OpenAI BAA申請方法](https://help.openai.com/en/articles/8660679-how-can-i-get-a-business-associate-agreement-baa-with-openai)
-- [Google Cloud STT データ利用FAQ（公式）](https://cloud.google.com/speech-to-text/docs/data-usage-faq)
 - [Azure Speech データプライバシー（公式）](https://learn.microsoft.com/en-us/legal/cognitive-services/speech-service/speech-to-text/data-privacy-security)
-- [AWS Transcribe 学習利用オプトアウト（公式）](https://docs.aws.amazon.com/transcribe/latest/dg/opt-out.html)
+- [AWS Transcribe 学習利用オプトアウト（公式）](https://docs.aws.amazon.com/transcribe/latest/dge/opt-out.html)
+- [厚労省 医療情報システム安全管理ガイドライン第6.0版](https://www.mhlw.go.jp/stf/shingi/0000516275_00006.html)
 - [個人情報保護委員会 生成AIサービスに関する注意喚起（2023年）](https://www.ppc.go.jp/news/careful_information/230602_AI_utilize_alert/)
