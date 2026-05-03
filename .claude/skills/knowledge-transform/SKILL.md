@@ -5,7 +5,7 @@ description: |
   Note記事・YouTube台本・Udemy教材・SNS投稿・HP(Astro)記事に対応。
   「Note記事にして」「ブログにして」「YouTube台本にして」「動画台本にして」「Udemy教材にして」
   「SNS投稿にして」「HP記事にして」などのキーワードで発動すること。
-  入力ファイルの指定がない場合は /Volumes/PortableSSD/Documents/knowledge-vault/structured/ 内の最新ファイルを候補提示する。
+  入力ファイルの指定がない場合は structured/ 内の最新ファイルを候補提示する。
 ---
 
 # ナレッジ横展開スキル
@@ -17,7 +17,7 @@ description: |
 ## Step 0: 入力ファイルの特定
 
 1. ユーザーがファイルパスを指定 → そのファイルを読み込む
-2. 指定なし → `/Volumes/PortableSSD/Documents/knowledge-vault/structured/` 配下（tools/ と projects/）の最新ファイルを候補提示して選択させる
+2. 指定なし → `structured/` 配下（tools/ と projects/）の最新ファイルを候補提示して選択させる
 
 ---
 
@@ -49,7 +49,7 @@ description: |
 
 ## Step 3: 保存と報告
 
-1. `/Volumes/PortableSSD/Documents/knowledge-vault/outputs/[メディア]/` に保存
+1. `outputs/[メディア]/` に保存
 2. 完了メッセージ: `✅ [メディア]用に変換しました。パス: [パス]`
 
 ---
