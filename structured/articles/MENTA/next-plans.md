@@ -238,19 +238,21 @@
 1. **候補1: ノーコードDify/n8n/Make/GAS** ← 最重要
 2. **候補2: Cloudflare特化** ← 圧倒的差別化
 3. **候補4: AIプロダクト開発（API組込）** ← 新カテゴリ優位性
+4. **候補5: AIアプリ開発の診断（セキュリティ＋コスト）** ← 空白地帯・最強差別化
 
 ### Phase 2: 周辺カテゴリで露出拡大（2〜3ヶ月目）
-4. **候補3: Next.js×AI MVP**
-5. **候補5: ハーネスエンジニアリング**
-6. **候補6: AI×Excel/スプレッドシート** ← 非エンジニア層拡大
+5. **候補3: Next.js×AI MVP**
+6. **候補6: ハーネスエンジニアリング**
+7. **候補7: AI×Excel/スプレッドシート** ← 非エンジニア層拡大
 
 ### Phase 3: 差別化ニッチで深掘り（3〜4ヶ月目）
-7. **候補8: AI×プレゼン資料**
-8. **候補9: AI×LP制作**
-9. **候補12: AI議事録**
+8. **候補9: AI×プレゼン資料**
+9. **候補10: AI×LP制作**
+10. **候補13: AI議事録**
+11. **候補17: 筋トレ×AIヘルスケア** ← 別軸の話題性確保＋AI×実績差別化
 
 ### Phase 4: 状況見て追加（4ヶ月目以降）
-- 候補8（LLMO）/ 10（キャリア）/ 13（Agent）/ 14（Notion連携）/ 15（動画）
+- 候補8（LLMO）/ 11（キャリア）/ 14（Agent）/ 15（Notion連携）/ 16（動画）
 - 反応を見ながら採否を決定
 
 ---
@@ -280,13 +282,14 @@
 | AI・機械学習 > 生成AIビジネス活用 | 少 | 低 | ★★★ |
 | プログラミング > ノーコード | 81 | 低 | ★★★ |
 | プログラミング > インフラ・クラウド | 257（AWS偏重） | 中 | ★★（Cloudflareで差別化） |
-| プログラミング > フルスタック | 中 | 中 | ★★ |
+| プログラミング > フルスタック | 中 | 中 | ★★（診断切り口で差別化可） |
 | ビジネス > Microsoft Officeツール | 中 | 中 | ★★ |
 | ビジネス > プレゼン・資料作成 | 中 | 中 | ★★ |
 | マーケティング > SEO/SEM | 多 | 高 | ★（LLMO切り口で参入） |
 | マーケティング > SNSマーケティング | 多 | 高 | ★ |
 | ビジネス > 副業 | 多 | 高 | ☆（差別化困難） |
 | ビジネス > 就職・キャリア相談 | 多 | 高 | ★ |
+| **フィットネス（ID:78）** | 中 | **中（人の知見のみ）** | **★★（AI×実績で差別化容易）** |
 | ライフスタイル > コーチング | 多 | 高 | ☆ |
 | 動画・映像 > CG・アニメーション | 中 | 中 | ★（Remotionニッチ） |
 | ライティング > ライティング | 多 | 高 | ★ |
@@ -295,7 +298,7 @@
 
 ## 次アクション
 
-1. **Phase 1の3プラン（候補1/2/4）から先に着手**
+1. **Phase 1の4プラン（候補1/2/4/5）から先に着手** — 特に **候補5（AIアプリ診断）はMENTAに空白地帯のため早期参入優位**
 2. 各プランは 軽量3コース構成 で素早くローンチ
 3. 各プランの「無料相談コース」で個別ヒアリング → 既存8コースプランへの誘導も可能（クロスセル動線）
 4. 1ヶ月運用後、反応を見て中量5コース or 8コースへ拡張判断
@@ -305,17 +308,18 @@
 
 - [MENTAカテゴリ全体](https://menta.work/plan)
 - [プログラミング > ノーコード（候補1）](https://menta.work/plan/category/104)
-- [プログラミング > インフラ・クラウド（候補2）](https://menta.work/plan/category/30)
-- [プログラミング > フルスタック（候補3）](https://menta.work/plan/category/105)
-- [AI・機械学習 > AIプロダクト開発（候補4・5・13）](https://menta.work/plan/category/107)
-- [AI・機械学習 > 生成AIビジネス活用（候補14）](https://menta.work/plan/category/106)
-- [ビジネス > Microsoft Officeツール（候補6・12）](https://menta.work/plan/category/55)
-- [ビジネス > プレゼン・資料作成（候補8）](https://menta.work/plan/category/56)
-- [マーケティング > SEO/SEM（候補7）](https://menta.work/plan/category/44)
-- [マーケティング > SNSマーケティング（候補11）](https://menta.work/plan/category/72)
-- [ビジネス > 就職・キャリア相談（候補10）](https://menta.work/plan/category/21)
-- [デザイン > Webデザイン（候補9）](https://menta.work/plan/category/96)
-- [プログラミング > WEB制作（候補9）](https://menta.work/plan/category/34)
-- [ライティング > ライティング（候補17）](https://menta.work/plan/category/47)
-- [ライフスタイル > コーチング（候補16・18）](https://menta.work/plan/category/66)
-- [動画・映像 > CG・アニメーション（候補15）](https://menta.work/plan/category/53)
+- [プログラミング > インフラ・クラウド（候補2・5）](https://menta.work/plan/category/30)
+- [プログラミング > フルスタック（候補3・5・6）](https://menta.work/plan/category/105)
+- [AI・機械学習 > AIプロダクト開発（候補4・6・14）](https://menta.work/plan/category/107)
+- [AI・機械学習 > 生成AIビジネス活用（候補13・15）](https://menta.work/plan/category/106)
+- [ビジネス > Microsoft Officeツール（候補7・13）](https://menta.work/plan/category/55)
+- [ビジネス > プレゼン・資料作成（候補9）](https://menta.work/plan/category/56)
+- [マーケティング > SEO/SEM（候補8）](https://menta.work/plan/category/44)
+- [マーケティング > SNSマーケティング（候補12）](https://menta.work/plan/category/72)
+- [ビジネス > 就職・キャリア相談（候補11）](https://menta.work/plan/category/21)
+- [デザイン > Webデザイン（候補10）](https://menta.work/plan/category/96)
+- [プログラミング > WEB制作（候補10）](https://menta.work/plan/category/34)
+- [ライティング > ライティング（候補18）](https://menta.work/plan/category/47)
+- [**フィットネス（候補17）**](https://menta.work/plan/category/78)
+- [ライフスタイル > コーチング（候補17・19）](https://menta.work/plan/category/66)
+- [動画・映像 > CG・アニメーション（候補16）](https://menta.work/plan/category/53)
