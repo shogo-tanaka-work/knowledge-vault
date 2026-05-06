@@ -175,6 +175,28 @@
 * 生成画像をFigma / Canva / SlideForgeへ入れた場合のPPTX export品質を比較する。
 * Big4風スライドプロンプトのテンプレートを作る。
 
+### 明日やること（2026/05/07）
+* 同じGPT Image 2生成画像を使い、画像から編集可能PPTXへ戻す4ルートを比較する。
+  * SlideForge: 画像からネイティブPPTXへの再構成品質を見る。
+  * Canva Magic Layers: Figmaなしで、画像をレイヤー分解してPPTX exportできるか見る。
+  * image-to-Figma系: Figmaレイヤー化、HTML/CSS化、PPTX化の流れが現実的か見る。
+  * 自作JSON→PPTX: インフラ図・比較表など型限定で再現性を担保できるか見る。
+* 比較に使う入力画像は、まず1枚に固定する。
+  * GPT Image 2で生成したDeloitte風の図解スライド
+  * 可能ならインフラ構成図スライドも追加
+* 評価軸を固定する。
+  * 見た目の再現度
+  * テキストの編集可能性
+  * 図形・矢印・罫線の編集可能性
+  * フォント、色、余白の維持
+  * PowerPointで開いたときの崩れ
+  * 修正指示への耐性
+  * 1枚あたりの工数
+  * クライアント環境で使えるか
+* Canva Magic Layersが日本アカウントで使えるか確認する。
+* `ppt-master` を候補に入れ、画像直接変換ではなく「SVG中間表現→ネイティブPPTX」のルートとして検証する。
+* Figmaが使えないクライアント向けには、CanvaまたはSlideForgeを現実解として試す。
+
 ### 横展開の可能性
 * 法人研修資料の表紙・章扉・キースライド生成
 * 提案資料のエグゼクティブサマリー生成
@@ -207,6 +229,14 @@
 * Figma Slides export: https://help.figma.com/hc/en-us/articles/24848334599447-Export-from-Figma-Slides
 * SlideForge image to PPTX: https://slideforge.dev/tools/image-to-pptx
 * AI総合研究所 GPT Image 2記事: https://www.ai-souken.com/article/what-is-gpt-image-2
+* SlideForge Image to PowerPoint: https://slideforge.dev/tools/image-to-pptx
+* Canva Magic Layers: https://www.canva.com/newsroom/news/magic-layers/
+* Canva PPTX export API: https://www.canva.dev/docs/connect/api-reference/exports/
+* Figma vectorize image: https://help.figma.com/hc/en-us/articles/38031452710807-Convert-static-images-to-vector-layers
+* Figma Make copy design layers: https://help.figma.com/hc/en-us/articles/35060759685015-Copy-a-Figma-Make-preview-as-design-layers
+* ppt-master: https://github.com/hugohe3/ppt-master
+* Presenton: https://github.com/presenton/presenton
+* svg2pptx: https://pypi.org/project/svg2pptx/
 
 ### 関連プロジェクト
 * slide-design-patterns Skill
@@ -221,6 +251,10 @@
 * GPT Image 2は、AIスライド制作におけるアートディレクター役として使うのが有望。
 * 画像1枚運用は最短で見た目が良いが、編集性が弱い。重要ページのみ画像1枚、本文ページはPPTXオブジェクト、というハイブリッドもあり。
 * 日本語テキストは最終的にPowerPoint側で編集可能テキストとして載せ直す前提が安全。
+* SlideForgeはVision LLMで構造をJSON化し、独自レンダラーでPPTXに戻す思想。構造再現には向くが、ピクセル完全再現ではなく近似再構成として見る。
+* Canva Magic Layersは、GPT Image 2で作った静止画像を編集可能レイヤーへ戻す用途にかなり近い。Figmaを使えないクライアント向けの本命候補。
+* Figma系は強いが、クライアント導入性より制作側の高精度ワークフロー向き。image-to-Figma、HTML/CSS、PPTX化の分岐検証が必要。
+* 自作スクリプトは汎用完全再現ではなく、インフラ図、比較表、ロードマップ、2軸マップなど型を絞れば成立しそう。
 
 ---
 
@@ -229,3 +263,4 @@
 | 日時 | 更新内容の概要 |
 |---|---|
 | 2026/05/06 | ファイル作成（GPT Image 2を用いたスライド制作ワークフロー検証ログ） |
+| 2026/05/06 | 画像から編集可能PPTXへ戻す追加リサーチと、2026/05/07の検証タスクを追記 |
