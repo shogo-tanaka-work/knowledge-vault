@@ -1,0 +1,1 @@
+../../../../structured/projects/powerpoint_jp_research/patterns/slide_patterns.md
