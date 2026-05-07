@@ -16,8 +16,8 @@
 ## 自己紹介本文 全文（コピペ用）
 
 ```
-エンジニア歴5年 × 生成AI講師として100名超を指導してきたフリーランスメンター。
-「AIを使いこなして現場で価値を出せるAI人材」を、フルスタック開発＋AI駆動開発で育てます。
+エンジニア歴5年 × 生成AI講師として100名超を指導してきました。
+AIを使いこなして現場で価値を出せるAI人材を育てます。
 
 🔹経歴 & スキルセット
 ・Web業界で5年の開発経験
@@ -30,7 +30,7 @@
 フロントエンド：JavaScript, TypeScript
 バックエンド：Nodejs, SQL
 インフラ・OS：Linux環境での開発・運用（Ubuntu）
-AI：ChatGPT, Claude, Gemini, Cursor, MS Copilot
+AI：ChatGPT, Codex , Claude, ClaudeCode, Gemini, MS Copilot
 
 🔹保有資格
 ・基本情報技術者試験
