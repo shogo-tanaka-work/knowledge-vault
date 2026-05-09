@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>10 - TAM / SAM / SOM</title>
+<link rel="stylesheet" href="../assets/style.css">
+<style>
+  .market { display: grid; grid-template-columns: 480px 1fr; gap: 36px; align-items: center; height: 460px; }
+
+  .circles { position: relative; width: 460px; height: 460px; }
+  .circle {
+    position: absolute;
+    border-radius: 50%;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    font-weight: 800;
+    color: #fff;
+    text-align: center;
+    padding-top: 20px;
+  }
+  .tam {
+    width: 460px; height: 460px;
+    background: radial-gradient(circle at 50% 40%, #2c5a87 0%, #1a3a5c 100%);
+    inset: 0;
+  }
+  .sam {
+    width: 320px; height: 320px;
+    background: radial-gradient(circle at 50% 40%, #1a3a5c 0%, #0b2545 100%);
+    top: 70px; left: 70px;
+  }
+  .som {
+    width: 180px; height: 180px;
+    background: radial-gradient(circle at 50% 40%, var(--accent) 0%, #8b0a1d 100%);
+    top: 140px; left: 140px;
+    box-shadow: 0 4px 18px rgba(200,16,46,0.4);
+  }
+  .circle .lbl { font-size: 11px; letter-spacing: 0.2em; opacity: 0.8; }
+  .circle .v { font-size: 28px; line-height: 1; margin-top: 4px; }
+  .som .v { font-size: 22px; }
+
+  .market-table { width: 100%; }
+  .market-table .row {
+    display: grid;
+    grid-template-columns: 28px 80px 1fr 130px;
+    gap: 12px;
+    padding: 16px 0;
+    border-bottom: 1px solid var(--rule);
+    align-items: start;
+  }
+  .market-table .swatch {
+    width: 16px; height: 16px; border-radius: 4px; margin-top: 4px;
+  }
+  .market-table .row .name { font-weight: 700; font-size: 13px; color: var(--navy-900); letter-spacing: 0.06em; }
+  .market-table .row .desc { font-size: 12px; color: var(--gray-700); line-height: 1.6; }
+  .market-table .row .desc small { color: var(--gray-500); display: block; margin-top: 2px; }
+  .market-table .val { font-size: 22px; font-weight: 800; color: var(--navy-900); text-align: right; line-height: 1.1; }
+  .market-table .val small { font-size: 10px; color: var(--gray-500); display: block; font-weight: 400; margin-top: 2px; letter-spacing: 0.06em; }
+  .market-table .row.som-row .val { color: var(--accent); }
+</style>
+</head>
+<body>
+<div class="slide">
+  <header class="slide-header">
+    <div>
+      <div class="slide-eyebrow">MARKET SIZING</div>
+      <div class="slide-title">TAM / SAM / SOM — 国内 AI エージェント支援市場で 3 年後 SOM 280億円を狙う</div>
+    </div>
+    <div class="slide-subtitle">出典: 富士キメラ総研 2026 / IDC 2026Q1 / 当社推計</div>
+  </header>
+
+  <div class="body market">
+    <div class="circles">
+      <div class="circle tam"><div><div class="lbl">TAM</div><div class="v">¥1.2兆</div></div></div>
+      <div class="circle sam"><div><div class="lbl">SAM</div><div class="v">¥3,800億</div></div></div>
+      <div class="circle som"><div><div class="lbl">SOM</div><div class="v">¥280億</div></div></div>
+    </div>
+
+    <div class="market-table">
+      <div class="row">
+        <div class="swatch" style="background:#2c5a87"></div>
+        <div class="name">TAM</div>
+        <div class="desc">
+          国内 DX / AI 関連法人サービス市場全体
+          <small>= 国内法人 IT 投資 4.8兆円 × DX 関連比率 25%</small>
+        </div>
+        <div class="val">¥1.2兆<small>2028 年</small></div>
+      </div>
+      <div class="row">
+        <div class="swatch" style="background:#0b2545"></div>
+        <div class="name">SAM</div>
+        <div class="desc">
+          AI エージェント / 業務自動化に絞った狙える市場
+          <small>= TAM × 法人領域比率 80% × エージェント需要比率 40%</small>
+        </div>
+        <div class="val">¥3,800億<small>2028 年</small></div>
+      </div>
+      <div class="row som-row">
+        <div class="swatch" style="background:var(--accent)"></div>
+        <div class="name">SOM</div>
+        <div class="desc">
+          自社で 3 年以内に獲得可能な現実的シェア
+          <small>= SAM × 当社到達可能シェア 7.4% (営業/拠点キャパ前提)</small>
+        </div>
+        <div class="val">¥280億<small>2028 年</small></div>
+      </div>
+    </div>
+  </div>
+
+  <footer class="slide-footer">
+    <span>Shogoworks Consulting Group — Confidential</span>
+    <span class="page-no">10 / 30</span>
+  </footer>
+</div>
+</body>
+</html>

@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>09 - SWOT</title>
+<link rel="stylesheet" href="../assets/style.css">
+<style>
+  .swot {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    gap: 16px;
+    height: 470px;
+  }
+  .swot-cell {
+    border: 1px solid var(--rule);
+    padding: 18px 22px;
+    position: relative;
+    overflow: hidden;
+  }
+  .swot-cell::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; right: 0; height: 4px;
+  }
+  .swot-cell .label {
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    font-weight: 700;
+  }
+  .swot-cell .head {
+    font-size: 22px;
+    font-weight: 800;
+    color: var(--navy-900);
+    margin: 4px 0 8px;
+  }
+  .swot-cell ul {
+    margin: 0; padding-left: 18px;
+    font-size: 13px;
+    line-height: 1.75;
+    color: var(--gray-700);
+  }
+  .swot-cell ul li::marker { color: var(--accent); }
+
+  .s { background: #f0f7ff; }
+  .s::before { background: #1d4ed8; }
+  .s .label { color: #1d4ed8; }
+
+  .w { background: #fff7f0; }
+  .w::before { background: #b45309; }
+  .w .label { color: #b45309; }
+
+  .o { background: #f0fbf4; }
+  .o::before { background: #047857; }
+  .o .label { color: #047857; }
+
+  .t { background: #fff5f5; }
+  .t::before { background: var(--accent); }
+  .t .label { color: var(--accent); }
+
+  .axes {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+</style>
+</head>
+<body>
+<div class="slide">
+  <header class="slide-header">
+    <div>
+      <div class="slide-eyebrow">INTERNAL × EXTERNAL ANALYSIS</div>
+      <div class="slide-title">SWOT 分析 — 強みを活かし、機会を取りに行く戦略を取る</div>
+    </div>
+    <div class="slide-subtitle">2026年5月時点 / ヒアリング32名・社内資料15件 ベース</div>
+  </header>
+
+  <div class="body">
+    <div class="swot">
+      <div class="swot-cell s">
+        <div class="label">STRENGTHS — 内部 × ポジティブ</div>
+        <div class="head">強み</div>
+        <ul>
+          <li>業界トップシェア (国内 27%) のブランド資産</li>
+          <li>全国主要 8 拠点の対面接点と既存顧客 4,200 社</li>
+          <li>営業数据 12 年分の蓄積 (CRM / 商談記録)</li>
+          <li>経営層の DX 推進コミットメント</li>
+        </ul>
+      </div>
+
+      <div class="swot-cell w">
+        <div class="label">WEAKNESSES — 内部 × ネガティブ</div>
+        <div class="head">弱み</div>
+        <ul>
+          <li>営業生産性が業界平均比で約 22% 劣後</li>
+          <li>マネージャ層のプレイヤー兼務率 78%</li>
+          <li>SFA 入力遵守率が部門間で大きく乖離</li>
+          <li>AI / データ人材の社内比率が 1.8%</li>
+        </ul>
+      </div>
+
+      <div class="swot-cell o">
+        <div class="label">OPPORTUNITIES — 外部 × ポジティブ</div>
+        <div class="head">機会</div>
+        <ul>
+          <li>AI エージェント市場が CAGR 38% で拡大中</li>
+          <li>顧客側の DX 投資意欲が継続的に上昇</li>
+          <li>政府・自治体の DX 補助金が拡充傾向</li>
+          <li>競合は AI 活用が散発的、差別化余地あり</li>
+        </ul>
+      </div>
+
+      <div class="swot-cell t">
+        <div class="label">THREATS — 外部 × ネガティブ</div>
+        <div class="head">脅威</div>
+        <ul>
+          <li>テック系新興プレイヤーの中堅価格帯への参入</li>
+          <li>AI ツールのコモディティ化による単価下落</li>
+          <li>個人情報保護法改正に伴う運用コスト増</li>
+          <li>ハイ層人材の獲得競争激化と離職率上昇</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="takeaway">
+      <strong>戦略示唆 (SO 戦略):</strong> 既存の顧客接点と業界データ資産を <strong>AI エージェントで武装化</strong> し、競合が散発的な AI 活用に留まる今のうちに「差別化されたソリューション提案力」をブランドとして確立する。
+    </div>
+  </div>
+
+  <footer class="slide-footer">
+    <span>Shogoworks Consulting Group — Confidential</span>
+    <span class="page-no">09 / 30</span>
+  </footer>
+</div>
+</body>
+</html>
