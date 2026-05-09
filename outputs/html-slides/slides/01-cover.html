@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>01 - 表紙</title>
+<link rel="stylesheet" href="../assets/style.css">
+<style>
+  .slide.cover {
+    padding: 0;
+    background: linear-gradient(135deg, #0b2545 0%, #1a3a5c 60%, #2c5a87 100%);
+    color: #fff;
+  }
+  .cover-inner {
+    position: absolute;
+    inset: 0;
+    padding: 80px 80px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  .cover-mark {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 12px;
+    letter-spacing: 0.2em;
+    color: rgba(255,255,255,0.7);
+  }
+  .cover-mark .dot { width: 28px; height: 4px; background: var(--accent); }
+  .cover-title {
+    font-size: 56px;
+    font-weight: 800;
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+  }
+  .cover-sub {
+    font-size: 20px;
+    color: rgba(255,255,255,0.8);
+    margin-top: 16px;
+    line-height: 1.6;
+    max-width: 820px;
+  }
+  .cover-foot {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    border-top: 1px solid rgba(255,255,255,0.2);
+    padding-top: 18px;
+    font-size: 13px;
+    color: rgba(255,255,255,0.85);
+  }
+  .cover-foot .right { text-align: right; }
+  .cover-foot .label { font-size: 10px; letter-spacing: 0.2em; color: rgba(255,255,255,0.5); }
+</style>
+</head>
+<body>
+<div class="slide cover">
+  <div class="cover-inner">
+    <div class="cover-mark"><span class="dot"></span>STRATEGIC PROPOSAL</div>
+    <div>
+      <div class="cover-title">AI 活用による<br>営業生産性の構造改革</div>
+      <div class="cover-sub">エージェント運用設計から組織変革ロードマップまで、<br>3年で粗利率 +6pt を実現する戦略提案</div>
+    </div>
+    <div class="cover-foot">
+      <div>
+        <div class="label">PREPARED FOR</div>
+        <div>株式会社 サンプル ホールディングス</div>
+      </div>
+      <div class="right">
+        <div class="label">PREPARED BY / DATE</div>
+        <div>Shogoworks Consulting Group / 2026.05</div>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

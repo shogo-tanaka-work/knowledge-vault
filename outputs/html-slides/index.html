@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>Consulting HTML Slides — Pattern Gallery</title>
+<link rel="stylesheet" href="assets/style.css">
+<style>
+  body { background: #eef1f5; }
+  .gallery-item .thumb-wrap {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    background: #fff;
+    position: relative;
+  }
+  .gallery-item iframe {
+    width: 1280px;
+    height: 720px;
+    border: 0;
+    transform: scale(var(--scale, 0.34375));
+    transform-origin: top left;
+    pointer-events: none;
+    display: block;
+  }
+  .gallery-grid { grid-template-columns: repeat(auto-fill, minmax(380px, 1fr)); }
+  .gallery-item { --scale: 0.297; }
+  .gallery-item iframe { width: 1280px; height: 720px; }
+  .header-bar {
+    background: var(--navy-900);
+    color: #fff;
+    padding: 24px 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .header-bar h1 { color: #fff; margin: 0; font-size: 20px; letter-spacing: 0.04em; }
+  .header-bar .tag { font-size: 11px; color: rgba(255,255,255,0.7); letter-spacing: 0.16em; }
+  .section-title {
+    font-size: 13px;
+    letter-spacing: 0.2em;
+    color: var(--gray-500);
+    margin: 32px 0 12px;
+    border-bottom: 1px solid var(--rule);
+    padding-bottom: 8px;
+  }
+</style>
+</head>
+<body>
+<div class="header-bar">
+  <div>
+    <h1>Consulting HTML Slides — Pattern Gallery</h1>
+    <div class="tag" style="margin-top:6px;">McKinsey / Deloitte / BCG style — 16:9 (1280×720)</div>
+  </div>
+  <div class="tag">Phase 1: 10 patterns / Target: 30 patterns</div>
+</div>
+
+<div class="gallery">
+  <p class="desc">
+    コンサル提案・企業説明で頻出するスライドパターンを HTML+CSS で再構築したテンプレート集。
+    各サムネイルをクリックすると 16:9 のフルサイズで開きます。
+    PowerPoint への変換は Playwright で PNG 化し python-pptx で画像埋込する方式を想定。
+  </p>
+
+  <div class="section-title">PHASE 1 — 提案資料の骨格を構成する10パターン</div>
+
+  <div class="gallery-grid">
+    <a class="gallery-item" href="slides/01-cover.html" target="_blank">
+      <div class="thumb-wrap"><iframe src="slides/01-cover.html" loading="lazy"></iframe></div>
+      <div class="meta">
+        <div class="num">01 — COVER</div>
+        <div class="name">表紙スライド</div>
+        <div class="cat">第一印象 / プロジェクト名・宛先・日付</div>
+      </div>
+    </a>
+
+    <a class="gallery-item" href="slides/02-executive-summary.html" target="_blank">
+      <div class="thumb-wrap"><iframe src="slides/02-executive-summary.html" loading="lazy"></iframe></div>
+      <div class="meta">
+        <div class="num">02 — EXECUTIVE SUMMARY</div>
+        <div class="name">エグゼクティブサマリー</div>
+        <div class="cat">3-5 ベットの結論＋数値インパクト</div>
+      </div>
+    </a>
+
+    <a class="gallery-item" href="slides/03-agenda.html" target="_blank">
+      <div class="thumb-wrap"><iframe src="slides/03-agenda.html" loading="lazy"></iframe></div>
+      <div class="meta">
+        <div class="num">03 — AGENDA</div>
+        <div class="name">アジェンダ / 目次</div>
+        <div class="cat">議論項目を 5-7 件、所要時間付き</div>
+      </div>
+    </a>
+
+    <a class="gallery-item" href="slides/04-comparison-table.html" target="_blank">
+      <div class="thumb-wrap"><iframe src="slides/04-comparison-table.html" loading="lazy"></iframe></div>
+      <div class="meta">
+        <div class="num">04 — COMPARISON</div>
+        <div class="name">比較表 (自社 vs 他社)</div>
+        <div class="cat">評価軸を縦並べ・自社列を強調色</div>
+      </div>
+    </a>
+
+    <a class="gallery-item" href="slides/05-matrix-2x2.html" target="_blank">
+      <div class="thumb-wrap"><iframe src="slides/05-matrix-2x2.html" loading="lazy"></iframe></div>
+      <div class="meta">
+        <div class="num">05 — MATRIX 2×2</div>
+        <div class="name">マトリクス 2×2</div>
+        <div class="cat">戦略マッピング / 優先度判定</div>
+      </div>
+    </a>
+
+    <a class="gallery-item" href="slides/06-kpi-tree.html" target="_blank">
+      <div class="thumb-wrap"><iframe src="slides/06-kpi-tree.html" loading="lazy"></iframe></div>
+      <div class="meta">
+        <div class="num">06 — KPI TREE</div>
+        <div class="name">KPI ツリー</div>
+        <div class="cat">KGI を分解し改善ドライバを特定</div>
+      </div>
+    </a>
+
+    <a class="gallery-item" href="slides/07-process-steps.html" target="_blank">
+      <div class="thumb-wrap"><iframe src="slides/07-process-steps.html" loading="lazy"></iframe></div>
+      <div class="meta">
+        <div class="num">07 — PROCESS</div>
+        <div class="name">プロセス図 (横ステップ)</div>
+        <div class="cat">5 段階フロー / 介入領域を強調</div>
+      </div>
+    </a>
+
+    <a class="gallery-item" href="slides/08-roadmap.html" target="_blank">
+      <div class="thumb-wrap"><iframe src="slides/08-roadmap.html" loading="lazy"></iframe></div>
+      <div class="meta">
+        <div class="num">08 — ROADMAP</div>
+        <div class="name">ロードマップ</div>
+        <div class="cat">ワークストリーム × 四半期 / Phase 別</div>
+      </div>
+    </a>
+
+    <a class="gallery-item" href="slides/09-swot.html" target="_blank">
+      <div class="thumb-wrap"><iframe src="slides/09-swot.html" loading="lazy"></iframe></div>
+      <div class="meta">
+        <div class="num">09 — SWOT</div>
+        <div class="name">SWOT 分析</div>
+        <div class="cat">内部/外部 × ポジ/ネガ の4象限</div>
+      </div>
+    </a>
+
+    <a class="gallery-item" href="slides/10-tam-sam-som.html" target="_blank">
+      <div class="thumb-wrap"><iframe src="slides/10-tam-sam-som.html" loading="lazy"></iframe></div>
+      <div class="meta">
+        <div class="num">10 — TAM / SAM / SOM</div>
+        <div class="name">市場規模 (同心円)</div>
+        <div class="cat">市場規模をロジック式付きで提示</div>
+      </div>
+    </a>
+  </div>
+
+  <div class="section-title">PHASE 2 — 第2バッチで追加予定 (要フィードバック)</div>
+  <p class="desc" style="margin: 0;">
+    会社概要 / 事業ポートフォリオ / ピラミッド図 / 循環図 (PDCA) / マーケティングファネル /
+    ガントチャート / ウォーターフォール / ビジネスモデル図 / 5フォース / MVV /
+    棒グラフ / 折れ線グラフ / 円グラフ / 散布図 / Before-After / SWOT 戦略マップ /
+    ロードマップ詳細版 / Problem-Solution / お願い事項 / 章扉 (Divider) — 計20パターン候補
+  </p>
+</div>
+</body>
+</html>

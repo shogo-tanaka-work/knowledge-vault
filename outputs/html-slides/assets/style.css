@@ -1,0 +1,259 @@
+/* ===========================================================
+   Consulting HTML Slides — shared stylesheet
+   16:9 (1280×720) コンサル提案・企業説明スライド用
+   =========================================================== */
+
+:root {
+  --navy-900: #0b2545;
+  --navy-700: #1a3a5c;
+  --navy-500: #2c5a87;
+  --accent: #c8102e;       /* 強調赤（マッキンゼー風） */
+  --accent-soft: #f4d4d8;
+  --teal: #00838f;
+  --gold: #c9a14a;
+  --gray-900: #1f2937;
+  --gray-700: #374151;
+  --gray-500: #6b7280;
+  --gray-300: #d1d5db;
+  --gray-100: #f1f3f6;
+  --gray-50:  #f7f8fa;
+  --bg: #ffffff;
+  --rule: #e5e7eb;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  font-family: "Noto Sans JP", "Hiragino Sans", "Yu Gothic", system-ui, sans-serif;
+  color: var(--gray-900);
+  background: var(--gray-100);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ---------- スライド外枠（1280×720 固定） ---------- */
+.slide {
+  width: 1280px;
+  height: 720px;
+  background: var(--bg);
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+  margin: 24px auto;
+  padding: 56px 64px 56px 64px;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ---------- ヘッダ（タイトルバー） ---------- */
+.slide-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  border-bottom: 2px solid var(--navy-700);
+  padding-bottom: 14px;
+  margin-bottom: 28px;
+}
+.slide-title {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--navy-900);
+  letter-spacing: 0.02em;
+}
+.slide-subtitle {
+  font-size: 13px;
+  color: var(--gray-500);
+  letter-spacing: 0.04em;
+}
+.slide-eyebrow {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--accent);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+
+/* ---------- フッタ ---------- */
+.slide-footer {
+  position: absolute;
+  bottom: 18px;
+  left: 64px;
+  right: 64px;
+  display: flex;
+  justify-content: space-between;
+  font-size: 10px;
+  color: var(--gray-500);
+  letter-spacing: 0.05em;
+  border-top: 1px solid var(--rule);
+  padding-top: 8px;
+}
+.page-no { font-weight: 700; color: var(--navy-700); }
+
+/* ---------- 本文ユーティリティ ---------- */
+.body { flex: 1; }
+.lead {
+  font-size: 16px;
+  line-height: 1.7;
+  color: var(--gray-700);
+}
+.takeaway {
+  background: var(--gray-50);
+  border-left: 4px solid var(--accent);
+  padding: 14px 18px;
+  font-size: 14px;
+  color: var(--gray-900);
+  margin-top: 20px;
+}
+
+/* ---------- グリッドヘルパ ---------- */
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+.grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+.grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+
+/* ---------- カード ---------- */
+.card {
+  background: var(--gray-50);
+  border: 1px solid var(--rule);
+  border-top: 3px solid var(--navy-700);
+  padding: 18px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.card.accent { border-top-color: var(--accent); background: #fff8f8; }
+.card-num {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--accent);
+  letter-spacing: 0.2em;
+}
+.card-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--navy-900);
+}
+.card-body {
+  font-size: 12px;
+  line-height: 1.6;
+  color: var(--gray-700);
+}
+
+/* ---------- テーブル（コンサル比較表） ---------- */
+table.comparison {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+table.comparison th, table.comparison td {
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--rule);
+  text-align: left;
+  vertical-align: top;
+}
+table.comparison thead th {
+  background: var(--navy-900);
+  color: #fff;
+  font-weight: 600;
+  font-size: 12px;
+  letter-spacing: 0.08em;
+}
+table.comparison .axis {
+  background: var(--gray-100);
+  font-weight: 700;
+  color: var(--navy-900);
+  width: 22%;
+}
+table.comparison .own {
+  background: #f4f8ff;
+  border-left: 3px solid var(--navy-700);
+}
+table.comparison .own-head {
+  background: var(--navy-700) !important;
+  color: #fff;
+}
+.win { color: var(--accent); font-weight: 700; }
+.lose { color: var(--gray-500); }
+
+/* ---------- バッジ ---------- */
+.badge {
+  display: inline-block;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 999px;
+  letter-spacing: 0.06em;
+}
+.badge.navy { background: var(--navy-900); color: #fff; }
+.badge.accent { background: var(--accent); color: #fff; }
+.badge.outline { border: 1px solid var(--gray-300); color: var(--gray-700); }
+
+/* ---------- index ギャラリー ---------- */
+.gallery {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 40px 24px 80px;
+}
+.gallery h1 {
+  font-size: 22px;
+  color: var(--navy-900);
+  margin: 0 0 6px;
+}
+.gallery .desc {
+  color: var(--gray-500);
+  font-size: 13px;
+  margin-bottom: 28px;
+}
+.gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(440px, 1fr));
+  gap: 24px;
+}
+.gallery-item {
+  background: #fff;
+  border: 1px solid var(--rule);
+  border-radius: 6px;
+  overflow: hidden;
+  text-decoration: none;
+  color: inherit;
+  transition: transform .12s ease, box-shadow .12s ease;
+}
+.gallery-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0,0,0,.08);
+}
+.gallery-item .thumb {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border: none;
+  display: block;
+  pointer-events: none;
+  background: #fff;
+}
+.gallery-item .meta {
+  padding: 12px 16px;
+  border-top: 1px solid var(--rule);
+}
+.gallery-item .num {
+  font-size: 11px;
+  color: var(--accent);
+  font-weight: 700;
+  letter-spacing: 0.16em;
+}
+.gallery-item .name {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--navy-900);
+  margin: 2px 0 4px;
+}
+.gallery-item .cat {
+  font-size: 11px;
+  color: var(--gray-500);
+}
+
+/* ---------- 印刷時：1スライド=1ページ ---------- */
+@media print {
+  body { background: #fff; }
+  .slide { box-shadow: none; margin: 0; page-break-after: always; }
+}
