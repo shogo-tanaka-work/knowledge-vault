@@ -229,7 +229,7 @@
 
     .scenario-grid {
       display: grid;
-      grid-template-columns: repeat(5, 1fr);
+      grid-template-columns: repeat(3, 1fr);
       gap: 10px;
       margin: 16px 0 22px;
     }
@@ -262,6 +262,59 @@
       color: var(--muted);
       font-size: 12px;
       line-height: 1.5;
+    }
+
+    .decision-flow {
+      margin: 20px 0 26px;
+      padding: 18px;
+      border: 1px solid var(--line);
+      background: #fbfcfe;
+    }
+
+    .flow-row {
+      display: grid;
+      grid-template-columns: 1fr 48px 1fr;
+      gap: 12px;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .flow-row:last-child {
+      margin-bottom: 0;
+    }
+
+    .flow-box {
+      min-height: 86px;
+      padding: 14px 16px;
+      border: 1px solid var(--line);
+      border-left: 5px solid var(--bronze);
+      background: #fff;
+    }
+
+    .flow-box.primary {
+      border-left-color: var(--navy);
+      background: #f6f8fb;
+    }
+
+    .flow-box .q {
+      margin: 0 0 6px;
+      color: var(--navy);
+      font-weight: 800;
+      line-height: 1.45;
+    }
+
+    .flow-box .a {
+      margin: 0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.55;
+    }
+
+    .flow-arrow {
+      color: var(--bronze);
+      font-size: 28px;
+      font-weight: 800;
+      text-align: center;
     }
 
     .note {
@@ -309,6 +362,14 @@
       .scenario-grid {
         grid-template-columns: 1fr;
       }
+
+      .flow-row {
+        grid-template-columns: 1fr;
+      }
+
+      .flow-arrow {
+        transform: rotate(90deg);
+      }
     }
   </style>
 </head>
@@ -317,19 +378,18 @@
     <header>
       <p class="eyebrow">Consulting Slide Solution</p>
       <h1>02. 使い方手順書</h1>
-      <p class="lead">Claude Code とスライド再現スキルを使い、参考画像・HTML・PPTXを行き来しながらコンサル品質の資料を作るための運用手順。</p>
+      <p class="lead">Claude Code とスライド再現スキルを使い、テンプレート・参考画像・図解生成を起点に、編集可能なPPTXまでつなげるための運用手順。</p>
     </header>
 
     <div class="layout">
       <nav aria-label="目次">
         <p class="label">目次</p>
         <a href="#premise">共通の前提</a>
-        <a href="#scenarios">シナリオ一覧</a>
-        <a href="#scenario-1">1. 既存スライドを投影 / 微編集</a>
-        <a href="#scenario-2">2. ゼロから作る</a>
-        <a href="#scenario-3">3. 参考画像から再現</a>
-        <a href="#scenario-4">4. 画像 / PDFを編集可能PPTXへ</a>
-        <a href="#scenario-5">5. HTML編集後にPPTX再生成</a>
+        <a href="#scenarios">判断フロー</a>
+        <a href="#case-template">1. 参考画像・既存テンプレから再現</a>
+        <a href="#case-no-template">2. テキスト指示から構成案を作る</a>
+        <a href="#case-diagram">3. 画像生成AIで構図ラフを作る</a>
+        <a href="#output">PPTX出力の考え方</a>
         <a href="#trouble">トラブルシューティング</a>
         <a href="#tree">参考: ファイル直接編集ツリー</a>
       </nav>
@@ -346,171 +406,184 @@
         </section>
 
         <section id="scenarios">
-          <h2>シナリオ一覧</h2>
+          <h2>判断フロー</h2>
+          <div class="decision-flow" aria-label="作成ルートの判断フロー">
+            <div class="flow-row">
+              <div class="flow-box primary">
+                <p class="q">参考画像・既存テンプレがあるか？</p>
+                <p class="a">近いPPTX、HTML、スクリーンショットがある場合は、それを構造解析の起点にする。</p>
+              </div>
+              <div class="flow-arrow">→</div>
+              <div class="flow-box">
+                <p class="q">YES: 1. 参考画像・既存テンプレから再現</p>
+                <p class="a">構図・配色・図解要素を踏襲し、テキストやラベルを差し替える。</p>
+              </div>
+            </div>
+            <div class="flow-row">
+              <div class="flow-box primary">
+                <p class="q">NO: テキストだけで構成できるか？</p>
+                <p class="a">比較表、ロードマップ、2x2、シンプルな業務フローならそのまま構成案から作る。</p>
+              </div>
+              <div class="flow-arrow">→</div>
+              <div class="flow-box">
+                <p class="q">YES: 2. テキスト指示から構成案を作る</p>
+                <p class="a">パターン辞書を使い、HTML/CSS/SVGでスライド化する。</p>
+              </div>
+            </div>
+            <div class="flow-row">
+              <div class="flow-box primary">
+                <p class="q">複雑な図解で、構図の当たりが必要か？</p>
+                <p class="a">密な業務フロー、概念図、接続関係が多い図は、先に構図ラフを作ると安定する。</p>
+              </div>
+              <div class="flow-arrow">→</div>
+              <div class="flow-box">
+                <p class="q">YES: 3. 画像生成AIで構図ラフを作る</p>
+                <p class="a">生成画像を「参考画像」として扱い、最終的には1番の再現ルートへ戻す。</p>
+              </div>
+            </div>
+          </div>
           <div class="scenario-grid">
             <div class="scenario">
               <div class="num">01</div>
-              <div class="name">完成済みスライドを投影 / 微編集</div>
-              <div class="from">起点: 既存 PPTX</div>
+              <div class="name">参考画像・既存テンプレから再現</div>
+              <div class="from">起点: PPTX / HTML / 参考スライド画像</div>
             </div>
             <div class="scenario">
               <div class="num">02</div>
-              <div class="name">ゼロから作る</div>
-              <div class="from">起点: テキスト指示のみ → 画像生成 AI 経由</div>
+              <div class="name">テキスト指示から構成案を作る</div>
+              <div class="from">起点: テキスト指示 / 構成メモ</div>
             </div>
             <div class="scenario">
               <div class="num">03</div>
-              <div class="name">参考画像から自分のテーマで再現</div>
-              <div class="from">起点: 既存スライド画像</div>
-            </div>
-            <div class="scenario">
-              <div class="num">04</div>
-              <div class="name">画像 / PDF を編集可能 PPTX に変換</div>
-              <div class="from">起点: 画像 / PDF</div>
-            </div>
-            <div class="scenario">
-              <div class="num">05</div>
-              <div class="name">HTML 編集して PPTX 再ビルド</div>
-              <div class="from">起点: 既存 HTML</div>
+              <div class="name">画像生成AIで構図ラフを作る</div>
+              <div class="from">起点: 文章化した図解要件</div>
             </div>
           </div>
         </section>
 
-        <section id="scenario-1">
-          <h2>シナリオ 1: 既に作ってあるスライドを投影 / 微編集する</h2>
-          <p>クライアント説明に <strong>そのまま使う</strong> ケース。</p>
-          <h3>手順</h3>
-          <ol>
-            <li><code>pptx/consulting-html-slides.pptx</code> をダブルクリック</li>
-            <li>PowerPoint で開く（Keynote でも可）</li>
-            <li>投影モードで再生</li>
-          </ol>
-          <h3>微編集したい場合</h3>
-          <ul>
-            <li><strong>見た目維持で文言だけ直したい</strong> → <code>pptx/12-ai-workflow-asis-editable.pptx</code> を開いて該当テキストボックスをクリック・編集</li>
-            <li><strong>見た目ごと変えたい</strong> → <code>slides/*.html</code> をエディタで開いて編集 → シナリオ 5 で再ビルド</li>
-          </ul>
-        </section>
-
-        <section id="scenario-2">
-          <h2>シナリオ 2: 参考画像が手元にない場合</h2>
+        <section id="case-template">
+          <h2>1. 参考画像・既存テンプレから再現する</h2>
           <blockquote>
-            真似たいスライドの参考が手元にない、または全く新しい構図を作りたいケース。直接 PowerPoint を AI に作らせると安っぽくなるため、画像生成 AI でいったん 1 枚作り、それをシナリオ 3 の入力に流す。
+            すでに近い見た目のPPTX、HTMLスライド、参考スライド画像がある場合。構図・余白・配色・図解要素を踏襲し、中身を差し替える最短ルート。
           </blockquote>
-          <h3>なぜこの 2 段構えなのか</h3>
-          <p>画像生成 AI（Nano Banana / GPT-Image-2 / Claude Design / Imagen 等）はコンサル風の <strong>構図</strong> を高速に作れるが、出力された PNG は文字・配色・数値の微調整ができない。そこで生成画像を <strong>自前のたたき台</strong> として消費し、Mode A で構造抽出 → HTML → PPTX に流す。</p>
-          <h3>手順</h3>
-          <ol>
-            <li><strong>テーマと構成を文章で書き出す</strong></li>
-          </ol>
-          <pre><code>- 章番号: 3.2
-- メッセージ: AI 浸透における 4 つの障壁を、組織・データ・人材・運用 で図解
-- レイアウト指定: 4 象限マトリクス、各象限に 3-5 のキーワード、左下にKEY TAKEAWAY
-- 配色: 政府系シンクタンク風（ネイビー＋ブロンズ）</code></pre>
-          <ol start="2">
-            <li><strong>画像生成 AI に投げる</strong></li>
-          </ol>
+          <h3>使う入力</h3>
           <ul>
-            <li>Nano Banana: 構図再現性が高い、図解寄り</li>
-            <li>GPT-Image (ChatGPT): タイポは弱いが構図インスピは強い</li>
-            <li>Claude Design tool: ベクター傾向、整列が綺麗</li>
-            <li>1 枚出ればよい。タイポや細部が崩れていても <strong>構図さえ取れていれば OK</strong></li>
+            <li>既存PPTX、または過去に作ったHTMLスライド</li>
+            <li>真似たいレイアウトのスクリーンショット</li>
+            <li>差し替えたい本文・章番号・メッセージ・表データ</li>
           </ul>
-          <ol start="3">
-            <li><strong>生成された画像を保存</strong> し、シナリオ 3 の入力として使う</li>
-          </ol>
-          <pre><code>この生成画像をベースに、政府系シンクタンク風で
-「AI 浸透 4 つの障壁」のスライドをリメイクしたい。
-テキストは自分のテーマに置き換えてください。
-
-[生成画像をペースト]</code></pre>
-          <ol start="4">
-            <li><code>consulting-slide-remake</code> Mode A が発動し、構造化されたプロンプトを返す</li>
-            <li>そのまま「これで HTML スライドにして」と Claude Code に追加依頼</li>
-            <li>完成した HTML をシナリオ 5 の手順で PPTX 化</li>
-          </ol>
-          <h3>注意</h3>
-          <ul>
-            <li>画像生成 AI の出力にあるタイポ・無意味な日本語は Mode A の構造解析時に自分の文言で上書きする</li>
-            <li>1 発で構図が決まらない場合、画像生成側のプロンプトを 2-3 回練り直してから入口に流すと品質が安定する</li>
-          </ul>
-        </section>
-
-        <section id="scenario-3">
-          <h2>シナリオ 3: 参考スライド画像から、自分のテーマで似たスライドを作る</h2>
-          <blockquote>
-            このマッキンゼー風スライドのレイアウトを真似て、当社の AI 浸透施策を表現したい、というケース。本ソリューションの中核ユースケース。
-          </blockquote>
-          <h3>手順</h3>
+          <h3>流れ</h3>
           <ol>
-            <li>参考にしたいスライドを画像（PNG / JPG）で保存</li>
-            <li>Claude Code を起動し、以下のように依頼する</li>
+            <li>テンプレまたは参考画像を Claude Code に渡す</li>
+            <li><code>consulting-slide-remake</code> Mode A で構造を抽出する</li>
+            <li>抽出結果をもとに、HTML/CSS/SVGでスライドを再構築する</li>
+            <li>必要に応じて <code>python-pptx</code> で編集可能PPTXに変換する</li>
           </ol>
-          <pre><code>この参考スライドをアビーム風で再現したい。
+          <h3>依頼例</h3>
+          <pre><code>この参考スライドを政府系シンクタンク風で再現したい。
 テーマは「AI 提案書作成ワークフローの現状」で、私の組織の
 営業プロセスに置き換えてください。
 
 [参考スライド画像をペースト]</code></pre>
-          <ol start="3">
-            <li><code>consulting-slide-remake</code> スキル（Mode A）が自動発動</li>
-            <li>Claude が画像を構造解析し、<strong>戦略コンサル風スライド生成プロンプト</strong> を出力</li>
-            <li>出力されたプロンプトを、好みの画像生成 AI（GPT-Image / Claude Design / nano banana 等）に投げる</li>
-            <li>または、そのまま「この内容で HTML スライドを作って」と Claude Code に依頼</li>
-          </ol>
-          <h3>発動キーワード</h3>
+          <h3>向いている場面</h3>
           <ul>
-            <li>コンサル風スライドを再現</li>
-            <li>アビーム風で作って</li>
-            <li>マッキンゼー風スライドのリメイク</li>
-            <li>画像から再現プロンプト作って</li>
+            <li>トンマナや余白設計を既存資料に寄せたい</li>
+            <li>章番号、フッタ、KEY TAKEAWAYなどの型を維持したい</li>
+            <li>構図はそのまま使い、テキスト・数値・ラベルだけ差し替えたい</li>
+            <li>ボックス数の増減や配置の微調整だけで済む</li>
           </ul>
         </section>
 
-        <section id="scenario-4">
-          <h2>シナリオ 4: 既存の画像スライド / PDF を、編集可能 PPTX に変換する</h2>
-          <blockquote>PDF でもらった綺麗なスライドを、PowerPoint で編集したいケース。</blockquote>
+        <section id="case-no-template">
+          <h2>2. テキスト指示から構成案を作る</h2>
+          <blockquote>
+            参考にできる見た目がなく、テーマ・論点・構成メモだけがある場合。まずスライドの骨格を作り、シンプルな図解ならそのままHTML化する。
+          </blockquote>
+          <h3>使う入力</h3>
+          <ul>
+            <li>作りたいテーマ</li>
+            <li>伝えたい結論、章番号、想定読者</li>
+            <li>使いたいフレーム（比較表、ロードマップ、KPIツリー、業務フローなど）</li>
+          </ul>
           <h3>手順</h3>
           <ol>
-            <li>変換対象の画像 / PDF を用意</li>
-            <li>Claude Code に依頼する</li>
+            <li><code>slide-design-patterns</code> でレイアウト候補を出す</li>
+            <li>アクションタイトル、主要メッセージ、図解パターンを決める</li>
+            <li>HTML/CSS/SVGでスライドを作る</li>
+            <li>プレビューで密度・整列・読みやすさを確認する</li>
+            <li>複雑な図解になりそうなら、3番で構図ラフを作ってから1番へ戻す</li>
           </ol>
-          <pre><code>この画像をズレなく編集可能な PPTX に変換するための
-再構築指示書を作って。
-
-[画像をペースト]</code></pre>
-          <ol start="3">
-            <li><code>consulting-slide-remake</code> スキル（Mode B）が自動発動</li>
-            <li>Claude が <strong>PPTX 再構築プロンプト</strong> を出力（座標・色・フォント・テキストの指定一式）</li>
-            <li>そのプロンプトを Claude Code 自身に渡し、<code>python-pptx</code> で実装させる</li>
-            <li>生成された <code>.pptx</code> を <code>unzip -l</code> で <code>ppt/media/</code> が空であることを確認する</li>
-          </ol>
-          <h3>発動キーワード</h3>
+          <h3>依頼例</h3>
+          <pre><code>「AI活用ロードマップ」を1枚で説明したい。
+構成は、現状課題 → 重点施策 → 導入ステップ → 効果指標。
+政府系シンクタンク風のネイビー＋ブロンズで、
+HTMLスライドとして作成してください。</code></pre>
+          <h3>向いている場面</h3>
           <ul>
-            <li>これをパワポにして</li>
-            <li>画像を編集可能な pptx に</li>
-            <li>PDF をズレなく PPTX 化</li>
+            <li>まだ見た目の正解が決まっていない</li>
+            <li>まず論理構成や見せ方を探索したい</li>
+            <li>比較表、ロードマップ、2x2、単純なプロセス図などで足りる</li>
+            <li>複数案を出してから1案に絞りたい</li>
           </ul>
         </section>
 
-        <section id="scenario-5">
-          <h2>シナリオ 5: HTML スライドを自分で編集して PPTX 再生成する</h2>
-          <blockquote>文言を直したいので、HTML を編集してから両方の PPTX を作り直したいケース。</blockquote>
+        <section id="case-diagram">
+          <h2>3. 画像生成AIで構図ラフを作る</h2>
+          <blockquote>
+            参考画像がないが、複雑な業務フロー・概念図・構造図が必要な場合の補助ルート。画像生成AIで作るのは完成物ではなく、1番の再現ルートへ渡すための構図ラフ。
+          </blockquote>
+          <h3>なぜ構図ラフを挟むのか</h3>
+          <p>テキストだけで密な業務フローを一発生成すると、接続関係や情報密度が崩れやすい。画像生成AIで先に構図の当たりを作り、その画像を参考画像として <code>consulting-slide-remake</code> に渡すと、1番の「参考画像から再現」ルートに持ち込める。</p>
+          <h3>手順</h3>
+          <ol>
+            <li>図解したい対象を文章で整理する</li>
+            <li>画像生成AIに、文字少なめ・図形中心で構図ラフを作らせる</li>
+            <li>生成画像を参考画像として Claude Code に渡す</li>
+            <li>1番と同じく <code>consulting-slide-remake</code> Mode A で構造を抽出する</li>
+            <li>本文・ラベル・数値を正しい内容に置き換えてHTML化する</li>
+            <li>必要に応じて編集可能PPTXへ変換する</li>
+          </ol>
+          <h3>画像生成AIに投げる例</h3>
+          <pre><code>AI提案書作成ワークフローを、2レーンの業務フロー図として可視化してください。
+左から右に処理が進み、DB、CSV、帳票、営業担当への引き渡しが分かる構図。
+文字は最小限で、ネイビー、ブロンズ、ライトグレーを基調にしてください。</code></pre>
+          <h3>注意</h3>
+          <ul>
+            <li>画像内の日本語や細かい数字は採用せず、後段で正しい文言に置き換える</li>
+            <li>生成画像は完成物ではなく、参考画像を人工的に作るためのたたき台として扱う</li>
+            <li>DBアイコン、書類、矢印、番号バッジは最終的にHTML/SVGまたはPowerPoint図形で再構築する</li>
+          </ul>
+        </section>
 
-          <h3>5-1. HTML を編集</h3>
-          <pre><code class="language-bash"># 例: 12 番のスライドの文言を直す
-open slides/12-ai-workflow-asis.html  # ブラウザでプレビューしながら
-code slides/12-ai-workflow-asis.html  # VS Code 等で編集</code></pre>
-
-          <h3>5-2. 画像埋込 PPTX を再生成（投影用）</h3>
+        <section id="output">
+          <h2>PPTX出力の考え方</h2>
+          <table>
+            <thead>
+              <tr>
+                <th>出力方式</th>
+                <th>特徴</th>
+                <th>使いどころ</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>HTML → PNG → PPTX</td>
+                <td>見た目の再現性が高い。PowerPoint上では画像扱い。</td>
+                <td>見た目を固定したい場合</td>
+              </tr>
+              <tr>
+                <td>HTML設計値 → 編集可能PPTX</td>
+                <td>テキスト・図形をPowerPoint上で編集できる。細部は近似になる。</td>
+                <td>後から文言・色・位置を直したい場合</td>
+              </tr>
+            </tbody>
+          </table>
+          <h3>再生成コマンド</h3>
           <pre><code class="language-bash">cd scripts
 /usr/local/bin/python3 01_build_pptx_image_embed.py
-# → ../pptx/consulting-html-slides.pptx が更新される</code></pre>
-          <p>所要時間: 12 スライドで約 30 秒。</p>
 
-          <h3>5-3. 編集可能 PPTX を再生成（必要なら）</h3>
-          <pre><code class="language-bash">/usr/local/bin/python3 02_build_pptx_editable.py
-# → ../pptx/12-ai-workflow-asis-editable.pptx が更新される</code></pre>
-          <p class="note">注意: <code>02_build_pptx_editable.py</code> は <strong>slide 12 専用</strong> にハードコードされている。他のスライドを編集可能 PPTX 化したい場合は、Claude Code に依頼してスクリプト追加が必要。</p>
+/usr/local/bin/python3 02_build_pptx_editable.py</code></pre>
+          <p class="note"><code>02_build_pptx_editable.py</code> は現状 slide 12 専用。別スライドを編集可能PPTX化する場合は、対象スライドごとに座標・図形・テキストを再構築する。</p>
         </section>
 
         <section id="trouble">
