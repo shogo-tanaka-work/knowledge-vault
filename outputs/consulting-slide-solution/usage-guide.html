@@ -1,0 +1,567 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>使い方手順書 | Consulting Slide Solution</title>
+  <style>
+    :root {
+      --navy: #1a2b4a;
+      --navy-2: #243b63;
+      --bronze: #b89456;
+      --ink: #263043;
+      --muted: #657083;
+      --line: #d8dde5;
+      --soft: #f3f5f8;
+      --paper: #ffffff;
+      --code: #f7f1e7;
+    }
+
+    * { box-sizing: border-box; }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      color: var(--ink);
+      background: #e9edf2;
+      font-family: "Noto Sans JP", "Hiragino Sans", "Yu Gothic", system-ui, sans-serif;
+      line-height: 1.75;
+    }
+
+    .page {
+      width: min(1160px, calc(100% - 40px));
+      margin: 32px auto;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      box-shadow: 0 18px 48px rgba(26, 43, 74, .12);
+    }
+
+    header {
+      padding: 44px 52px 32px;
+      border-bottom: 4px solid var(--navy);
+      position: relative;
+    }
+
+    header::before {
+      content: "";
+      position: absolute;
+      left: 52px;
+      bottom: -4px;
+      width: 140px;
+      height: 4px;
+      background: var(--bronze);
+    }
+
+    .eyebrow {
+      margin: 0 0 8px;
+      color: var(--bronze);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 0;
+      color: var(--navy);
+      font-size: clamp(30px, 4vw, 44px);
+      line-height: 1.25;
+      letter-spacing: 0;
+    }
+
+    .lead {
+      max-width: 780px;
+      margin: 18px 0 0;
+      color: var(--muted);
+      font-size: 15px;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 276px 1fr;
+      gap: 0;
+      align-items: start;
+    }
+
+    nav {
+      position: sticky;
+      top: 0;
+      min-height: 100vh;
+      padding: 28px 24px;
+      border-right: 1px solid var(--line);
+      background: #fbfcfe;
+    }
+
+    nav .label {
+      margin: 0 0 12px;
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .14em;
+    }
+
+    nav a {
+      display: block;
+      padding: 8px 10px;
+      border-left: 3px solid transparent;
+      color: var(--navy);
+      text-decoration: none;
+      font-size: 13px;
+      line-height: 1.45;
+    }
+
+    nav a:hover {
+      background: var(--soft);
+      border-left-color: var(--bronze);
+    }
+
+    main {
+      padding: 34px 52px 56px;
+    }
+
+    section {
+      padding: 22px 0 34px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    section:last-child {
+      border-bottom: 0;
+    }
+
+    h2 {
+      margin: 0 0 18px;
+      color: var(--navy);
+      font-size: 24px;
+      line-height: 1.35;
+      letter-spacing: 0;
+    }
+
+    h3 {
+      margin: 28px 0 10px;
+      color: var(--navy-2);
+      font-size: 18px;
+      line-height: 1.45;
+    }
+
+    h4 {
+      margin: 22px 0 8px;
+      color: var(--ink);
+      font-size: 15px;
+    }
+
+    p {
+      margin: 0 0 14px;
+    }
+
+    ul, ol {
+      margin: 0 0 16px 1.3em;
+      padding: 0;
+    }
+
+    li + li {
+      margin-top: 4px;
+    }
+
+    strong {
+      color: var(--navy);
+      font-weight: 800;
+    }
+
+    blockquote {
+      margin: 16px 0;
+      padding: 14px 18px;
+      border-left: 5px solid var(--bronze);
+      background: #faf7f0;
+      color: #4d5565;
+    }
+
+    code {
+      padding: 2px 5px;
+      border-radius: 3px;
+      background: var(--code);
+      color: #233454;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: .92em;
+    }
+
+    pre {
+      margin: 14px 0 18px;
+      padding: 16px 18px;
+      overflow: auto;
+      border: 1px solid #e2d3bb;
+      border-radius: 4px;
+      background: #fffaf2;
+    }
+
+    pre code {
+      padding: 0;
+      background: transparent;
+      font-size: 13px;
+      line-height: 1.65;
+    }
+
+    table {
+      width: 100%;
+      margin: 14px 0 20px;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+
+    th, td {
+      padding: 10px 12px;
+      border: 1px solid var(--line);
+      vertical-align: top;
+      text-align: left;
+    }
+
+    th {
+      background: var(--navy);
+      color: #fff;
+      font-weight: 700;
+    }
+
+    tr:nth-child(even) td {
+      background: #fafbfc;
+    }
+
+    .scenario-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 10px;
+      margin: 16px 0 22px;
+    }
+
+    .scenario {
+      min-height: 118px;
+      padding: 14px;
+      border: 1px solid var(--line);
+      border-top: 4px solid var(--bronze);
+      background: #fbfcfe;
+    }
+
+    .scenario .num {
+      color: var(--bronze);
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: .08em;
+    }
+
+    .scenario .name {
+      margin-top: 6px;
+      color: var(--navy);
+      font-size: 14px;
+      font-weight: 800;
+      line-height: 1.45;
+    }
+
+    .scenario .from {
+      margin-top: 8px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
+    .note {
+      padding: 14px 16px;
+      border: 1px solid #d7c49d;
+      background: #fffaf0;
+      color: #4d5565;
+      font-size: 14px;
+    }
+
+    .tree {
+      white-space: pre;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 13px;
+      line-height: 1.7;
+    }
+
+    @media (max-width: 920px) {
+      .page {
+        width: 100%;
+        margin: 0;
+        border: 0;
+      }
+
+      header, main {
+        padding-left: 24px;
+        padding-right: 24px;
+      }
+
+      header::before {
+        left: 24px;
+      }
+
+      .layout {
+        grid-template-columns: 1fr;
+      }
+
+      nav {
+        position: relative;
+        min-height: auto;
+        border-right: 0;
+        border-bottom: 1px solid var(--line);
+      }
+
+      .scenario-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header>
+      <p class="eyebrow">Consulting Slide Solution</p>
+      <h1>02. 使い方手順書</h1>
+      <p class="lead">Claude Code とスライド再現スキルを使い、参考画像・HTML・PPTXを行き来しながらコンサル品質の資料を作るための運用手順。</p>
+    </header>
+
+    <div class="layout">
+      <nav aria-label="目次">
+        <p class="label">目次</p>
+        <a href="#premise">共通の前提</a>
+        <a href="#scenarios">シナリオ一覧</a>
+        <a href="#scenario-1">1. 既存スライドを投影 / 微編集</a>
+        <a href="#scenario-2">2. ゼロから作る</a>
+        <a href="#scenario-3">3. 参考画像から再現</a>
+        <a href="#scenario-4">4. 画像 / PDFを編集可能PPTXへ</a>
+        <a href="#scenario-5">5. HTML編集後にPPTX再生成</a>
+        <a href="#trouble">トラブルシューティング</a>
+        <a href="#tree">参考: ファイル直接編集ツリー</a>
+      </nav>
+
+      <main>
+        <section id="premise">
+          <h2>共通の前提</h2>
+          <ul>
+            <li><strong>Claude Code がインストール済み</strong>（<code>https://claude.com/claude-code</code>）</li>
+            <li>当フォルダを Claude Code で開く、または <code>cd</code> してから <code>claude</code> コマンドを実行する</li>
+            <li>スキルが認識されているかは Claude Code 内で <code>/skills</code> で確認する</li>
+          </ul>
+          <p class="note">PPTX の再生成だけしたい場合は Claude Code 不要。Python だけで実行できる。</p>
+        </section>
+
+        <section id="scenarios">
+          <h2>シナリオ一覧</h2>
+          <div class="scenario-grid">
+            <div class="scenario">
+              <div class="num">01</div>
+              <div class="name">完成済みスライドを投影 / 微編集</div>
+              <div class="from">起点: 既存 PPTX</div>
+            </div>
+            <div class="scenario">
+              <div class="num">02</div>
+              <div class="name">ゼロから作る</div>
+              <div class="from">起点: テキスト指示のみ → 画像生成 AI 経由</div>
+            </div>
+            <div class="scenario">
+              <div class="num">03</div>
+              <div class="name">参考画像から自分のテーマで再現</div>
+              <div class="from">起点: 既存スライド画像</div>
+            </div>
+            <div class="scenario">
+              <div class="num">04</div>
+              <div class="name">画像 / PDF を編集可能 PPTX に変換</div>
+              <div class="from">起点: 画像 / PDF</div>
+            </div>
+            <div class="scenario">
+              <div class="num">05</div>
+              <div class="name">HTML 編集して PPTX 再ビルド</div>
+              <div class="from">起点: 既存 HTML</div>
+            </div>
+          </div>
+        </section>
+
+        <section id="scenario-1">
+          <h2>シナリオ 1: 既に作ってあるスライドを投影 / 微編集する</h2>
+          <p>クライアント説明に <strong>そのまま使う</strong> ケース。</p>
+          <h3>手順</h3>
+          <ol>
+            <li><code>pptx/consulting-html-slides.pptx</code> をダブルクリック</li>
+            <li>PowerPoint で開く（Keynote でも可）</li>
+            <li>投影モードで再生</li>
+          </ol>
+          <h3>微編集したい場合</h3>
+          <ul>
+            <li><strong>見た目維持で文言だけ直したい</strong> → <code>pptx/12-ai-workflow-asis-editable.pptx</code> を開いて該当テキストボックスをクリック・編集</li>
+            <li><strong>見た目ごと変えたい</strong> → <code>slides/*.html</code> をエディタで開いて編集 → シナリオ 5 で再ビルド</li>
+          </ul>
+        </section>
+
+        <section id="scenario-2">
+          <h2>シナリオ 2: 参考画像が手元にない場合</h2>
+          <blockquote>
+            真似たいスライドの参考が手元にない、または全く新しい構図を作りたいケース。直接 PowerPoint を AI に作らせると安っぽくなるため、画像生成 AI でいったん 1 枚作り、それをシナリオ 3 の入力に流す。
+          </blockquote>
+          <h3>なぜこの 2 段構えなのか</h3>
+          <p>画像生成 AI（Nano Banana / GPT-Image-2 / Claude Design / Imagen 等）はコンサル風の <strong>構図</strong> を高速に作れるが、出力された PNG は文字・配色・数値の微調整ができない。そこで生成画像を <strong>自前のたたき台</strong> として消費し、Mode A で構造抽出 → HTML → PPTX に流す。</p>
+          <h3>手順</h3>
+          <ol>
+            <li><strong>テーマと構成を文章で書き出す</strong></li>
+          </ol>
+          <pre><code>- 章番号: 3.2
+- メッセージ: AI 浸透における 4 つの障壁を、組織・データ・人材・運用 で図解
+- レイアウト指定: 4 象限マトリクス、各象限に 3-5 のキーワード、左下にKEY TAKEAWAY
+- 配色: 政府系シンクタンク風（ネイビー＋ブロンズ）</code></pre>
+          <ol start="2">
+            <li><strong>画像生成 AI に投げる</strong></li>
+          </ol>
+          <ul>
+            <li>Nano Banana: 構図再現性が高い、図解寄り</li>
+            <li>GPT-Image (ChatGPT): タイポは弱いが構図インスピは強い</li>
+            <li>Claude Design tool: ベクター傾向、整列が綺麗</li>
+            <li>1 枚出ればよい。タイポや細部が崩れていても <strong>構図さえ取れていれば OK</strong></li>
+          </ul>
+          <ol start="3">
+            <li><strong>生成された画像を保存</strong> し、シナリオ 3 の入力として使う</li>
+          </ol>
+          <pre><code>この生成画像をベースに、政府系シンクタンク風で
+「AI 浸透 4 つの障壁」のスライドをリメイクしたい。
+テキストは自分のテーマに置き換えてください。
+
+[生成画像をペースト]</code></pre>
+          <ol start="4">
+            <li><code>consulting-slide-remake</code> Mode A が発動し、構造化されたプロンプトを返す</li>
+            <li>そのまま「これで HTML スライドにして」と Claude Code に追加依頼</li>
+            <li>完成した HTML をシナリオ 5 の手順で PPTX 化</li>
+          </ol>
+          <h3>注意</h3>
+          <ul>
+            <li>画像生成 AI の出力にあるタイポ・無意味な日本語は Mode A の構造解析時に自分の文言で上書きする</li>
+            <li>1 発で構図が決まらない場合、画像生成側のプロンプトを 2-3 回練り直してから入口に流すと品質が安定する</li>
+          </ul>
+        </section>
+
+        <section id="scenario-3">
+          <h2>シナリオ 3: 参考スライド画像から、自分のテーマで似たスライドを作る</h2>
+          <blockquote>
+            このマッキンゼー風スライドのレイアウトを真似て、当社の AI 浸透施策を表現したい、というケース。本ソリューションの中核ユースケース。
+          </blockquote>
+          <h3>手順</h3>
+          <ol>
+            <li>参考にしたいスライドを画像（PNG / JPG）で保存</li>
+            <li>Claude Code を起動し、以下のように依頼する</li>
+          </ol>
+          <pre><code>この参考スライドをアビーム風で再現したい。
+テーマは「AI 提案書作成ワークフローの現状」で、私の組織の
+営業プロセスに置き換えてください。
+
+[参考スライド画像をペースト]</code></pre>
+          <ol start="3">
+            <li><code>consulting-slide-remake</code> スキル（Mode A）が自動発動</li>
+            <li>Claude が画像を構造解析し、<strong>戦略コンサル風スライド生成プロンプト</strong> を出力</li>
+            <li>出力されたプロンプトを、好みの画像生成 AI（GPT-Image / Claude Design / nano banana 等）に投げる</li>
+            <li>または、そのまま「この内容で HTML スライドを作って」と Claude Code に依頼</li>
+          </ol>
+          <h3>発動キーワード</h3>
+          <ul>
+            <li>コンサル風スライドを再現</li>
+            <li>アビーム風で作って</li>
+            <li>マッキンゼー風スライドのリメイク</li>
+            <li>画像から再現プロンプト作って</li>
+          </ul>
+        </section>
+
+        <section id="scenario-4">
+          <h2>シナリオ 4: 既存の画像スライド / PDF を、編集可能 PPTX に変換する</h2>
+          <blockquote>PDF でもらった綺麗なスライドを、PowerPoint で編集したいケース。</blockquote>
+          <h3>手順</h3>
+          <ol>
+            <li>変換対象の画像 / PDF を用意</li>
+            <li>Claude Code に依頼する</li>
+          </ol>
+          <pre><code>この画像をズレなく編集可能な PPTX に変換するための
+再構築指示書を作って。
+
+[画像をペースト]</code></pre>
+          <ol start="3">
+            <li><code>consulting-slide-remake</code> スキル（Mode B）が自動発動</li>
+            <li>Claude が <strong>PPTX 再構築プロンプト</strong> を出力（座標・色・フォント・テキストの指定一式）</li>
+            <li>そのプロンプトを Claude Code 自身に渡し、<code>python-pptx</code> で実装させる</li>
+            <li>生成された <code>.pptx</code> を <code>unzip -l</code> で <code>ppt/media/</code> が空であることを確認する</li>
+          </ol>
+          <h3>発動キーワード</h3>
+          <ul>
+            <li>これをパワポにして</li>
+            <li>画像を編集可能な pptx に</li>
+            <li>PDF をズレなく PPTX 化</li>
+          </ul>
+        </section>
+
+        <section id="scenario-5">
+          <h2>シナリオ 5: HTML スライドを自分で編集して PPTX 再生成する</h2>
+          <blockquote>文言を直したいので、HTML を編集してから両方の PPTX を作り直したいケース。</blockquote>
+
+          <h3>5-1. HTML を編集</h3>
+          <pre><code class="language-bash"># 例: 12 番のスライドの文言を直す
+open slides/12-ai-workflow-asis.html  # ブラウザでプレビューしながら
+code slides/12-ai-workflow-asis.html  # VS Code 等で編集</code></pre>
+
+          <h3>5-2. 画像埋込 PPTX を再生成（投影用）</h3>
+          <pre><code class="language-bash">cd scripts
+/usr/local/bin/python3 01_build_pptx_image_embed.py
+# → ../pptx/consulting-html-slides.pptx が更新される</code></pre>
+          <p>所要時間: 12 スライドで約 30 秒。</p>
+
+          <h3>5-3. 編集可能 PPTX を再生成（必要なら）</h3>
+          <pre><code class="language-bash">/usr/local/bin/python3 02_build_pptx_editable.py
+# → ../pptx/12-ai-workflow-asis-editable.pptx が更新される</code></pre>
+          <p class="note">注意: <code>02_build_pptx_editable.py</code> は <strong>slide 12 専用</strong> にハードコードされている。他のスライドを編集可能 PPTX 化したい場合は、Claude Code に依頼してスクリプト追加が必要。</p>
+        </section>
+
+        <section id="trouble">
+          <h2>トラブルシューティング</h2>
+          <table>
+            <thead>
+              <tr>
+                <th>症状</th>
+                <th>原因</th>
+                <th>対処</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>playwright._impl._errors.Error: Executable doesn't exist</code></td>
+                <td>Playwright がブラウザを持っていない</td>
+                <td>スクリプト内の <code>executable_path="/Applications/Google Chrome.app/..."</code> を参照、または <code>playwright install chromium</code></td>
+              </tr>
+              <tr>
+                <td>矢印が左上に飛んでいる</td>
+                <td><code>add_connector</code> の引数を delta で渡している</td>
+                <td><code>(begin_x, begin_y, end_x, end_y)</code> の <strong>絶対座標</strong> で渡す</td>
+              </tr>
+              <tr>
+                <td>HTML スライドの iframe ギャラリーで点線位置がズレる</td>
+                <td>iframe スケーリングと CSS 計算式の相性</td>
+                <td>フルスクリーン（<code>slides/*.html</code> を直接開く）で確認すれば正常</td>
+              </tr>
+              <tr>
+                <td>編集可能 PPTX で書類アイコンの形が違う</td>
+                <td><code>MSO_SHAPE.FOLDED_CORNER</code> で近似している</td>
+                <td><code>MSO_SHAPE.FREEFORM</code> で自前パス描画に差し替え可能</td>
+              </tr>
+            </tbody>
+          </table>
+        </section>
+
+        <section id="tree">
+          <h2>参考: ファイル直接編集ツリー</h2>
+          <p>最頻出の編集対象だけ抜粋。</p>
+          <pre class="tree"><code>slides/12-ai-workflow-asis.html         ← 文言・配色を直接編集
+   └─ 中の SVG 内の &lt;text&gt; を書き換えるだけで反映
+
+assets/style.css                         ← 配色テーマを横断的に変える時
+   └─ :root 直下のカスタムプロパティ
+
+scripts/02_build_pptx_editable.py        ← 編集可能 PPTX のレイアウト基準
+   └─ NAVY / BRONZE 等の定数を変えれば配色変更</code></pre>
+        </section>
+      </main>
+    </div>
+  </div>
+</body>
+</html>
