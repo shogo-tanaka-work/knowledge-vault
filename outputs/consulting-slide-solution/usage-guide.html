@@ -391,7 +391,6 @@
         <a href="#case-diagram">3. 画像生成AIで構図ラフを作る</a>
         <a href="#output">PPTX出力の考え方</a>
         <a href="#trouble">トラブルシューティング</a>
-        <a href="#tree">参考: ファイル直接編集ツリー</a>
       </nav>
 
       <main>
@@ -402,7 +401,6 @@
             <li>当フォルダを Claude Code で開く、または <code>cd</code> してから <code>claude</code> コマンドを実行する</li>
             <li>スキルが認識されているかは Claude Code 内で <code>/skills</code> で確認する</li>
           </ul>
-          <p class="note">PPTX の再生成だけしたい場合は Claude Code 不要。Python だけで実行できる。</p>
         </section>
 
         <section id="scenarios">
@@ -464,27 +462,40 @@
         <section id="case-template">
           <h2>1. 参考画像・既存テンプレから再現する</h2>
           <blockquote>
-            すでに近い見た目のPPTX、HTMLスライド、参考スライド画像がある場合。構図・余白・配色・図解要素を踏襲し、中身を差し替える最短ルート。
+            いつ使うか: すでに近い見た目のPPTX、HTMLスライド、参考スライド画像がある場合。構図・余白・配色・図解要素を踏襲し、中身を差し替える。
           </blockquote>
-          <h3>使う入力</h3>
+          <h3>入力データ</h3>
           <ul>
-            <li>既存PPTX、または過去に作ったHTMLスライド</li>
-            <li>真似たいレイアウトのスクリーンショット</li>
+            <li>参考画像（PNG / JPG）または既存PPTX</li>
+            <li>過去に作ったHTMLスライド</li>
             <li>差し替えたい本文・章番号・メッセージ・表データ</li>
           </ul>
-          <h3>流れ</h3>
+          <h3>操作手順</h3>
           <ol>
-            <li>テンプレまたは参考画像を Claude Code に渡す</li>
+            <li>このディレクトリを Claude Code で開く</li>
+            <li>参考画像を貼り付ける。PPTXを使う場合は、必要なページを画像化して渡すか、PPTX内の対象ページを指定する</li>
+            <li>再現したいテイスト、差し替えるテーマ、変更したいテキストをプロンプトで指示する</li>
             <li><code>consulting-slide-remake</code> Mode A で構造を抽出する</li>
-            <li>抽出結果をもとに、HTML/CSS/SVGでスライドを再構築する</li>
-            <li>必要に応じて <code>python-pptx</code> で編集可能PPTXに変換する</li>
+            <li>抽出結果をもとに <code>slides/*.html</code> を作成または更新する</li>
+            <li>必要に応じて <code>scripts/01_build_pptx_image_embed.py</code> または <code>scripts/02_build_pptx_editable.py</code> でPPTX化する</li>
           </ol>
-          <h3>依頼例</h3>
+          <h3>アウトプット先</h3>
+          <ul>
+            <li>HTMLスライド: <code>slides/*.html</code></li>
+            <li>画像埋込PPTX: <code>pptx/consulting-html-slides.pptx</code></li>
+            <li>編集可能PPTX: <code>pptx/*-editable.pptx</code> または検証用の別名PPTX</li>
+          </ul>
+          <h3>プロンプト例（参考画像を使う）</h3>
           <pre><code>この参考スライドを政府系シンクタンク風で再現したい。
 テーマは「AI 提案書作成ワークフローの現状」で、私の組織の
 営業プロセスに置き換えてください。
 
 [参考スライド画像をペースト]</code></pre>
+          <h3>プロンプト例（既存PPTXを使う）</h3>
+          <pre><code>このPPTXの12ページ目の構図をベースに、
+文言を「AI活用ロードマップ」に差し替えてください。
+配色、章番号、KEY TAKEAWAY、右側の説明欄の型は維持し、
+HTMLスライドと編集可能PPTXを作成してください。</code></pre>
           <h3>向いている場面</h3>
           <ul>
             <li>トンマナや余白設計を既存資料に寄せたい</li>
@@ -497,23 +508,31 @@
         <section id="case-no-template">
           <h2>2. テキスト指示から構成案を作る</h2>
           <blockquote>
-            参考にできる見た目がなく、テーマ・論点・構成メモだけがある場合。まずスライドの骨格を作り、シンプルな図解ならそのままHTML化する。
+            いつ使うか: 参考にできる見た目がなく、テーマ・論点・構成メモだけがある場合。まずスライドの骨格を作り、シンプルな図解ならそのままHTML化する。
           </blockquote>
-          <h3>使う入力</h3>
+          <h3>入力データ</h3>
           <ul>
             <li>作りたいテーマ</li>
             <li>伝えたい結論、章番号、想定読者</li>
             <li>使いたいフレーム（比較表、ロードマップ、KPIツリー、業務フローなど）</li>
           </ul>
-          <h3>手順</h3>
+          <h3>操作手順</h3>
           <ol>
+            <li>このディレクトリを Claude Code で開く</li>
+            <li>テーマ、結論、使いたいフレームをプロンプトで渡す</li>
             <li><code>slide-design-patterns</code> でレイアウト候補を出す</li>
             <li>アクションタイトル、主要メッセージ、図解パターンを決める</li>
-            <li>HTML/CSS/SVGでスライドを作る</li>
-            <li>プレビューで密度・整列・読みやすさを確認する</li>
+            <li><code>slides/*.html</code> としてHTML/CSS/SVGでスライドを作る</li>
+            <li>ブラウザまたはスクリーンショットで密度・整列・読みやすさを確認する</li>
             <li>複雑な図解になりそうなら、3番で構図ラフを作ってから1番へ戻す</li>
           </ol>
-          <h3>依頼例</h3>
+          <h3>アウトプット先</h3>
+          <ul>
+            <li>構成案: Claude Codeの応答本文</li>
+            <li>HTMLスライド: <code>slides/*.html</code></li>
+            <li>PPTX化する場合: <code>pptx/*.pptx</code></li>
+          </ul>
+          <h3>プロンプト例</h3>
           <pre><code>「AI活用ロードマップ」を1枚で説明したい。
 構成は、現状課題 → 重点施策 → 導入ステップ → 効果指標。
 政府系シンクタンク風のネイビー＋ブロンズで、
@@ -530,20 +549,33 @@ HTMLスライドとして作成してください。</code></pre>
         <section id="case-diagram">
           <h2>3. 画像生成AIで構図ラフを作る</h2>
           <blockquote>
-            参考画像がないが、複雑な業務フロー・概念図・構造図が必要な場合の補助ルート。画像生成AIで作るのは完成物ではなく、1番の再現ルートへ渡すための構図ラフ。
+            いつ使うか: 参考画像がないが、複雑な業務フロー・概念図・構造図が必要な場合。画像生成AIで作るのは完成物ではなく、1番の再現ルートへ渡すための構図ラフ。
           </blockquote>
           <h3>なぜ構図ラフを挟むのか</h3>
           <p>テキストだけで密な業務フローを一発生成すると、接続関係や情報密度が崩れやすい。画像生成AIで先に構図の当たりを作り、その画像を参考画像として <code>consulting-slide-remake</code> に渡すと、1番の「参考画像から再現」ルートに持ち込める。</p>
-          <h3>手順</h3>
+          <h3>入力データ</h3>
+          <ul>
+            <li>図解したい業務・概念・システム構成の説明文</li>
+            <li>登場要素（担当者、DB、帳票、CSV、処理ステップなど）</li>
+            <li>希望するテイスト（政府系シンクタンク風、アビーム風、ネイビー＋ブロンズなど）</li>
+          </ul>
+          <h3>操作手順</h3>
           <ol>
             <li>図解したい対象を文章で整理する</li>
             <li>画像生成AIに、文字少なめ・図形中心で構図ラフを作らせる</li>
+            <li>このディレクトリを Claude Code で開く</li>
             <li>生成画像を参考画像として Claude Code に渡す</li>
             <li>1番と同じく <code>consulting-slide-remake</code> Mode A で構造を抽出する</li>
-            <li>本文・ラベル・数値を正しい内容に置き換えてHTML化する</li>
+            <li>本文・ラベル・数値を正しい内容に置き換えて <code>slides/*.html</code> としてHTML化する</li>
             <li>必要に応じて編集可能PPTXへ変換する</li>
           </ol>
-          <h3>画像生成AIに投げる例</h3>
+          <h3>アウトプット先</h3>
+          <ul>
+            <li>構図ラフ: 画像生成AIから出力されるPNG / JPG</li>
+            <li>HTMLスライド: <code>slides/*.html</code></li>
+            <li>編集可能PPTX: <code>pptx/*-editable.pptx</code></li>
+          </ul>
+          <h3>画像生成AIに投げるプロンプト例</h3>
           <pre><code>AI提案書作成ワークフローを、2レーンの業務フロー図として可視化してください。
 左から右に処理が進み、DB、CSV、帳票、営業担当への引き渡しが分かる構図。
 文字は最小限で、ネイビー、ブロンズ、ライトグレーを基調にしてください。</code></pre>
@@ -562,19 +594,22 @@ HTMLスライドとして作成してください。</code></pre>
               <tr>
                 <th>出力方式</th>
                 <th>特徴</th>
+                <th>必要なもの</th>
                 <th>使いどころ</th>
               </tr>
             </thead>
             <tbody>
               <tr>
                 <td>HTML → PNG → PPTX</td>
-                <td>見た目の再現性が高い。PowerPoint上では画像扱い。</td>
-                <td>見た目を固定したい場合</td>
+                <td>HTMLをブラウザ表示どおりPNG化し、PPTXに全面貼付する。PowerPoint上では画像扱い。</td>
+                <td>Playwright + Chrome。ローカルHTMLを正確にレンダリングするためで、スクレイピング用途ではない。</td>
+                <td>見た目の再現性を優先したい場合。</td>
               </tr>
               <tr>
                 <td>HTML設計値 → 編集可能PPTX</td>
-                <td>テキスト・図形をPowerPoint上で編集できる。細部は近似になる。</td>
-                <td>後から文言・色・位置を直したい場合</td>
+                <td><code>python-pptx</code>でテキスト・図形をPowerPoint要素として再構築する。細部は近似になる。</td>
+                <td><code>python-pptx</code>。この方式ではPlaywrightは使わない。</td>
+                <td>後から文言・色・位置を直したい場合。</td>
               </tr>
             </tbody>
           </table>
@@ -587,7 +622,7 @@ HTMLスライドとして作成してください。</code></pre>
         </section>
 
         <section id="trouble">
-          <h2>トラブルシューティング</h2>
+          <h2>トラブルシューティング（一例）</h2>
           <table>
             <thead>
               <tr>
@@ -599,8 +634,8 @@ HTMLスライドとして作成してください。</code></pre>
             <tbody>
               <tr>
                 <td><code>playwright._impl._errors.Error: Executable doesn't exist</code></td>
-                <td>Playwright がブラウザを持っていない</td>
-                <td>スクリプト内の <code>executable_path="/Applications/Google Chrome.app/..."</code> を参照、または <code>playwright install chromium</code></td>
+                <td>画像埋込PPTX生成時に、Playwright が利用できるブラウザを見つけられない</td>
+                <td><code>01_build_pptx_image_embed.py</code> を使う場合のみ対応する。スクリプト内の <code>executable_path="/Applications/Google Chrome.app/..."</code> を参照、または <code>playwright install chromium</code></td>
               </tr>
               <tr>
                 <td>矢印が左上に飛んでいる</td>
@@ -619,19 +654,6 @@ HTMLスライドとして作成してください。</code></pre>
               </tr>
             </tbody>
           </table>
-        </section>
-
-        <section id="tree">
-          <h2>参考: ファイル直接編集ツリー</h2>
-          <p>最頻出の編集対象だけ抜粋。</p>
-          <pre class="tree"><code>slides/12-ai-workflow-asis.html         ← 文言・配色を直接編集
-   └─ 中の SVG 内の &lt;text&gt; を書き換えるだけで反映
-
-assets/style.css                         ← 配色テーマを横断的に変える時
-   └─ :root 直下のカスタムプロパティ
-
-scripts/02_build_pptx_editable.py        ← 編集可能 PPTX のレイアウト基準
-   └─ NAVY / BRONZE 等の定数を変えれば配色変更</code></pre>
         </section>
       </main>
     </div>
