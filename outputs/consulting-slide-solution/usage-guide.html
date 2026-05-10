@@ -264,57 +264,17 @@
       line-height: 1.5;
     }
 
-    .decision-flow {
+    .flow-image {
       margin: 20px 0 26px;
-      padding: 18px;
+      padding: 10px;
       border: 1px solid var(--line);
-      background: #fbfcfe;
-    }
-
-    .flow-row {
-      display: grid;
-      grid-template-columns: 1fr 48px 1fr;
-      gap: 12px;
-      align-items: center;
-      margin-bottom: 12px;
-    }
-
-    .flow-row:last-child {
-      margin-bottom: 0;
-    }
-
-    .flow-box {
-      min-height: 86px;
-      padding: 14px 16px;
-      border: 1px solid var(--line);
-      border-left: 5px solid var(--bronze);
       background: #fff;
     }
 
-    .flow-box.primary {
-      border-left-color: var(--navy);
-      background: #f6f8fb;
-    }
-
-    .flow-box .q {
-      margin: 0 0 6px;
-      color: var(--navy);
-      font-weight: 800;
-      line-height: 1.45;
-    }
-
-    .flow-box .a {
-      margin: 0;
-      color: var(--muted);
-      font-size: 13px;
-      line-height: 1.55;
-    }
-
-    .flow-arrow {
-      color: var(--bronze);
-      font-size: 28px;
-      font-weight: 800;
-      text-align: center;
+    .flow-image img {
+      display: block;
+      width: 100%;
+      height: auto;
     }
 
     .note {
@@ -363,13 +323,6 @@
         grid-template-columns: 1fr;
       }
 
-      .flow-row {
-        grid-template-columns: 1fr;
-      }
-
-      .flow-arrow {
-        transform: rotate(90deg);
-      }
     }
   </style>
 </head>
@@ -377,8 +330,8 @@
   <div class="page">
     <header>
       <p class="eyebrow">Consulting Slide Solution</p>
-      <h1>02. 使い方手順書</h1>
-      <p class="lead">Claude Code とスライド再現スキルを使い、テンプレート・参考画像・図解生成を起点に、編集可能なPPTXまでつなげるための運用手順。</p>
+      <h1>使い方手順書</h1>
+      <p class="lead">Claude Code または Codex とスライド再現スキルを使い、テンプレート・参考画像・図解生成を起点にPPTX作成までつなげるための運用手順。</p>
     </header>
 
     <div class="layout">
@@ -397,48 +350,16 @@
         <section id="premise">
           <h2>共通の前提</h2>
           <ul>
-            <li><strong>Claude Code がインストール済み</strong>（<code>https://claude.com/claude-code</code>）</li>
-            <li>当フォルダを Claude Code で開く、または <code>cd</code> してから <code>claude</code> コマンドを実行する</li>
-            <li>スキルが認識されているかは Claude Code 内で <code>/skills</code> で確認する</li>
+            <li><strong>Claude Code または Codex が利用できる状態</strong>にしておく</li>
+            <li>当フォルダを作業ディレクトリとして開く</li>
+            <li>Claude Code で使う場合は、必要に応じて <code>/skills</code> でスキル認識を確認する</li>
           </ul>
         </section>
 
         <section id="scenarios">
           <h2>判断フロー</h2>
-          <div class="decision-flow" aria-label="作成ルートの判断フロー">
-            <div class="flow-row">
-              <div class="flow-box primary">
-                <p class="q">参考画像・既存テンプレがあるか？</p>
-                <p class="a">近いPPTX、HTML、スクリーンショットがある場合は、それを構造解析の起点にする。</p>
-              </div>
-              <div class="flow-arrow">→</div>
-              <div class="flow-box">
-                <p class="q">YES: 1. 参考画像・既存テンプレから再現</p>
-                <p class="a">構図・配色・図解要素を踏襲し、テキストやラベルを差し替える。</p>
-              </div>
-            </div>
-            <div class="flow-row">
-              <div class="flow-box primary">
-                <p class="q">NO: テキストだけで構成できるか？</p>
-                <p class="a">比較表、ロードマップ、2x2、シンプルな業務フローならそのまま構成案から作る。</p>
-              </div>
-              <div class="flow-arrow">→</div>
-              <div class="flow-box">
-                <p class="q">YES: 2. テキスト指示から構成案を作る</p>
-                <p class="a">パターン辞書を使い、HTML/CSS/SVGでスライド化する。</p>
-              </div>
-            </div>
-            <div class="flow-row">
-              <div class="flow-box primary">
-                <p class="q">複雑な図解で、構図の当たりが必要か？</p>
-                <p class="a">密な業務フロー、概念図、接続関係が多い図は、先に構図ラフを作ると安定する。</p>
-              </div>
-              <div class="flow-arrow">→</div>
-              <div class="flow-box">
-                <p class="q">YES: 3. 画像生成AIで構図ラフを作る</p>
-                <p class="a">生成画像を「参考画像」として扱い、最終的には1番の再現ルートへ戻す。</p>
-              </div>
-            </div>
+          <div class="flow-image">
+            <img src="assets/decision-flow.png" alt="PowerPoint作成ルートの判断フロー">
           </div>
           <div class="scenario-grid">
             <div class="scenario">
@@ -472,7 +393,7 @@
           </ul>
           <h3>操作手順</h3>
           <ol>
-            <li>このディレクトリを Claude Code で開く</li>
+            <li>このディレクトリを Claude Code または Codex で開く</li>
             <li>参考画像を貼り付ける。PPTXを使う場合は、必要なページを画像化して渡すか、PPTX内の対象ページを指定する</li>
             <li>再現したいテイスト、差し替えるテーマ、変更したいテキストをプロンプトで指示する</li>
             <li><code>consulting-slide-remake</code> Mode A で構造を抽出する</li>
@@ -518,7 +439,7 @@ HTMLスライドと編集可能PPTXを作成してください。</code></pre>
           </ul>
           <h3>操作手順</h3>
           <ol>
-            <li>このディレクトリを Claude Code で開く</li>
+            <li>このディレクトリを Claude Code または Codex で開く</li>
             <li>テーマ、結論、使いたいフレームをプロンプトで渡す</li>
             <li><code>slide-design-patterns</code> でレイアウト候補を出す</li>
             <li>アクションタイトル、主要メッセージ、図解パターンを決める</li>
@@ -528,7 +449,7 @@ HTMLスライドと編集可能PPTXを作成してください。</code></pre>
           </ol>
           <h3>アウトプット先</h3>
           <ul>
-            <li>構成案: Claude Codeの応答本文</li>
+            <li>構成案: Claude Code / Codex の応答本文</li>
             <li>HTMLスライド: <code>slides/*.html</code></li>
             <li>PPTX化する場合: <code>pptx/*.pptx</code></li>
           </ul>
@@ -563,8 +484,8 @@ HTMLスライドとして作成してください。</code></pre>
           <ol>
             <li>図解したい対象を文章で整理する</li>
             <li>画像生成AIに、文字少なめ・図形中心で構図ラフを作らせる</li>
-            <li>このディレクトリを Claude Code で開く</li>
-            <li>生成画像を参考画像として Claude Code に渡す</li>
+            <li>このディレクトリを Claude Code または Codex で開く</li>
+            <li>生成画像を参考画像として Claude Code / Codex に渡す</li>
             <li>1番と同じく <code>consulting-slide-remake</code> Mode A で構造を抽出する</li>
             <li>本文・ラベル・数値を正しい内容に置き換えて <code>slides/*.html</code> としてHTML化する</li>
             <li>必要に応じて編集可能PPTXへ変換する</li>
