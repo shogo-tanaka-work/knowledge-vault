@@ -124,9 +124,24 @@ def add_doc(slide, x, y, w, h):
     s.shadow.inherit = False
     return s
 
-def add_chevron(slide, x, y, w, h, text, fill=BRONZE, color=WHITE, size_px=11.5, bold=True, pointed_right=True):
-    shape = MSO_SHAPE.CHEVRON if pointed_right else MSO_SHAPE.PENTAGON
-    s = slide.shapes.add_shape(shape, E(x), E(y), E(w), E(h))
+def add_chevron(slide, x, y, w, h, text, fill=BRONZE, color=WHITE, size_px=11.5, bold=True, notch_left=False):
+    tip = min(48, w * 0.12)
+    vertices = []
+    if notch_left:
+        vertices.append((E(x), E(y)))
+        vertices.append((E(x + tip), E(y + h / 2)))
+        vertices.append((E(x), E(y + h)))
+    else:
+        vertices.append((E(x), E(y)))
+        vertices.append((E(x), E(y + h)))
+    vertices.extend([
+        (E(x + w - tip), E(y + h)),
+        (E(x + w), E(y + h / 2)),
+        (E(x + w - tip), E(y)),
+    ])
+    builder = slide.shapes.build_freeform(vertices[0][0], vertices[0][1])
+    builder.add_line_segments(vertices[1:], close=True)
+    s = builder.convert_to_shape()
     s.fill.solid(); s.fill.fore_color.rgb = fill
     s.line.fill.background()
     s.shadow.inherit = False
@@ -213,7 +228,7 @@ def build():
     add_chevron(slide, 50,  band_y, 460, band_h, "受領・集計（AI ツール群）",
                 fill=BRONZE, color=WHITE)
     add_chevron(slide, 510, band_y, 460, band_h, "提示（営業担当）",
-                fill=NAVY, color=WHITE)
+                fill=NAVY, color=WHITE, notch_left=True)
 
     # ==========================================================
     # 5) 図解枠（点線・グレー）
