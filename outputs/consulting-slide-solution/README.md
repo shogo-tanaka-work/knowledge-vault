@@ -13,8 +13,8 @@ consulting-slide-solution/
 ├── 01-仕組みの解説.md          ← なぜこのフローで品質が出るのかの理屈
 ├── 02-使い方手順書.md          ← 実際の使い方（4 シナリオ）
 ├── 03-スキル一覧と発動.md      ← Claude Code スキルの内容と発動キーワード
+├── 使い方手順書.html           ← ブラウザで読める版（02-使い方手順書.md の HTML 版）
 │
-├── index.html                  ← ブラウザで開くと 12 スライドのギャラリー
 ├── slides/                     ← HTML スライド本体（編集対象）
 │   ├── 01-cover.html  〜  12-ai-workflow-asis.html
 ├── assets/style.css            ← 共有スタイル（コンサル風配色・タイポ）
@@ -74,7 +74,7 @@ consulting-slide-solution/
 
 ## いますぐ確認したい
 
-- **見た目を見たい**: `index.html` をブラウザで開く（12 パターン横断ギャラリー）
+- **ブラウザで手順を読みたい**: `使い方手順書.html` をダブルクリック
 - **PowerPoint で開きたい**: `pptx/consulting-html-slides.pptx` をダブルクリック（投影向け）
 - **編集したい**: `pptx/12-ai-workflow-asis-editable.pptx` をダブルクリック（テキスト・図形すべて編集可）
 - **仕組みを把握したい**: `01-仕組みの解説.md`
