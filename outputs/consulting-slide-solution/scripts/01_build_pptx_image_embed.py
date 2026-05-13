@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 HTML スライド一覧 → PNG → 16:9 PPTX 変換スクリプト
-- 各 slides/*.html を Playwright で 1280x720 PNG に変換
+- 各 slides-source/*.html を Playwright で 1280x720 PNG に変換
 - python-pptx で 1スライド=1ページの PPTX を生成
 """
 import sys
@@ -10,11 +10,12 @@ from playwright.sync_api import sync_playwright
 from pptx import Presentation
 from pptx.util import Inches, Emu
 
-ROOT = Path(__file__).resolve().parent
-SLIDES_DIR = ROOT / "slides"
-DIST = ROOT / "dist"
-PNG_DIR = DIST / "png"
+ROOT = Path(__file__).resolve().parent.parent
+SLIDES_DIR = ROOT / "slides-source"
+PPTX_DIR = ROOT / "pptx"
+PNG_DIR = ROOT / "scripts" / ".png-cache"
 PNG_DIR.mkdir(parents=True, exist_ok=True)
+PPTX_DIR.mkdir(parents=True, exist_ok=True)
 
 WIDTH, HEIGHT = 1280, 720  # 16:9 ピクセル
 
@@ -60,7 +61,7 @@ def build_pptx(pngs):
             str(png), 0, 0,
             width=prs.slide_width, height=prs.slide_height,
         )
-    out = DIST / "consulting-html-slides.pptx"
+    out = PPTX_DIR / "consulting-html-slides.pptx"
     prs.save(str(out))
     print(f"[pptx] {out} ({out.stat().st_size/1024:.1f} KB, {len(pngs)} slides)")
     return out
