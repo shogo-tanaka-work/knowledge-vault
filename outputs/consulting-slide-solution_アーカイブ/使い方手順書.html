@@ -352,14 +352,25 @@
           <ul>
             <li><strong>Claude Code または Codex が利用できる状態</strong>にしておく</li>
             <li>当フォルダを作業ディレクトリとして開く</li>
-            <li>Claude Code で使う場合は、必要に応じて <code>/skills</code> でスキル認識を確認する</li>
+            <li>Claude Code で使う場合は、必要に応じて <code>/skills</code> でスキル認識を確認する（このフォルダの <code>.claude/skills/</code> 配下に <code>consulting-slide-remake</code> と <code>slide-design-patterns</code> が入っており、開くだけで自動ロードされる）</li>
+            <li>Mode A / Mode B に流す参考スライド画像は <code>assets/references/</code> に置く運用</li>
+          </ul>
+          <h3>フォルダの役割</h3>
+          <ul>
+            <li><strong>中間ソース</strong>: <code>tmp-source/</code>（HTMLスライド本体。手 or Claude で編集する場所）</li>
+            <li><strong>入力</strong>: <code>assets/references/</code>（Mode A / Mode B に流す参考画像の置き場）</li>
+            <li><strong>共通スタイル</strong>: <code>assets/style.css</code>（HTMLスライドの配色・タイポ）</li>
+            <li><strong>最終出力</strong>: <code>outputs/</code>（スクリプトが生成。クライアントに渡すのはここ。手では触らない）</li>
+            <li><strong>スキル本体</strong>: <code>.claude/skills/</code>（Claude Code が自動参照）</li>
+            <li><strong>実行ツール</strong>: <code>scripts/</code>（HTML 編集後の再ビルド時のみ実行）</li>
+            <li><strong>ドキュメント</strong>: <code>docs/</code>（仕組み解説・手順書・本書の解説図）</li>
           </ul>
         </section>
 
         <section id="scenarios">
           <h2>判断フロー</h2>
           <div class="flow-image">
-            <img src="assets/decision-flow.png" alt="PowerPoint作成ルートの判断フロー">
+            <img src="docs/images/decision-flow.png" alt="PowerPoint作成ルートの判断フロー">
           </div>
           <div class="scenario-grid">
             <div class="scenario">
@@ -393,30 +404,65 @@
           </ul>
           <h3>操作手順</h3>
           <ol>
-            <li>このディレクトリを Claude Code または Codex で開く</li>
-            <li>参考画像を貼り付ける。PPTXを使う場合は、必要なページを画像化して渡すか、PPTX内の対象ページを指定する</li>
-            <li>再現したいテイスト、差し替えるテーマ、変更したいテキストをプロンプトで指示する</li>
-            <li><code>consulting-slide-remake</code> Mode A で構造を抽出する</li>
-            <li>抽出結果をもとに <code>slides/*.html</code> を作成または更新する</li>
-            <li>必要に応じて <code>scripts/01_build_pptx_image_embed.py</code> または <code>scripts/02_build_pptx_editable.py</code> でPPTX化する</li>
+            <li>参考素材を <code>assets/references/</code> フォルダに保存する。形式ごとの扱いは下表のとおり</li>
+            <li>このディレクトリを Claude Code で開く</li>
+            <li>下のプロンプト例のように、<strong>使用するスキル</strong>と<strong>画像パス</strong>を明示し、差し替えたいテーマ・テイストを伝える</li>
+            <li>Claude がスキルの定義に沿って構造解析 → HTML化 → PPTX生成までを実行する</li>
+            <li>完成した <code>outputs/*.pptx</code> をダブルクリックで確認</li>
           </ol>
+          <h4>参考素材ごとの置き方</h4>
+          <table>
+            <thead>
+              <tr>
+                <th>形式</th>
+                <th>置き方</th>
+                <th>例</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>画像（PNG / JPG）</td>
+                <td>そのまま <code>assets/references/</code> に保存</td>
+                <td><code>assets/references/mckinsey-sample.png</code></td>
+              </tr>
+              <tr>
+                <td>PDF</td>
+                <td>対象ページをPNG/JPGに書き出してから <code>assets/references/</code> に保存（プレビュー.appの「書き出し」、Adobe Acrobatのページ画像エクスポート等）</td>
+                <td><code>assets/references/whitepaper-p12.png</code></td>
+              </tr>
+              <tr>
+                <td>既存PPTX</td>
+                <td>PPTXファイル本体と、対象ページをPNG化したものを両方 <code>assets/references/</code> に保存。Claudeに渡すのはPNG画像で、PPTXは元データの確認用</td>
+                <td><code>assets/references/client-deck.pptx</code><br><code>assets/references/client-deck-p12.png</code></td>
+              </tr>
+              <tr>
+                <td>過去に作ったHTMLスライド</td>
+                <td>このリポジトリ内の <code>tmp-source/*.html</code> をそのまま参照（コピー不要）</td>
+                <td><code>tmp-source/05-matrix-2x2.html</code></td>
+              </tr>
+            </tbody>
+          </table>
+          <p class="note">スキル（<code>consulting-slide-remake</code>）は画像から構造を読み取る仕組みのため、PDFやPPTXの場合は対象ページを <strong>画像化してから渡す</strong> 必要があります。PowerPointの「名前を付けて保存 → PNG」やKeynoteの書き出し機能で1ページ単位の画像にできます。</p>
           <h3>アウトプット先</h3>
           <ul>
-            <li>HTMLスライド: <code>slides/*.html</code></li>
-            <li>画像埋込PPTX: <code>pptx/consulting-html-slides.pptx</code></li>
-            <li>編集可能PPTX: <code>pptx/*-editable.pptx</code> または検証用の別名PPTX</li>
+            <li>画像埋込PPTX: <code>outputs/consulting-html-slides.pptx</code></li>
+            <li>編集可能PPTX: <code>outputs/*-editable.pptx</code></li>
           </ul>
-          <h3>プロンプト例（参考画像を使う）</h3>
-          <pre><code>この参考スライドを政府系シンクタンク風で再現したい。
+          <h3>プロンプト例（参考画像から再現）</h3>
+          <pre><code>@.claude/skills/consulting-slide-remake/SKILL.md を参照して実装してください。
+
+@assets/references/mckinsey-sample.png を政府系シンクタンク風で再現したい。
 テーマは「AI 提案書作成ワークフローの現状」で、私の組織の
 営業プロセスに置き換えてください。
+PPTXまで作成してください。</code></pre>
+          <h3>プロンプト例（既存PPTXのページを流用）</h3>
+          <pre><code>@.claude/skills/consulting-slide-remake/SKILL.md を参照して実装してください。
 
-[参考スライド画像をペースト]</code></pre>
-          <h3>プロンプト例（既存PPTXを使う）</h3>
-          <pre><code>このPPTXの12ページ目の構図をベースに、
+@assets/references/client-deck-p12.png の構図をベースに、
 文言を「AI活用ロードマップ」に差し替えてください。
 配色、章番号、KEY TAKEAWAY、右側の説明欄の型は維持し、
-HTMLスライドと編集可能PPTXを作成してください。</code></pre>
+編集可能PPTXまで作成してください。</code></pre>
+          <p class="note"><code>@</code> 付きのパスは Claude Code がファイル参照として認識します。先頭で <strong>使うスキルのSKILL.mdを明示参照</strong> することで、想定どおりのスキル（ここでは <code>consulting-slide-remake</code>）が必ず発動します。「スライド作って」だけだと別のスキルが反応する場合があるため、明示参照する運用が安全です。</p>
           <h3>向いている場面</h3>
           <ul>
             <li>トンマナや余白設計を既存資料に寄せたい</li>
@@ -439,25 +485,25 @@ HTMLスライドと編集可能PPTXを作成してください。</code></pre>
           </ul>
           <h3>操作手順</h3>
           <ol>
-            <li>このディレクトリを Claude Code または Codex で開く</li>
-            <li>テーマ、結論、使いたいフレームをプロンプトで渡す</li>
-            <li><code>slide-design-patterns</code> でレイアウト候補を出す</li>
-            <li>アクションタイトル、主要メッセージ、図解パターンを決める</li>
-            <li><code>slides/*.html</code> としてHTML/CSS/SVGでスライドを作る</li>
-            <li>ブラウザまたはスクリーンショットで密度・整列・読みやすさを確認する</li>
-            <li>複雑な図解になりそうなら、3番で構図ラフを作ってから1番へ戻す</li>
+            <li>このディレクトリを Claude Code で開く</li>
+            <li>下のプロンプト例のように、<strong>使用するスキル</strong>（パターン辞書 + 再現スキル）を明示し、テーマ・結論・使いたいフレームを伝える</li>
+            <li>Claude がパターン辞書からレイアウト候補を選び、アクションタイトル決定 → HTML化 → PPTX生成までを実行する</li>
+            <li>完成した <code>outputs/*.pptx</code> をダブルクリックで確認</li>
           </ol>
+          <p class="note">複雑な業務フロー・概念図にしたい場合は、先に「3. 画像生成AIで構図ラフを作る」を経由したほうが品質が安定します。</p>
           <h3>アウトプット先</h3>
           <ul>
-            <li>構成案: Claude Code / Codex の応答本文</li>
-            <li>HTMLスライド: <code>slides/*.html</code></li>
-            <li>PPTX化する場合: <code>pptx/*.pptx</code></li>
+            <li>画像埋込PPTX: <code>outputs/consulting-html-slides.pptx</code></li>
+            <li>編集可能PPTX: <code>outputs/*-editable.pptx</code></li>
           </ul>
           <h3>プロンプト例</h3>
-          <pre><code>「AI活用ロードマップ」を1枚で説明したい。
+          <pre><code>@.claude/skills/slide-design-patterns/SKILL.md でレイアウト候補を選び、
+@.claude/skills/consulting-slide-remake/SKILL.md を参照してスライドを実装してください。
+
+「AI活用ロードマップ」を1枚のスライドで説明したい。
 構成は、現状課題 → 重点施策 → 導入ステップ → 効果指標。
-政府系シンクタンク風のネイビー＋ブロンズで、
-HTMLスライドとして作成してください。</code></pre>
+政府系シンクタンク風のネイビー＋ブロンズで、PPTXまで作成してください。</code></pre>
+          <p class="note">2つのスキルを明示参照することで、「パターン辞書からレイアウトを選ぶ」→「コンサル品質で実装する」の流れを確実に踏ませられます。</p>
           <h3>向いている場面</h3>
           <ul>
             <li>まだ見た目の正解が決まっていない</li>
@@ -482,20 +528,31 @@ HTMLスライドとして作成してください。</code></pre>
           </ul>
           <h3>操作手順</h3>
           <ol>
-            <li>図解したい対象を文章で整理する</li>
-            <li>画像生成AIに、文字少なめ・図形中心で構図ラフを作らせる</li>
-            <li>このディレクトリを Claude Code または Codex で開く</li>
-            <li>生成画像を参考画像として Claude Code / Codex に渡す</li>
-            <li>1番と同じく <code>consulting-slide-remake</code> Mode A で構造を抽出する</li>
-            <li>本文・ラベル・数値を正しい内容に置き換えて <code>slides/*.html</code> としてHTML化する</li>
-            <li>必要に応じて編集可能PPTXへ変換する</li>
+            <li>図解したい対象を文章で整理する（登場要素、矢印の方向、配色イメージなど）</li>
+            <li>画像生成AI（Nano Banana / GPT-Image / Claude Design など）に、文字少なめ・図形中心で構図ラフを1枚作らせる</li>
+            <li>生成された画像を <code>assets/references/</code> フォルダに保存する</li>
+            <li>このディレクトリを Claude Code で開く</li>
+            <li>下のプロンプト例のように、<strong>使用するスキル</strong>と<strong>画像パス</strong>を明示し、正しい本文・ラベル・数値を伝える</li>
+            <li>Claude がスキルの定義に沿って構造解析 → HTML化 → PPTX生成までを実行する</li>
+            <li>完成した <code>outputs/*.pptx</code> を確認</li>
           </ol>
+          <p class="note">画像生成AIの出力にあるタイポや意味の通らない日本語は無視してOK。Claudeが構造を抽出する際に、こちらが指定した正しい文言で上書きされます。</p>
           <h3>アウトプット先</h3>
           <ul>
-            <li>構図ラフ: 画像生成AIから出力されるPNG / JPG</li>
-            <li>HTMLスライド: <code>slides/*.html</code></li>
-            <li>編集可能PPTX: <code>pptx/*-editable.pptx</code></li>
+            <li>構図ラフ: <code>assets/references/</code> 配下</li>
+            <li>編集可能PPTX: <code>outputs/*-editable.pptx</code></li>
           </ul>
+          <h3>プロンプト例</h3>
+          <pre><code>@.claude/skills/consulting-slide-remake/SKILL.md を参照して実装してください。
+
+@assets/references/ai-workflow-rough.png は画像生成AIで作った構図ラフです。
+この構図をベースに、テーマ「AI 提案書作成ワークフローの現状」で
+正しい文言に置き換えてスライド化してください。
+画像内のタイポや崩れた日本語は無視し、以下の本文に差し替えてください:
+- レーン1: 営業担当 / レーン2: AIエージェント
+- 矢印の上のラベル: 「ヒアリング → 提案ドラフト生成 → レビュー → 提出」
+- KEY TAKEAWAY: 「提案書作成の60%をAIに置換、リードタイム3日→半日」
+政府系シンクタンク風のネイビー＋ブロンズで、編集可能PPTXまで作成してください。</code></pre>
           <h3>画像生成AIに投げるプロンプト例</h3>
           <pre><code>AI提案書作成ワークフローを、2レーンの業務フロー図として可視化してください。
 左から右に処理が進み、DB、CSV、帳票、営業担当への引き渡しが分かる構図。
@@ -535,10 +592,12 @@ HTMLスライドとして作成してください。</code></pre>
             </tbody>
           </table>
           <h3>再生成コマンド</h3>
-          <pre><code class="language-bash">cd scripts
-/usr/local/bin/python3 01_build_pptx_image_embed.py
+          <pre><code class="language-bash"># プロジェクトルートで実行
+/usr/local/bin/python3 scripts/01_build_pptx_image_embed.py
+# → outputs/consulting-html-slides.pptx を更新
 
-/usr/local/bin/python3 02_build_pptx_editable.py</code></pre>
+/usr/local/bin/python3 scripts/02_build_pptx_editable.py
+# → outputs/12-ai-workflow-asis-editable.pptx を更新</code></pre>
           <p class="note"><code>02_build_pptx_editable.py</code> は現状 slide 12 専用。別スライドを編集可能PPTX化する場合は、対象スライドごとに座標・図形・テキストを再構築する。</p>
         </section>
 
@@ -566,7 +625,7 @@ HTMLスライドとして作成してください。</code></pre>
               <tr>
                 <td>HTML スライドの iframe ギャラリーで点線位置がズレる</td>
                 <td>iframe スケーリングと CSS 計算式の相性</td>
-                <td>フルスクリーン（<code>slides/*.html</code> を直接開く）で確認すれば正常</td>
+                <td>フルスクリーン（<code>tmp-source/*.html</code> を直接開く）で確認すれば正常</td>
               </tr>
               <tr>
                 <td>編集可能 PPTX で書類アイコンの形が違う</td>
