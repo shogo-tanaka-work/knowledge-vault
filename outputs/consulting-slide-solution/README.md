@@ -15,7 +15,8 @@ consulting-slide-solution/
 ├── docs/                       ← 解説・手順ドキュメント一式
 │   ├── 01-仕組みの解説.md       （なぜこのフローで品質が出るのかの理屈）
 │   ├── 02-使い方手順書.md       （実際の使い方・5 シナリオ）
-│   └── 03-スキル一覧と発動.md   （Claude Code スキルの内容と発動キーワード）
+│   ├── 03-スキル一覧と発動.md   （Claude Code スキルの内容と発動キーワード）
+│   └── images/                  （手順書に埋め込む解説図）
 │
 ├── .claude/
 │   └── skills/                ← Claude Code が自動発動するスキル本体
@@ -27,7 +28,6 @@ consulting-slide-solution/
 │
 ├── assets/
 │   ├── style.css              ← HTML スライド共通スタイル（配色・タイポ）
-│   ├── images/                ← HTML スライドに埋め込む画像
 │   └── references/            ← Mode A / Mode B に流す参考スライド画像の置き場所
 │
 ├── outputs/                      ← 【最終アウトプット】クライアントに渡す PowerPoint
