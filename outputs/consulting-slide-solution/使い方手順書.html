@@ -406,8 +406,8 @@
           <ol>
             <li>参考素材を <code>assets/references/</code> フォルダに保存する。形式ごとの扱いは下表のとおり</li>
             <li>このディレクトリを Claude Code で開く</li>
-            <li>下のプロンプト例のように、画像のパスと差し替えたいテーマ・テイストを伝える</li>
-            <li>あとは Claude にお任せ。スキルが自動で構造解析・HTML化・PPTX生成まで実行する</li>
+            <li>下のプロンプト例のように、<strong>使用するスキル</strong>と<strong>画像パス</strong>を明示し、差し替えたいテーマ・テイストを伝える</li>
+            <li>Claude がスキルの定義に沿って構造解析 → HTML化 → PPTX生成までを実行する</li>
             <li>完成した <code>outputs/*.pptx</code> をダブルクリックで確認</li>
           </ol>
           <h4>参考素材ごとの置き方</h4>
@@ -449,16 +449,20 @@
             <li>編集可能PPTX: <code>outputs/*-editable.pptx</code></li>
           </ul>
           <h3>プロンプト例（参考画像から再現）</h3>
-          <pre><code>@assets/references/mckinsey-sample.png を政府系シンクタンク風で再現したい。
+          <pre><code>@.claude/skills/consulting-slide-remake/SKILL.md を参照して実装してください。
+
+@assets/references/mckinsey-sample.png を政府系シンクタンク風で再現したい。
 テーマは「AI 提案書作成ワークフローの現状」で、私の組織の
 営業プロセスに置き換えてください。
 PPTXまで作成してください。</code></pre>
           <h3>プロンプト例（既存PPTXのページを流用）</h3>
-          <pre><code>@assets/references/client-deck-p12.png の構図をベースに、
+          <pre><code>@.claude/skills/consulting-slide-remake/SKILL.md を参照して実装してください。
+
+@assets/references/client-deck-p12.png の構図をベースに、
 文言を「AI活用ロードマップ」に差し替えてください。
 配色、章番号、KEY TAKEAWAY、右側の説明欄の型は維持し、
 編集可能PPTXまで作成してください。</code></pre>
-          <p class="note">画像のパスは <code>@</code> をつけるとClaude Codeがファイル参照として認識します。複数枚渡したい場合は <code>@assets/references/a.png @assets/references/b.png</code> のように並べてください。</p>
+          <p class="note"><code>@</code> 付きのパスは Claude Code がファイル参照として認識します。先頭で <strong>使うスキルのSKILL.mdを明示参照</strong> することで、想定どおりのスキル（ここでは <code>consulting-slide-remake</code>）が必ず発動します。「スライド作って」だけだと別のスキルが反応する場合があるため、明示参照する運用が安全です。</p>
           <h3>向いている場面</h3>
           <ul>
             <li>トンマナや余白設計を既存資料に寄せたい</li>
@@ -482,8 +486,8 @@ PPTXまで作成してください。</code></pre>
           <h3>操作手順</h3>
           <ol>
             <li>このディレクトリを Claude Code で開く</li>
-            <li>下のプロンプト例のように、テーマ・結論・使いたいフレームを伝える</li>
-            <li>あとは Claude にお任せ。スキルがレイアウト候補の提示 → アクションタイトル決定 → HTML化 → PPTX生成まで実行する</li>
+            <li>下のプロンプト例のように、<strong>使用するスキル</strong>（パターン辞書 + 再現スキル）を明示し、テーマ・結論・使いたいフレームを伝える</li>
+            <li>Claude がパターン辞書からレイアウト候補を選び、アクションタイトル決定 → HTML化 → PPTX生成までを実行する</li>
             <li>完成した <code>outputs/*.pptx</code> をダブルクリックで確認</li>
           </ol>
           <p class="note">複雑な業務フロー・概念図にしたい場合は、先に「3. 画像生成AIで構図ラフを作る」を経由したほうが品質が安定します。</p>
@@ -493,9 +497,13 @@ PPTXまで作成してください。</code></pre>
             <li>編集可能PPTX: <code>outputs/*-editable.pptx</code></li>
           </ul>
           <h3>プロンプト例</h3>
-          <pre><code>「AI活用ロードマップ」を1枚のスライドで説明したい。
+          <pre><code>@.claude/skills/slide-design-patterns/SKILL.md でレイアウト候補を選び、
+@.claude/skills/consulting-slide-remake/SKILL.md を参照してスライドを実装してください。
+
+「AI活用ロードマップ」を1枚のスライドで説明したい。
 構成は、現状課題 → 重点施策 → 導入ステップ → 効果指標。
 政府系シンクタンク風のネイビー＋ブロンズで、PPTXまで作成してください。</code></pre>
+          <p class="note">2つのスキルを明示参照することで、「パターン辞書からレイアウトを選ぶ」→「コンサル品質で実装する」の流れを確実に踏ませられます。</p>
           <h3>向いている場面</h3>
           <ul>
             <li>まだ見た目の正解が決まっていない</li>
@@ -524,8 +532,9 @@ PPTXまで作成してください。</code></pre>
             <li>画像生成AI（Nano Banana / GPT-Image / Claude Design など）に、文字少なめ・図形中心で構図ラフを1枚作らせる</li>
             <li>生成された画像を <code>assets/references/</code> フォルダに保存する</li>
             <li>このディレクトリを Claude Code で開く</li>
-            <li>「1. 参考画像から再現する」と同じ要領で、画像パスと正しい本文・ラベル・数値を伝える</li>
-            <li>あとは Claude にお任せ。完成した <code>outputs/*.pptx</code> を確認</li>
+            <li>下のプロンプト例のように、<strong>使用するスキル</strong>と<strong>画像パス</strong>を明示し、正しい本文・ラベル・数値を伝える</li>
+            <li>Claude がスキルの定義に沿って構造解析 → HTML化 → PPTX生成までを実行する</li>
+            <li>完成した <code>outputs/*.pptx</code> を確認</li>
           </ol>
           <p class="note">画像生成AIの出力にあるタイポや意味の通らない日本語は無視してOK。Claudeが構造を抽出する際に、こちらが指定した正しい文言で上書きされます。</p>
           <h3>アウトプット先</h3>
@@ -533,6 +542,17 @@ PPTXまで作成してください。</code></pre>
             <li>構図ラフ: <code>assets/references/</code> 配下</li>
             <li>編集可能PPTX: <code>outputs/*-editable.pptx</code></li>
           </ul>
+          <h3>プロンプト例</h3>
+          <pre><code>@.claude/skills/consulting-slide-remake/SKILL.md を参照して実装してください。
+
+@assets/references/ai-workflow-rough.png は画像生成AIで作った構図ラフです。
+この構図をベースに、テーマ「AI 提案書作成ワークフローの現状」で
+正しい文言に置き換えてスライド化してください。
+画像内のタイポや崩れた日本語は無視し、以下の本文に差し替えてください:
+- レーン1: 営業担当 / レーン2: AIエージェント
+- 矢印の上のラベル: 「ヒアリング → 提案ドラフト生成 → レビュー → 提出」
+- KEY TAKEAWAY: 「提案書作成の60%をAIに置換、リードタイム3日→半日」
+政府系シンクタンク風のネイビー＋ブロンズで、編集可能PPTXまで作成してください。</code></pre>
           <h3>画像生成AIに投げるプロンプト例</h3>
           <pre><code>AI提案書作成ワークフローを、2レーンの業務フロー図として可視化してください。
 左から右に処理が進み、DB、CSV、帳票、営業担当への引き渡しが分かる構図。
