@@ -1,4 +1,5 @@
 """政府系シンクタンク風スライド: AI提案書作成ワークフローの現状"""
+from pathlib import Path
 from pptx import Presentation
 from pptx.util import Inches, Pt, Emu
 from pptx.dml.color import RGBColor
@@ -298,6 +299,7 @@ add_text(slide, Inches(8.5), Inches(7.18), Inches(4.6), Inches(0.25),
 add_text(slide, Inches(0.4), Inches(7.18), Inches(0.3), Inches(0.25),
          "6", size=9, color=GRAY_TEXT)
 
-out = "/Users/shogo/.Trash/consulting-slide-solution/output/ai_proposal_workflow_current.pptx"
-prs.save(out)
+out = Path(__file__).resolve().parent.parent / "output" / "ai_proposal_workflow_current.pptx"
+out.parent.mkdir(parents=True, exist_ok=True)
+prs.save(str(out))
 print(f"saved: {out}")

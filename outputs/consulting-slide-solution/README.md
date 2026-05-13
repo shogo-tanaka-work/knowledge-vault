@@ -15,19 +15,25 @@ consulting-slide-solution/
 ├── 03-スキル一覧と発動.md      ← Claude Code スキルの内容と発動キーワード
 ├── 使い方手順書.html           ← ブラウザで読める版（02-使い方手順書.md の HTML 版）
 │
-├── slides/                     ← HTML スライド本体（編集対象）
-│   ├── 01-cover.html  〜  12-ai-workflow-asis.html
+├── input/                      ← 【入力】参考 PowerPoint / 画像 / PDF を置く場所
+│   └── pptx雛形素材.png                       （Mode A/B の入力素材）
+│
+├── src/                        ← 【中間】HTML スライド設計図（編集対象）
+│   └── 12-ai-workflow-asis.html  ほか
+│
+├── output/                     ← 【出力】最終 PowerPoint
+│   ├── consulting-html-slides.pptx          (画像埋込・見た目完全再現)
+│   ├── 12-ai-workflow-asis-editable.pptx    (完全編集可能・ネイティブシェイプ)
+│   └── ai_proposal_workflow_current.pptx
+│
 ├── assets/style.css            ← 共有スタイル（コンサル風配色・タイポ）
 │
-├── pptx/                       ← 生成済 PowerPoint
-│   ├── consulting-html-slides.pptx          (12 枚 / 画像埋込・見た目完全再現)
-│   └── 12-ai-workflow-asis-editable.pptx    (1 枚 / 完全編集可能・ネイティブシェイプ)
-│
 ├── scripts/                    ← 再生成用スクリプト
-│   ├── 01_build_pptx_image_embed.py     (HTML → PNG → 画像埋込 PPTX)
-│   └── 02_build_pptx_editable.py        (HTML 設計を元にネイティブ再構築)
+│   ├── 01_build_pptx_image_embed.py     (src/*.html → PNG → 画像埋込 PPTX)
+│   ├── 02_build_pptx_editable.py        (HTML 設計を元にネイティブ再構築)
+│   └── build_ai_proposal_workflow.py
 │
-└── reference/skills/           ← 当ソリューションの中核プロンプト（スキル定義）
+└── .claude/skills/             ← Claude Code スキル（自動発動）
     ├── consulting-slide-remake/         ← 画像 → コンサル風スライド再現
     └── slide-design-patterns/           ← パワポ研由来のパターン辞書
 ```
@@ -56,7 +62,7 @@ consulting-slide-solution/
                             ↓
 ┌─────────────────────────────────────────────────────────┐
 │  レイヤー2: HTML/CSS スライド（編集容易な中間表現）       │
-│  slides/*.html + assets/style.css                          │
+│  src/*.html + assets/style.css                            │
 │  → ネイビー・ブロンズ等のコンサル配色を共通化            │
 │  → 矢印・DB 図形は SVG でベクター表現                    │
 └─────────────────────────────────────────────────────────┘
@@ -75,8 +81,8 @@ consulting-slide-solution/
 ## いますぐ確認したい
 
 - **ブラウザで手順を読みたい**: `使い方手順書.html` をダブルクリック
-- **PowerPoint で開きたい**: `pptx/consulting-html-slides.pptx` をダブルクリック（投影向け）
-- **編集したい**: `pptx/12-ai-workflow-asis-editable.pptx` をダブルクリック（テキスト・図形すべて編集可）
+- **PowerPoint で開きたい**: `output/consulting-html-slides.pptx` をダブルクリック（投影向け）
+- **編集したい**: `output/12-ai-workflow-asis-editable.pptx` をダブルクリック（テキスト・図形すべて編集可）
 - **仕組みを把握したい**: `01-仕組みの解説.md`
 - **自分で動かしたい**: `02-使い方手順書.md`
 

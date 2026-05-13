@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-slides/12-ai-workflow-asis.html の内容を、編集可能な PowerPoint (.pptx) として再構築する。
+src/12-ai-workflow-asis.html の内容を、編集可能な PowerPoint (.pptx) として再構築する。
 - 文字はすべてネイティブテキストボックス
 - 装飾はすべて PowerPoint シェイプ
 - 画像埋め込み禁止（DB/書類アイコンは MSO_SHAPE で近似）
@@ -443,8 +443,8 @@ def build():
     # ==========================================================
     # 保存
     # ==========================================================
-    out = Path(__file__).resolve().parent / "dist" / "12-ai-workflow-asis-editable.pptx"
-    out.parent.mkdir(exist_ok=True)
+    out = Path(__file__).resolve().parent.parent / "output" / "12-ai-workflow-asis-editable.pptx"
+    out.parent.mkdir(parents=True, exist_ok=True)
     prs.save(str(out))
     print(f"saved: {out}  ({out.stat().st_size/1024:.1f} KB)")
     return out
