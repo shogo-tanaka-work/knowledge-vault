@@ -22,7 +22,7 @@ consulting-slide-solution/
 │       ├── consulting-slide-remake/   （画像 → コンサル風スライド再現）
 │       └── slide-design-patterns/     （パワポ研由来のパターン辞書）
 │
-├── slides-source/             ← 【中間ソース】HTML スライド本体（編集対象）
+├── tmp-source/             ← 【中間ソース】HTML スライド本体（編集対象）
 │   └── 01-cover.html  〜  12-ai-workflow-asis.html
 │
 ├── assets/
@@ -30,7 +30,7 @@ consulting-slide-solution/
 │   ├── images/                ← HTML スライドに埋め込む画像
 │   └── references/            ← Mode A / Mode B に流す参考スライド画像の置き場所
 │
-├── pptx/                      ← 【最終アウトプット】クライアントに渡す PowerPoint
+├── outputs/                      ← 【最終アウトプット】クライアントに渡す PowerPoint
 │   ├── consulting-html-slides.pptx          (12 枚 / 画像埋込・見た目完全再現)
 │   └── 12-ai-workflow-asis-editable.pptx    (1 枚 / 完全編集可能・ネイティブシェイプ)
 │
@@ -39,35 +39,35 @@ consulting-slide-solution/
     └── 02_build_pptx_editable.py        (HTML 設計を元にネイティブ再構築)
 ```
 
-### `slides-source/` と `pptx/` の関係
+### `tmp-source/` と `outputs/` の関係
 
 このソリューションは **「HTML を設計図にして、それを PPTX に焼く」** 2 段階構造です。両方とも出力物ですが役割が違います。
 
 ```
 [ 入力 ]                  [ 中間ソース ]                [ 最終アウトプット ]
-参考画像 / テキスト指示  →  slides-source/*.html   →   pptx/*.pptx
+参考画像 / テキスト指示  →  tmp-source/*.html   →   outputs/*.pptx
                             （HTML 設計図）              （クライアント納品物）
                             ↑                            ↑
                             Claude や手で編集する所      触らない・スクリプトが上書き
 ```
 
-- **`slides-source/`** : 文言・配色・図形を編集する場所。Claude Code が新規スライドを作る時もここに HTML を追加する。**人間（または Claude）が編集する側**。
-- **`pptx/`** : `scripts/*.py` を実行すると `slides-source/` から自動生成される。**クライアントに渡すのはこちら**。手で開いて文言だけ直すことも可能（編集可能 PPTX の場合のみ）。
+- **`tmp-source/`** : 文言・配色・図形を編集する場所。Claude Code が新規スライドを作る時もここに HTML を追加する。**人間（または Claude）が編集する側**。
+- **`outputs/`** : `scripts/*.py` を実行すると `tmp-source/` から自動生成される。**クライアントに渡すのはこちら**。手で開いて文言だけ直すことも可能（編集可能 PPTX の場合のみ）。
 
 ### フォルダの役割まとめ
 
 | 役割 | フォルダ | いつ触る |
 |---|---|---|
-| **編集対象（中間）** | `slides-source/`, `assets/` | 文言や配色を変えたい時に手で or Claude 経由で編集 |
+| **編集対象（中間）** | `tmp-source/`, `assets/` | 文言や配色を変えたい時に手で or Claude 経由で編集 |
 | **入力** | `assets/references/` | Mode A / Mode B に流す参考画像を置く時 |
-| **最終出力** | `pptx/` | 触らない（スクリプトが上書き）。**ここの .pptx をクライアントに渡す** |
+| **最終出力** | `outputs/` | 触らない（スクリプトが上書き）。**ここの .pptx をクライアントに渡す** |
 | **スキル本体** | `.claude/skills/` | Claude Code が自動参照（手で触らない） |
 | **実行ツール** | `scripts/` | HTML 編集後に PPTX を再生成する時のみ |
 | **解説** | `docs/` | 仕組み・手順を読む時 |
 
 ---
 
-## 起点パターンは 2 系統
+## スライド作成の2つのパターン
 
 | 起点 | フロー |
 |---|---|
@@ -76,9 +76,9 @@ consulting-slide-solution/
 
 ゼロから作る場合も、生成画像はあくまで **構図のたたき台** として使い、最終アウトプットは HTML/PPTX で編集可能な状態にする。詳しくは `docs/01-仕組みの解説.md` のアーキテクチャ図を参照。
 
-## 5 分で全体像をつかむ
+## 全体構成（3レイヤー）
 
-このソリューションは **3 つのレイヤー** で動いている。
+スキル → HTML → PPTX の3段階で動いています。
 
 ```
 ┌─────────────────────────────────────────────────────────┐
@@ -90,7 +90,7 @@ consulting-slide-solution/
                             ↓
 ┌─────────────────────────────────────────────────────────┐
 │  レイヤー2: HTML/CSS スライド（編集容易な中間表現）       │
-│  slides-source/*.html + assets/style.css                  │
+│  tmp-source/*.html + assets/style.css                  │
 │  → ネイビー・ブロンズ等のコンサル配色を共通化            │
 │  → 矢印・DB 図形は SVG でベクター表現                    │
 └─────────────────────────────────────────────────────────┘
@@ -106,24 +106,26 @@ consulting-slide-solution/
 
 ---
 
-## いますぐ確認したい
+## どこから手をつけるか
 
-- **ブラウザで手順を読みたい**: `使い方手順書.html` をダブルクリック
-- **PowerPoint で開きたい**: `pptx/consulting-html-slides.pptx` をダブルクリック（投影向け）
-- **編集したい**: `pptx/12-ai-workflow-asis-editable.pptx` をダブルクリック（テキスト・図形すべて編集可）
-- **仕組みを把握したい**: `docs/01-仕組みの解説.md`
-- **自分で動かしたい**: `docs/02-使い方手順書.md`
-- **スキルの発動キーワード**: `docs/03-スキル一覧と発動.md`
-
----
-
-## スキルの自動発動について
-
-このフォルダを Claude Code で開けば、`.claude/skills/` 配下のスキルが **そのまま発動可能** になっています（`/skills` で確認できます）。別環境にコピーする場合も `.claude/skills/` ごと持っていけば即座に有効です。
+| やりたいこと | 開くファイル |
+|---|---|
+| 完成したスライドを見る（投影用） | `outputs/consulting-html-slides.pptx` |
+| 完成したスライドを編集する | `outputs/12-ai-workflow-asis-editable.pptx` |
+| 手順書をブラウザで読む | `使い方手順書.html` |
+| 仕組みを理解する | `docs/01-仕組みの解説.md` |
+| 自分で動かす | `docs/02-使い方手順書.md` |
+| スキルの発動キーワードを調べる | `docs/03-スキル一覧と発動.md` |
 
 ---
 
-## 動作要件（再生成する場合のみ）
+## スキルの読み込みについて
+
+このフォルダを Claude Code で開けば、`.claude/skills/` 配下のスキルが自動で読み込まれます（`/skills` で一覧確認可）。別環境にコピーする場合も `.claude/skills/` ごと持っていけば、そのまま使えます。
+
+---
+
+## 動作要件（PPTXを再生成する場合のみ）
 
 - macOS / Linux
 - Python 3.10+ with `python-pptx`, `playwright`, `Pillow`, `lxml`

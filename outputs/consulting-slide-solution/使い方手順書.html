@@ -357,9 +357,9 @@
           </ul>
           <h3>フォルダの役割</h3>
           <ul>
-            <li><strong>編集対象</strong>: <code>slides-source/</code>（HTMLスライドのソース）、<code>assets/</code>（CSS・画像）</li>
+            <li><strong>編集対象</strong>: <code>tmp-source/</code>（HTMLスライドのソース）、<code>assets/</code>（CSS・画像）</li>
             <li><strong>入力</strong>: <code>assets/references/</code>（Mode A / Mode B に流す参考画像の置き場）</li>
-            <li><strong>出力</strong>: <code>pptx/</code>（スクリプトで生成。手では触らない）</li>
+            <li><strong>最終出力</strong>: <code>outputs/</code>（スクリプトで生成。手では触らない。クライアントに渡すのはここ）</li>
             <li><strong>スキル本体</strong>: <code>.claude/skills/</code>（Claude Code が自動参照）</li>
             <li><strong>実行ツール</strong>: <code>scripts/</code>（HTML 編集後の再ビルド時のみ実行）</li>
           </ul>
@@ -406,14 +406,14 @@
             <li>参考画像を貼り付ける。PPTXを使う場合は、必要なページを画像化して渡すか、PPTX内の対象ページを指定する</li>
             <li>再現したいテイスト、差し替えるテーマ、変更したいテキストをプロンプトで指示する</li>
             <li><code>consulting-slide-remake</code> Mode A で構造を抽出する</li>
-            <li>抽出結果をもとに <code>slides-source/*.html</code> を作成または更新する</li>
+            <li>抽出結果をもとに <code>tmp-source/*.html</code> を作成または更新する</li>
             <li>必要に応じて <code>scripts/01_build_pptx_image_embed.py</code> または <code>scripts/02_build_pptx_editable.py</code> でPPTX化する</li>
           </ol>
           <h3>アウトプット先</h3>
           <ul>
-            <li>HTMLスライド: <code>slides-source/*.html</code></li>
-            <li>画像埋込PPTX: <code>pptx/consulting-html-slides.pptx</code></li>
-            <li>編集可能PPTX: <code>pptx/*-editable.pptx</code> または検証用の別名PPTX</li>
+            <li>HTMLスライド: <code>tmp-source/*.html</code></li>
+            <li>画像埋込PPTX: <code>outputs/consulting-html-slides.pptx</code></li>
+            <li>編集可能PPTX: <code>outputs/*-editable.pptx</code> または検証用の別名PPTX</li>
           </ul>
           <h3>プロンプト例（参考画像を使う）</h3>
           <pre><code>この参考スライドを政府系シンクタンク風で再現したい。
@@ -452,15 +452,15 @@ HTMLスライドと編集可能PPTXを作成してください。</code></pre>
             <li>テーマ、結論、使いたいフレームをプロンプトで渡す</li>
             <li><code>slide-design-patterns</code> でレイアウト候補を出す</li>
             <li>アクションタイトル、主要メッセージ、図解パターンを決める</li>
-            <li><code>slides-source/*.html</code> としてHTML/CSS/SVGでスライドを作る</li>
+            <li><code>tmp-source/*.html</code> としてHTML/CSS/SVGでスライドを作る</li>
             <li>ブラウザまたはスクリーンショットで密度・整列・読みやすさを確認する</li>
             <li>複雑な図解になりそうなら、3番で構図ラフを作ってから1番へ戻す</li>
           </ol>
           <h3>アウトプット先</h3>
           <ul>
             <li>構成案: Claude Code / Codex の応答本文</li>
-            <li>HTMLスライド: <code>slides-source/*.html</code></li>
-            <li>PPTX化する場合: <code>pptx/*.pptx</code></li>
+            <li>HTMLスライド: <code>tmp-source/*.html</code></li>
+            <li>PPTX化する場合: <code>outputs/*.pptx</code></li>
           </ul>
           <h3>プロンプト例</h3>
           <pre><code>「AI活用ロードマップ」を1枚で説明したい。
@@ -496,14 +496,14 @@ HTMLスライドとして作成してください。</code></pre>
             <li>このディレクトリを Claude Code または Codex で開く</li>
             <li>生成画像を参考画像として Claude Code / Codex に渡す</li>
             <li>1番と同じく <code>consulting-slide-remake</code> Mode A で構造を抽出する</li>
-            <li>本文・ラベル・数値を正しい内容に置き換えて <code>slides-source/*.html</code> としてHTML化する</li>
+            <li>本文・ラベル・数値を正しい内容に置き換えて <code>tmp-source/*.html</code> としてHTML化する</li>
             <li>必要に応じて編集可能PPTXへ変換する</li>
           </ol>
           <h3>アウトプット先</h3>
           <ul>
             <li>構図ラフ: 画像生成AIから出力されるPNG / JPG</li>
-            <li>HTMLスライド: <code>slides-source/*.html</code></li>
-            <li>編集可能PPTX: <code>pptx/*-editable.pptx</code></li>
+            <li>HTMLスライド: <code>tmp-source/*.html</code></li>
+            <li>編集可能PPTX: <code>outputs/*-editable.pptx</code></li>
           </ul>
           <h3>画像生成AIに投げるプロンプト例</h3>
           <pre><code>AI提案書作成ワークフローを、2レーンの業務フロー図として可視化してください。
@@ -546,10 +546,10 @@ HTMLスライドとして作成してください。</code></pre>
           <h3>再生成コマンド</h3>
           <pre><code class="language-bash"># プロジェクトルートで実行
 /usr/local/bin/python3 scripts/01_build_pptx_image_embed.py
-# → pptx/consulting-html-slides.pptx を更新
+# → outputs/consulting-html-slides.pptx を更新
 
 /usr/local/bin/python3 scripts/02_build_pptx_editable.py
-# → pptx/12-ai-workflow-asis-editable.pptx を更新</code></pre>
+# → outputs/12-ai-workflow-asis-editable.pptx を更新</code></pre>
           <p class="note"><code>02_build_pptx_editable.py</code> は現状 slide 12 専用。別スライドを編集可能PPTX化する場合は、対象スライドごとに座標・図形・テキストを再構築する。</p>
         </section>
 
@@ -577,7 +577,7 @@ HTMLスライドとして作成してください。</code></pre>
               <tr>
                 <td>HTML スライドの iframe ギャラリーで点線位置がズレる</td>
                 <td>iframe スケーリングと CSS 計算式の相性</td>
-                <td>フルスクリーン（<code>slides-source/*.html</code> を直接開く）で確認すれば正常</td>
+                <td>フルスクリーン（<code>tmp-source/*.html</code> を直接開く）で確認すれば正常</td>
               </tr>
               <tr>
                 <td>編集可能 PPTX で書類アイコンの形が違う</td>
