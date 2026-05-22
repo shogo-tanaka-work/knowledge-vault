@@ -39,6 +39,14 @@
 | 3 | [リモートMCPサーバー構築](../../structured/articles/google-ads-mcp/03-remote-mcp-server.md) | `draft` | `niche` | - | - | 2026-04-05 |
 | - | [初期ドラフト（統合前）](../../structured/articles/google-ads-mcp/remote-mcp-server-article.md) | `archived` | - | - | - | 2026-04-05 |
 
+### 検証ラボ由来の記事（単発）
+
+検証ログ（`structured/projects/`）から展開した記事。原本は `outputs/note/` に直接配置。
+
+| タイトル | ステータス | 元検証ログ | 更新日 |
+|:---|:---:|:---|:---:|
+| [LINEサポートのFAQ対応をAI化してみた](20260522_line-gas-spreadsheet-rag.md) | `draft` | `20260520_line-gas-spreadsheet-rag.md` | 2026-05-22 |
+
 ---
 
 ## データフロー
