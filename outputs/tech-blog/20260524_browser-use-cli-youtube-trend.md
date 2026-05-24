@@ -164,27 +164,23 @@ browser-use eval "document.body.innerText"
 browser-use close
 ```
 
-`browser-use get text`ではなく`browser-use eval "document.body.innerText"`を使う理由。SPAで動的注入されたコンテンツは`get text`では拾えないケースが頻発した。`eval`で明示的にDOMのinnerTextを取るほうが安定する。
+`get text`ではなく`eval "document.body.innerText"`を使う理由は、SPAで動的注入されたコンテンツが`get text`では拾えないケースが頻発したため。
 
 <!-- 画像案②: 上記コマンドを順に実行しているターミナルのスクショ。タイトル"探す - Google トレンド"とinnerTextの一部が見えると良い -->
 
 ### なぜPythonスクリプトを挟まないか
 
-理由は3つ。
-
-1. 取得結果が「ランキング」という単純構造で、ロジック分岐が不要
-2. Googleトレンドのレイアウトはたまに変わるため、固定パーサより自然言語抽出のほうが頑健
+1. 取得結果がランキングという単純構造で、ロジック分岐が不要
+2. Googleトレンドのレイアウトは時折変わり、固定パーサより自然言語抽出のほうが頑健
 3. 出力がMarkdownリストで完結し、Excel化が不要
 
-自動化＝Pythonでがっちり、と決め打ちせず、LLMが整形に向いている範囲はLLMに残すほうがメンテが楽。
+LLMが整形に向いている範囲はLLMに残すほうがメンテが楽。
 
 ---
 
 ## 7. ハマりどころ①：JS描画待ちは12秒必要
 
-Googleトレンドは典型的なSPAで、HTMLレスポンス直後のDOMにはキーワードがほぼ存在しない。Reactで後から差し込まれる。
-
-`sleep 3`では毎回ヘッダーだけが返る。`sleep 5`で半分の確率で空。`sleep 8`でほぼ取れる、`sleep 12`で安定、というのが実測。
+GoogleトレンドはSPAで、HTMLレスポンス直後のDOMにはキーワードがほぼ存在せず、Reactで後から差し込まれる。実測では`sleep 3`はヘッダーだけ、`sleep 5`は半分空、`sleep 8`でほぼ取れる、`sleep 12`で安定。
 
 ```bash
 browser-use open "https://trends.google.co.jp/trends/explore?date=today%201-m&geo=JP&gprop=youtube&hl=ja"
@@ -192,15 +188,13 @@ sleep 12  # 8秒未満は不安定。12秒で安定
 browser-use eval "document.body.innerText"
 ```
 
-ネットワークが遅い環境では`sleep 15`まで延ばす。`browser-use state`で読み込み完了を見るのが理論的には正しいが、Googleトレンドは継続的にXHRを叩いていて`state`では完了判定が出ない。固定秒スリープが現実解。
+遅い回線では`sleep 15`。`state`で完了判定するのが理論的には正しいが、Googleトレンドは継続的にXHRを叩いていて`state`では完了が出ない。固定秒スリープが現実解。
 
 ---
 
 ## 8. ハマりどころ②：`get text`が空を返す
 
-`browser-use get text`は内部的にPlaywrightの`page.text_content('body')`相当を呼ぶ。Shadow DOMやReact内部ツリーにテキストが入るケースでは拾い損ねる。
-
-対処は`eval`に切り替えるだけ。
+`browser-use get text`はPlaywrightの`page.text_content('body')`相当。Shadow DOMやReact内部ツリーにテキストが入るケースで拾い損ねる。対処は`eval`に切り替えるだけ。
 
 ```bash
 # NG: 空が返ることが多い
@@ -210,9 +204,7 @@ browser-use get text
 browser-use eval "document.body.innerText"
 ```
 
-`innerText`は表示中テキストを返すプロパティで、`textContent`より人間が見ている内容に近い。Googleトレンドのキーワードリストは`innerText`で全部拾えた。
-
-それでも空なら、もう1段スクロールして再取得。
+`innerText`は表示中テキストを返すプロパティで、`textContent`より人間の視認内容に近い。それでも空なら、スクロールして再取得。
 
 ```bash
 browser-use scroll down
@@ -225,17 +217,15 @@ browser-use eval "document.body.innerText"
 
 ## 9. ハマりどころ③：403/Captchaとアンチボット対策
 
-連続リクエストや、デフォルトのPlaywrightセッションのまま叩き続けると、Googleが「自動アクセスです」とCaptchaを出す。403やリダイレクトも返る。
-
-対策は2つ。
+連続リクエストやデフォルトセッションのまま叩き続けると、Captchaが出る。403やリダイレクトも返る。対策は2つ。
 
 ### A. リクエスト間隔を空ける
 
-1回の取得ごとに最低5秒、できれば10秒以上。連続実行スクリプトでは`time.sleep(10)`を必ず挟む。
+最低5秒、推奨10秒以上。連続実行スクリプトでは`time.sleep(10)`を必ず挟む。
 
 ### B. 実Chromeプロファイルを使う
 
-`--profile`で普段使いのChromeプロファイルを指定する。
+`--profile`で普段使いのプロファイルを指定する。
 
 ```bash
 # macOS
@@ -251,11 +241,9 @@ browser-use --profile "%LOCALAPPDATA%\Google\Chrome\User Data\Default" open "htt
 
 ## 10. ハマりどころ④：Chromeプロファイルの排他制御
 
-`--profile`で指定したプロファイルが普段使いのChromeで開かれていると、Browser Use CLIは起動に失敗する。Chromeの`Singleton`ロックに弾かれるため。
+`--profile`で指定したプロファイルが普段使いのChromeで開かれていると、Chromeの`Singleton`ロックに弾かれて起動失敗する。`SingletonLock`や`profile is already in use`のエラーが出たらこれ。
 
-エラーは環境により変わるが、`SingletonLock`や`profile is already in use`が出たらこれ。
-
-対処はChromeを完全終了してから`browser-use`を実行する。タスクトレイ常駐も切る。タブを閉じるだけでは不十分で、プロセスが残るとロックは解けない。
+対処はChromeを完全終了してから`browser-use`を実行。タスクトレイ常駐も切る。タブを閉じるだけでは不十分で、プロセスが残るとロックは解けない。
 
 ```bash
 # macOS で確認
@@ -265,7 +253,7 @@ pgrep -f "Google Chrome"
 osascript -e 'quit app "Google Chrome"'
 ```
 
-実運用では自動化用に別プロファイル（例：`Profile 2`）を切り、一度Googleにログインしてから`--profile`で指定するのが安全。普段使いと共存できる。
+実運用では自動化用に別プロファイル（例：`Profile 2`）を切り、Googleにログインしてから`--profile`指定するのが安全。普段使いと共存できる。
 
 ```bash
 browser-use --profile "$HOME/Library/Application Support/Google/Chrome/Profile 2" open "..."
@@ -275,13 +263,9 @@ browser-use --profile "$HOME/Library/Application Support/Google/Chrome/Profile 2
 
 ## 11. ハマりどころ⑤：`get title`は通っても`eval`が空
 
-タイトルは「探す - Google トレンド」が返るのに、`eval`で取得した`innerText`がヘッダー部分しか返らない症状にも遭遇した。
+タイトルは返るのに、`eval`の`innerText`がヘッダー部分しか返らない症状。タイトルは`<title>`タグでSSRされ、本体キーワードリストはクライアントサイドJSが描画するため起きる。
 
-タイトルは`<head>`内の`<title>`タグでSSRされている一方、本体のキーワードリストはクライアントサイドJSが描画している。Googleトレンドのこの構造ゆえに起きる。
-
-`get title`は疎通確認にしかならず、本体描画完了を意味しない。`sleep 12`を必ず挟んでから`eval`、を徹底するしかない。
-
-疎通確認用は`get title`、本体取得用は`eval` + 十分なスリープ、と役割を分ける。
+`get title`は疎通確認専用、本体取得は`eval` + 十分なスリープ、と役割を分ける。
 
 ---
 
@@ -336,15 +320,13 @@ tags:
 ---
 ```
 
-本体（`SKILL.md`）には実行フローと最小コマンドだけ書き、詳細仕様は`reference.md`に分離する。Claudeの初期コンテキストに乗るのは`SKILL.md`だけで、`reference.md`は必要時にClaude自身が`Read`する。
+本体（`SKILL.md`）は実行フローと最小コマンドだけ。詳細仕様は`reference.md`に分離する。初期コンテキストに乗るのは`SKILL.md`だけで、`reference.md`は必要時にClaude自身が`Read`する。
 
 ### なぜ分離するか
 
-`SKILL.md`は発動時に毎回読まれる。ここに2万字のリファレンスを詰めるとトークンコストが跳ねる。SKILL本体は3〜400字、リファレンスは別ファイル、がClaude Codeスキルの標準作法。
+`SKILL.md`は発動時に毎回読まれる。2万字のリファレンスを詰めるとトークンコストが跳ねる。SKILL本体は3〜400字、リファレンスは別ファイル、がClaude Codeスキルの標準作法。
 
 ### 出力フォーマットを固定する
-
-末尾で出力フォーマットを定義しておくと整形品質が安定する。
 
 ```markdown
 ## 出力フォーマット
@@ -358,7 +340,7 @@ tags:
 ...（上位50件）
 ```
 
-これがないとClaudeが余計な解説や絵文字を入れる。固定フォーマットがあれば後段の集計スクリプトでパースしやすい。
+指定がないとClaudeが余計な解説や絵文字を入れる。固定フォーマットなら後段の集計スクリプトでパースしやすい。
 
 <!-- 画像案③: Claude Codeで「YouTubeトレンドを取得して」と打って、スキルが発動し、整形済みリストが返ってくるまでのスクショ -->
 
@@ -366,7 +348,7 @@ tags:
 
 ## 14. 毎週運用のかたち
 
-社内では月曜の朝に自然言語で叩き、結果をNotionに転記している。
+月曜朝に自然言語で叩き、結果をNotionに転記する運用にしている。
 
 ```
 ユーザー: YouTubeトレンドを過去7日間で取得して
@@ -376,9 +358,9 @@ Claude:   （スキル発動 → browser-use → 整形）
           1. ...
 ```
 
-期間切替は引数なしで自然言語に任せる。「過去1ヶ月」「過去7日間」「過去12ヶ月」をClaudeがURLの`date`パラメータに変換する。`today 1-m` / `now 7-d` / `today 12-m`の対応表を`SKILL.md`に書いておけばよい。
+期間切替は自然言語に任せる。「過去1ヶ月」「過去7日間」「過去12ヶ月」をClaudeが`date`パラメータに変換する。`today 1-m` / `now 7-d` / `today 12-m`の対応表を`SKILL.md`に書いておけばよい。
 
-YouTube Data API v3との使い分け。
+YouTube Data API v3との使い分けはこう。
 
 | 知りたいこと | 使うAPI |
 |---|---|
@@ -386,7 +368,7 @@ YouTube Data API v3との使い分け。
 | いま何が再生されているか（参考動画探し） | YouTube Data API v3 `videos.list?chart=mostPopular` |
 | 自分のチャンネルの伸び | YouTube Analytics API |
 
-検索クエリ視点のトレンドは公式API化されていないため、ブラウザ自動化が現状の唯一解。
+検索クエリ視点のトレンドは公式API化されておらず、ブラウザ自動化が現状の唯一解。
 
 ---
 
@@ -408,8 +390,6 @@ YouTube Data API v3との使い分け。
 
 ## 16. 横展開できそうな対象
 
-同じパターンが効きそうな対象を備忘で。
-
 - Googleトレンド`gprop=images`版（画像検索トレンド）
 - Googleトレンド`gprop=news`版（ニュース検索トレンド）
 - 各国版`geo=US` / `geo=KR`などのローカルトレンド
@@ -417,34 +397,34 @@ YouTube Data API v3との使い分け。
 - メルカリ・ヤフオクのカテゴリ別検索トレンド
 - 求人系の人気職種ランキング
 
-公式API化されていない、SPA構造で、URLパラメータで絞り込みが効くページであれば、本記事の`open → sleep → eval → close`パターンがほぼ流用できる。
+公式API化されておらず、SPA構造でURLパラメータ絞り込みが効くページなら、`open → sleep → eval → close`パターンがほぼ流用できる。
 
 ---
 
 ## 17. 利用上の注意
 
-Googleトレンドの利用規約はGoogle一般利用規約に従う。明示的にスクレイピングを禁止する条文は2026年5月時点で確認できなかったが、以下を守って運用している。
+Googleトレンドの利用規約はGoogle一般利用規約に従う。スクレイピング禁止の明文は2026年5月時点で確認できないが、以下を守って運用している。
 
 - アクセス間隔は最低5秒、推奨10秒以上
 - 取得データの第三者販売はしない
-- 取得結果は社内のリサーチ補助に限定
+- 取得結果は社内リサーチ補助に限定
 - 大量並列アクセスはしない（`--session`を10並列にしない）
 
-Googleはアンチボットを強く効かせる。Captchaを連発する使い方はそもそも続けられない。節度ある使用が長期運用にもつながる。
+アンチボットが強く効くサービスなので、Captchaを連発する使い方は続かない。節度ある使用が長期運用につながる。
 
 ---
 
 ## まとめ
 
-YouTube検索トレンドは公式APIで取れない情報の代表例。Googleトレンドの`/explore`タブを`gprop=youtube`で叩く仕様を、Browser Use CLIで安定実行に落とし込み、Claude Codeスキルとしてチーム配布できる形まで持っていった。
+YouTube検索トレンドは公式APIで取れない情報の代表例。Googleトレンドの`/explore?gprop=youtube`をBrowser Use CLIで安定取得し、Claude Codeスキルとしてチーム配布できる形にまとめた。
 
-ポイントは3点。
+ポイント。
 
 1. `videos.list?chart=mostPopular`と検索トレンドは別物
 2. SPA相手は`sleep 12` + `eval "document.body.innerText"`が最小実用単位
 3. Chromeプロファイル排他制御に注意。自動化用に別プロファイルを切る
 
-スクレイピングは泥臭い印象だが、Browser Use CLIで小さなコマンドの組み合わせに落とすと、再現性のある作業手順として共有しやすい。SKILL.md + reference.mdの2ファイル構成にしておけば、トークンコストも抑えられて配布もしやすい。
+Browser Use CLIで小さなコマンドの組み合わせに落とせば、再現性ある作業手順として共有しやすい。SKILL.md + reference.mdの2ファイル構成ならトークンコストも抑えられる。
 
 スキルリポジトリ（browser-use-googletrends）：[GitHub URL]
 
