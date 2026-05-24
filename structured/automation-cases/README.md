@@ -14,8 +14,11 @@ automation-cases/
 ├── scripts/
 │   └── generate_cards.py      … CSV → カード雛形 + INDEX.md
 ├── cards/
-│   ├── INDEX.md               … カテゴリ別・ツール別索引
-│   └── NNN-<tool>-<category>.md … 1事例=1カード
+│   ├── INDEX.md               … 1軍索引（成果報告DB系）
+│   ├── NNN-<tool>-<category>.md … 1軍カード（34件、Before/After完備）
+│   └── log/
+│       ├── INDEX.md           … 2軍索引（面談ログ由来）
+│       └── log-NNN-*.md       … 2軍カード（249件、AI評価YES）
 └── README.md（このファイル）
 ```
 
@@ -44,7 +47,10 @@ automation-cases/
 - **フェーズ1（自動生成済み）**: 成果報告DB系 計34件 → `cards/001.md`〜`034.md`
   - Before / After / 定量効果 / 定性効果 / 特記事項 / 社内展開 は埋まっている
   - **タイトル / 汎用化Tips / 発信角度** は TODO（人手加筆）
-- **フェーズ2（未着手）**: 面談ログから「改善成功 × 情報密度80字以上」のみ追加カード化予定
+- **フェーズ2（自動生成済み）**: 面談ログから「改善成功×80字以上」654件をAI評価し YES 249件を2軍カード化 → `cards/log/log-001.md`〜`log-249.md`
+  - 元データに Before/After 列がないため、定性効果＋特記事項からの再構成
+  - **発信時に汎化済み Before/After を人手で起こす前提**
+  - 評価詳細は `source/verdict_batch_*.jsonl`
 - **フェーズ3（未着手）**: 各カードに対し、媒体別のドラフトを `10_プロジェクト/<各発信>/20_articles/` 配下に展開
 
 ## 更新フロー

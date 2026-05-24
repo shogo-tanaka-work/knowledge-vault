@@ -1,0 +1,110 @@
+{"id": "0950", "decision": "YES", "reason": "事業報告書要約フォーマット運用", "summary": "事業報告書要約をGeminiジェムで定型化", "primary_tool": "Gemini", "primary_category": "資料・スライド作成"}
+{"id": "0952", "decision": "NO", "reason": "進行中・成果未確定"}
+{"id": "0953", "decision": "NO", "reason": "ツール導入のみ学習段階"}
+{"id": "0955", "decision": "YES", "reason": "月報コメント自動生成定着", "summary": "月報の概況コメントをChatGPTで自動生成", "primary_tool": "ChatGPT", "primary_category": "議事録・文章作成"}
+{"id": "0957", "decision": "YES", "reason": "市場調査自動化で時短", "summary": "中国化粧品市場調査をClaudeで自動分析", "primary_tool": "Claude", "primary_category": "情報収集・リサーチ"}
+{"id": "0959", "decision": "NO", "reason": "業務改善でなく記事投稿"}
+{"id": "0960", "decision": "YES", "reason": "PDF発注書OCR置換", "summary": "PDF発注書のCSV化をChatGPTで代替", "primary_tool": "ChatGPT", "primary_category": "データ集計・分析"}
+{"id": "0961", "decision": "NO", "reason": "プライベート活用中心"}
+{"id": "0963", "decision": "YES", "reason": "技術報告書AI作成", "summary": "システム障害報告書をAIで作成効率化", "primary_tool": "ChatGPT", "primary_category": "議事録・文章作成"}
+{"id": "0964", "decision": "NO", "reason": "GAS学習段階"}
+{"id": "0965", "decision": "YES", "reason": "給与明細作成自動化", "summary": "給与明細作成をGASで自動化し2hを30分に", "primary_tool": "GAS", "primary_category": "定型フロー自動化"}
+{"id": "0968", "decision": "NO", "reason": "活用中だが成果未明確"}
+{"id": "0974", "decision": "NO", "reason": "デバッグ手法習得のみ"}
+{"id": "0975", "decision": "NO", "reason": "業務リストアップ段階"}
+{"id": "0978", "decision": "NO", "reason": "部分成功で進行中"}
+{"id": "0980", "decision": "NO", "reason": "活用継続中で成果未確定"}
+{"id": "0981", "decision": "NO", "reason": "課題提出段階"}
+{"id": "0983", "decision": "YES", "reason": "補助金申請5倍に増加", "summary": "補助金申請をGemini Gemで5倍生産性化", "primary_tool": "Gemini", "primary_category": "定型フロー自動化"}
+{"id": "0984", "decision": "YES", "reason": "特許書類4日→1日", "summary": "特許庁提出書類作成をClaudeで4日→1日", "primary_tool": "Claude", "primary_category": "議事録・文章作成"}
+{"id": "0985", "decision": "NO", "reason": "実装中・未完了"}
+{"id": "0986", "decision": "NO", "reason": "運用開始だが課題残存"}
+{"id": "0987", "decision": "NO", "reason": "フロー習得段階"}
+{"id": "0988", "decision": "YES", "reason": "複数業務で大幅時短", "summary": "メール・資料・請求書をAIで大幅時短", "primary_tool": "ChatGPT", "primary_category": "議事録・文章作成"}
+{"id": "0989", "decision": "NO", "reason": "課題残存・プラマイゼロ"}
+{"id": "0990", "decision": "NO", "reason": "ツール体験段階"}
+{"id": "0991", "decision": "NO", "reason": "認識改善のみ"}
+{"id": "0992", "decision": "NO", "reason": "課題整理段階"}
+{"id": "0993", "decision": "YES", "reason": "SaaS自作置換で時短", "summary": "既存SaaSをClaude Codeで自作ツール置換", "primary_tool": "Claude", "primary_category": "定型フロー自動化"}
+{"id": "0994", "decision": "YES", "reason": "面接評価入力自動化", "summary": "面接評価入力をPower Automateで自動化", "primary_tool": "NotebookLM", "primary_category": "定型フロー自動化"}
+{"id": "0996", "decision": "NO", "reason": "方向性確定段階"}
+{"id": "0997", "decision": "NO", "reason": "状態確認段階"}
+{"id": "0998", "decision": "NO", "reason": "課題完了のみ業務未適用"}
+{"id": "0999", "decision": "NO", "reason": "理解向上のみ"}
+{"id": "1000", "decision": "NO", "reason": "新ビジネス構想段階"}
+{"id": "1001", "decision": "NO", "reason": "啓蒙活動段階"}
+{"id": "1002", "decision": "NO", "reason": "品質向上中・最終回前"}
+{"id": "1004", "decision": "NO", "reason": "検討段階"}
+{"id": "1005", "decision": "NO", "reason": "問題集自作のみ業務外"}
+{"id": "1007", "decision": "NO", "reason": "効率化実感のみで具体的でない"}
+{"id": "1008", "decision": "NO", "reason": "実現可能性確認段階"}
+{"id": "1009", "decision": "NO", "reason": "実装進行中"}
+{"id": "1010", "decision": "NO", "reason": "実演体感段階"}
+{"id": "1011", "decision": "NO", "reason": "可能性確認段階"}
+{"id": "1012", "decision": "NO", "reason": "ノウハウ共有段階"}
+{"id": "1013", "decision": "YES", "reason": "エージェント多数構築", "summary": "業務エージェント約21個をCopilotで作成", "primary_tool": "Copilot", "primary_category": "定型フロー自動化"}
+{"id": "1014", "decision": "YES", "reason": "中国語ニュース配信完成", "summary": "中国語ニュース配信をGASで自動化完成", "primary_tool": "GAS", "primary_category": "情報収集・リサーチ"}
+{"id": "1015", "decision": "NO", "reason": "気づきのみ未着手"}
+{"id": "1016", "decision": "NO", "reason": "移行段階"}
+{"id": "1017", "decision": "YES", "reason": "決算・議事録大幅短縮", "summary": "決算・議事録作成をGeminiで大幅時短", "primary_tool": "Gemini", "primary_category": "データ集計・分析"}
+{"id": "1018", "decision": "NO", "reason": "習得中"}
+{"id": "1019", "decision": "NO", "reason": "応用進行中"}
+{"id": "1020", "decision": "NO", "reason": "実用例体験段階"}
+{"id": "1021", "decision": "NO", "reason": "検証進行中"}
+{"id": "1022", "decision": "NO", "reason": "実装中完成度向上中"}
+{"id": "1023", "decision": "NO", "reason": "整理・進行開始段階"}
+{"id": "1024", "decision": "YES", "reason": "シフト処理60分→3分", "summary": "シフト表処理をNotebookLM+GASで自動化", "primary_tool": "NotebookLM", "primary_category": "定型フロー自動化"}
+{"id": "1025", "decision": "YES", "reason": "解約金計算100件短縮", "summary": "携帯解約金計算をGeminiジェムで効率化", "primary_tool": "Gemini", "primary_category": "データ集計・分析"}
+{"id": "1027", "decision": "NO", "reason": "理解開始段階"}
+{"id": "1028", "decision": "NO", "reason": "プロンプト手法習得のみ"}
+{"id": "1029", "decision": "NO", "reason": "操作習得段階"}
+{"id": "1030", "decision": "YES", "reason": "議事録7-8h→1h短縮", "summary": "議事録作成をClaudeで7-8時間→1時間", "primary_tool": "Claude", "primary_category": "議事録・文章作成"}
+{"id": "1031", "decision": "NO", "reason": "進行中・次段階へ"}
+{"id": "1032", "decision": "NO", "reason": "理解段階"}
+{"id": "1033", "decision": "NO", "reason": "活用範囲整理のみ"}
+{"id": "1034", "decision": "NO", "reason": "ワークフロー確立だが具体成果不明"}
+{"id": "1035", "decision": "YES", "reason": "Peatix管理自動化運用中", "summary": "Peatixデータ管理をGASで自動運用", "primary_tool": "GAS", "primary_category": "定型フロー自動化"}
+{"id": "1036", "decision": "NO", "reason": "学習方針整理"}
+{"id": "1037", "decision": "NO", "reason": "課題認識形成のみ"}
+{"id": "1039", "decision": "YES", "reason": "補助金検索完全自動化", "summary": "補助金検索メディアをClaude/Codexで自動化", "primary_tool": "Claude", "primary_category": "定型フロー自動化"}
+{"id": "1040", "decision": "NO", "reason": "検討段階"}
+{"id": "1041", "decision": "NO", "reason": "方針転換段階"}
+{"id": "1043", "decision": "NO", "reason": "仕様整理段階"}
+{"id": "1045", "decision": "NO", "reason": "重点化検討段階"}
+{"id": "1047", "decision": "NO", "reason": "環境構築完了のみ"}
+{"id": "1048", "decision": "YES", "reason": "業界ニュース自動収集", "summary": "業界ニュース自動収集をClaudeルーティンで運用", "primary_tool": "Claude", "primary_category": "情報収集・リサーチ"}
+{"id": "1049", "decision": "YES", "reason": "アクセスレポート自動化", "summary": "アクセスレポート作成をGAS+Claudeで自動化", "primary_tool": "Claude", "primary_category": "定型フロー自動化"}
+{"id": "1050", "decision": "NO", "reason": "方針転換段階"}
+{"id": "1051", "decision": "NO", "reason": "具体化段階"}
+{"id": "1052", "decision": "NO", "reason": "精度向上手法整理"}
+{"id": "1053", "decision": "NO", "reason": "予定・整理段階"}
+{"id": "1054", "decision": "YES", "reason": "メール自動送信安定稼働", "summary": "メール受信〜送信フローをClaude Codeで自動化", "primary_tool": "Claude", "primary_category": "定型フロー自動化"}
+{"id": "1055", "decision": "NO", "reason": "予定・構築段階"}
+{"id": "1056", "decision": "NO", "reason": "試行開始段階"}
+{"id": "1057", "decision": "YES", "reason": "データ転記1週間短縮", "summary": "データ転記作業をCodexで大幅短縮", "primary_tool": "Codex", "primary_category": "データ集計・分析"}
+{"id": "1058", "decision": "NO", "reason": "認識のみ"}
+{"id": "1078", "decision": "NO", "reason": "方針転換段階"}
+{"id": "1081", "decision": "NO", "reason": "学習進行中"}
+{"id": "1082", "decision": "NO", "reason": "省力化見込みのみ"}
+{"id": "1083", "decision": "NO", "reason": "活用拡大検討段階"}
+{"id": "1086", "decision": "NO", "reason": "理解深化のみ"}
+{"id": "1087", "decision": "NO", "reason": "納品済みだが精度未達"}
+{"id": "1091", "decision": "NO", "reason": "検証段階"}
+{"id": "1094", "decision": "NO", "reason": "再計画段階"}
+{"id": "1095", "decision": "NO", "reason": "検討段階"}
+{"id": "1096", "decision": "NO", "reason": "学習進度確認"}
+{"id": "1097", "decision": "NO", "reason": "発見段階"}
+{"id": "1100", "decision": "NO", "reason": "進行中・8割完成"}
+{"id": "1102", "decision": "NO", "reason": "POC構築段階"}
+{"id": "1104", "decision": "NO", "reason": "学習方針転換"}
+{"id": "1105", "decision": "NO", "reason": "学習完了のみ業務未適用"}
+{"id": "1107", "decision": "NO", "reason": "再整理段階"}
+{"id": "1108", "decision": "NO", "reason": "見込み・残課題あり"}
+{"id": "1109", "decision": "NO", "reason": "スポット使用開始のみ"}
+{"id": "1110", "decision": "NO", "reason": "環境整備のみ"}
+{"id": "1111", "decision": "NO", "reason": "検証中"}
+{"id": "1113", "decision": "NO", "reason": "見通し・良好結果だが進行中"}
+{"id": "1114", "decision": "NO", "reason": "カリキュラム視聴完了のみ"}
+{"id": "1116", "decision": "NO", "reason": "講座完了のみ"}
+{"id": "1119", "decision": "NO", "reason": "情報整理のみ"}
+{"id": "1120", "decision": "NO", "reason": "基礎安定のみ"}

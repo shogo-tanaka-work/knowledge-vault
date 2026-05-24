@@ -1,0 +1,110 @@
+{"id": "1122", "decision": "NO", "reason": "実装可能性向上止まり"}
+{"id": "1124", "decision": "NO", "reason": "精度向上の体感のみ"}
+{"id": "1125", "decision": "NO", "reason": "学習進捗報告"}
+{"id": "1126", "decision": "NO", "reason": "提案・検討段階"}
+{"id": "1127", "decision": "YES", "reason": "Difyで顧客課題解決", "summary": "DifyでクライアントワークのCSV出力運用を実現", "primary_tool": "Dify", "primary_category": "定型フロー自動化"}
+{"id": "1129", "decision": "YES", "reason": "R&D審査フロー納品", "summary": "DifyでR&D審査フロー構築し顧客納品", "primary_tool": "Dify", "primary_category": "定型フロー自動化"}
+{"id": "1130", "decision": "NO", "reason": "進行中で曖昧"}
+{"id": "1132", "decision": "NO", "reason": "議論段階"}
+{"id": "1133", "decision": "NO", "reason": "学習方針整理"}
+{"id": "1138", "decision": "NO", "reason": "方向性明確化のみ"}
+{"id": "1140", "decision": "YES", "reason": "レポート8/10効率化", "summary": "Difyでアナリストレポート処理を効率化", "primary_tool": "Dify", "primary_category": "データ集計・分析"}
+{"id": "1143", "decision": "NO", "reason": "理解レベル止まり"}
+{"id": "1145", "decision": "NO", "reason": "アプローチが見えた段階"}
+{"id": "1146", "decision": "NO", "reason": "検討段階"}
+{"id": "1147", "decision": "YES", "reason": "テスト仕様書高品質生成", "summary": "Codex/Geminiでテスト仕様書・工数見積を高精度生成", "primary_tool": "Codex", "primary_category": "定型フロー自動化"}
+{"id": "1148", "decision": "YES", "reason": "日報手打ち削減", "summary": "Gemini×カレンダー連携で日報作成効率化", "primary_tool": "Gemini", "primary_category": "議事録・文章作成"}
+{"id": "1149", "decision": "NO", "reason": "提案段階"}
+{"id": "1153", "decision": "NO", "reason": "明確化のみ"}
+{"id": "1155", "decision": "YES", "reason": "Dify案件2-3件納品", "summary": "Difyで顧客向けスライド作成案件を納品", "primary_tool": "Dify", "primary_category": "定型フロー自動化"}
+{"id": "1157", "decision": "YES", "reason": "翻訳・脆弱性整理短縮", "summary": "Geminiで英日翻訳・脆弱性整理を時間削減", "primary_tool": "Gemini", "primary_category": "情報収集・リサーチ"}
+{"id": "1160", "decision": "NO", "reason": "段階的実装方針"}
+{"id": "1163", "decision": "NO", "reason": "認識深まり段階"}
+{"id": "1168", "decision": "NO", "reason": "検討中"}
+{"id": "1169", "decision": "NO", "reason": "方針明確化のみ"}
+{"id": "1174", "decision": "NO", "reason": "方向性整理段階"}
+{"id": "1176", "decision": "NO", "reason": "原因特定段階"}
+{"id": "1178", "decision": "YES", "reason": "マニュアル統合可視化", "summary": "NotebookLMでマニュアル統合し業務フロー可視化", "primary_tool": "NotebookLM", "primary_category": "議事録・文章作成"}
+{"id": "1179", "decision": "NO", "reason": "未着手・方針再設定"}
+{"id": "1180", "decision": "NO", "reason": "ツール比較理解"}
+{"id": "1182", "decision": "NO", "reason": "試行予定"}
+{"id": "1183", "decision": "YES", "reason": "セキュリティ対応効率化", "summary": "Geminiで英語PDF要約しセキュリティアラート対応効率化", "primary_tool": "Gemini", "primary_category": "情報収集・リサーチ"}
+{"id": "1184", "decision": "YES", "reason": "PDF7-8/15自動化", "summary": "Difyでアナリストレポート審査を自動判定", "primary_tool": "Dify", "primary_category": "データ集計・分析"}
+{"id": "1185", "decision": "NO", "reason": "進行中・未実装"}
+{"id": "1186", "decision": "NO", "reason": "方向転換段階"}
+{"id": "1189", "decision": "NO", "reason": "理解進展のみ"}
+{"id": "1197", "decision": "NO", "reason": "再開・方針転換"}
+{"id": "1198", "decision": "NO", "reason": "成果数値未確認"}
+{"id": "1199", "decision": "NO", "reason": "理解習得のみ"}
+{"id": "1200", "decision": "NO", "reason": "初級課題完了のみ"}
+{"id": "1201", "decision": "NO", "reason": "アプローチ確立段階"}
+{"id": "1202", "decision": "YES", "reason": "弁護士から高評価", "summary": "ChatGPTで行政意見書作成し法的専門性を実現", "primary_tool": "ChatGPT", "primary_category": "議事録・文章作成"}
+{"id": "1204", "decision": "NO", "reason": "構築中・構想"}
+{"id": "1205", "decision": "NO", "reason": "手法習得のみ"}
+{"id": "1206", "decision": "NO", "reason": "見込み段階"}
+{"id": "1207", "decision": "NO", "reason": "実装予定段階"}
+{"id": "1209", "decision": "YES", "reason": "AI壁打ち日常化", "summary": "Gemini/NotebookLMで壁打ち・調査が日常業務化", "primary_tool": "Gemini", "primary_category": "情報収集・リサーチ"}
+{"id": "1210", "decision": "YES", "reason": "請求書OCR精度100%", "summary": "AI OCRで請求書読取精度100%とマニュアル整備", "primary_tool": "NotebookLM", "primary_category": "データ集計・分析"}
+{"id": "1211", "decision": "NO", "reason": "課題明確化段階"}
+{"id": "1214", "decision": "YES", "reason": "予約アクション運用定着", "summary": "Gemini予約アクションでサイバー攻撃情報を自動収集運用", "primary_tool": "Gemini", "primary_category": "情報収集・リサーチ"}
+{"id": "1215", "decision": "NO", "reason": "実践開始段階"}
+{"id": "1216", "decision": "YES", "reason": "戦略設計時間短縮", "summary": "ChatGPT/Gemsでブレスト・戦略設計の時間短縮", "primary_tool": "ChatGPT", "primary_category": "ブレインストーミング・戦略設計の効率化"}
+{"id": "1218", "decision": "NO", "reason": "確立中・運用開始予定"}
+{"id": "1219", "decision": "YES", "reason": "Gem複数作成成功", "summary": "GeminiでUI/UX検索・競合比較Gemとバナー作成を内製化", "primary_tool": "Gemini", "primary_category": "資料・スライド作成"}
+{"id": "1222", "decision": "NO", "reason": "推進中・実験段階"}
+{"id": "1223", "decision": "NO", "reason": "学習方針見直し"}
+{"id": "1224", "decision": "NO", "reason": "検討中"}
+{"id": "1226", "decision": "YES", "reason": "日報自動化展開中", "summary": "Geminiエージェントで日報作成を自動化し同僚展開", "primary_tool": "Gemini", "primary_category": "議事録・文章作成"}
+{"id": "1227", "decision": "NO", "reason": "設計中"}
+{"id": "1229", "decision": "YES", "reason": "対応2h→15分", "summary": "Geminiジェムでセキュリティチェック対応を15分化", "primary_tool": "Gemini", "primary_category": "議事録・文章作成"}
+{"id": "1231", "decision": "NO", "reason": "課題着手中"}
+{"id": "1232", "decision": "NO", "reason": "可能性確認段階"}
+{"id": "1234", "decision": "NO", "reason": "実装パターン習得"}
+{"id": "1235", "decision": "NO", "reason": "基盤構築段階"}
+{"id": "1236", "decision": "YES", "reason": "議事録Gem構築済", "summary": "Geminiで議事録自動作成Gemを構築・運用", "primary_tool": "Gemini", "primary_category": "議事録・文章作成"}
+{"id": "1237", "decision": "NO", "reason": "整理できるようになった段階"}
+{"id": "1238", "decision": "NO", "reason": "方針明確化のみ"}
+{"id": "1239", "decision": "NO", "reason": "使い分け明確化のみ"}
+{"id": "1242", "decision": "YES", "reason": "意見書50%削減", "summary": "AIで意見書作成50%削減・スライド95%削減", "primary_tool": "Claude", "primary_category": "議事録・文章作成"}
+{"id": "1244", "decision": "YES", "reason": "ChatGPT毎日活用", "summary": "ChatGPT有料版を毎日業務で活用継続", "primary_tool": "ChatGPT", "primary_category": "議事録・文章作成"}
+{"id": "1245", "decision": "NO", "reason": "推進中で具体性薄"}
+{"id": "1247", "decision": "NO", "reason": "導入部完了・学習中"}
+{"id": "1248", "decision": "NO", "reason": "方針決定段階"}
+{"id": "1249", "decision": "NO", "reason": "進捗管理明確化のみ"}
+{"id": "1250", "decision": "NO", "reason": "検討段階"}
+{"id": "1251", "decision": "YES", "reason": "Copilot正常動作", "summary": "Copilot Studioフローを環境ポリシー解決し稼働", "primary_tool": "Copilot Studio", "primary_category": "定型フロー自動化"}
+{"id": "1252", "decision": "NO", "reason": "許可取得段階"}
+{"id": "1253", "decision": "YES", "reason": "請求書72h→4h", "summary": "AI OCRで請求書処理を72時間→4時間に削減", "primary_tool": "Claude", "primary_category": "データ集計・分析"}
+{"id": "1256", "decision": "YES", "reason": "議事録8割効率化", "summary": "Claudeで議事録作成を8割効率化", "primary_tool": "Claude", "primary_category": "議事録・文章作成"}
+{"id": "1257", "decision": "NO", "reason": "検証開始段階"}
+{"id": "1258", "decision": "NO", "reason": "作成・チューニング中"}
+{"id": "1259", "decision": "NO", "reason": "提案・検討段階"}
+{"id": "1260", "decision": "NO", "reason": "応用学習段階"}
+{"id": "1261", "decision": "NO", "reason": "方針策定のみ"}
+{"id": "1263", "decision": "NO", "reason": "基礎習得・課題直面"}
+{"id": "1264", "decision": "NO", "reason": "アーキテクチャ明確化"}
+{"id": "1265", "decision": "NO", "reason": "理解深化"}
+{"id": "1266", "decision": "YES", "reason": "PPT/Excel自動化日常化", "summary": "GeminiでPowerPoint/Excel自動化が日常運用化", "primary_tool": "Gemini", "primary_category": "資料・スライド作成"}
+{"id": "1267", "decision": "YES", "reason": "数ヶ月→2時間", "summary": "Geminiでデータクレンジング業務を数ヶ月→2時間化", "primary_tool": "Gemini", "primary_category": "データ集計・分析"}
+{"id": "1268", "decision": "NO", "reason": "提案段階"}
+{"id": "1269", "decision": "NO", "reason": "実装進行中"}
+{"id": "1273", "decision": "NO", "reason": "活用法整理のみ"}
+{"id": "1275", "decision": "YES", "reason": "競合店抽出習得", "summary": "GoogleマップとAIで競合店抽出・地域分析を実現", "primary_tool": "Gemini", "primary_category": "情報収集・リサーチ"}
+{"id": "1276", "decision": "NO", "reason": "可能になった段階"}
+{"id": "1277", "decision": "YES", "reason": "シフト・メール自動化", "summary": "Gemini×GASでシフト作成・メール送信を自動化", "primary_tool": "GAS", "primary_category": "定型フロー自動化"}
+{"id": "1278", "decision": "NO", "reason": "手応え段階"}
+{"id": "1279", "decision": "NO", "reason": "壁打ち継続中"}
+{"id": "1280", "decision": "YES", "reason": "資料2h→10分", "summary": "GAS+Claudeで叩き資料2h→10分・週10h削減", "primary_tool": "Claude", "primary_category": "資料・スライド作成"}
+{"id": "1282", "decision": "YES", "reason": "文書10-15分→5分", "summary": "Geminiでビジネス文書作成を10-15分→5分に短縮", "primary_tool": "Gemini", "primary_category": "議事録・文章作成"}
+{"id": "1283", "decision": "YES", "reason": "経費精算自動化完了", "summary": "Gemini/GASでバクラク経費精算チェックを自動化", "primary_tool": "Gemini", "primary_category": "定型フロー自動化"}
+{"id": "1284", "decision": "NO", "reason": "見通しが立った段階"}
+{"id": "1287", "decision": "NO", "reason": "日常活用継続・抽象"}
+{"id": "1288", "decision": "YES", "reason": "入札情報自動取得完成", "summary": "Pythonスクレイピングで入札案件情報を自動Excel化", "primary_tool": "Antigravity", "primary_category": "データ集計・分析"}
+{"id": "1291", "decision": "YES", "reason": "議事録月4-6h削減", "summary": "AIで会議議事録自動化し月4-6時間削減", "primary_tool": "Gemini", "primary_category": "議事録・文章作成"}
+{"id": "1292", "decision": "YES", "reason": "面接評価シート効率化", "summary": "Claude/Geminiで採用面接フィードバック作成を効率化", "primary_tool": "Claude", "primary_category": "議事録・文章作成"}
+{"id": "1294", "decision": "YES", "reason": "Excel処理高精度確認", "summary": "Geminiでエクセルデータ処理を高精度に運用", "primary_tool": "Gemini", "primary_category": "データ集計・分析"}
+{"id": "1295", "decision": "YES", "reason": "Claude Code生産性向上", "summary": "Claude Codeで生産性短縮を実績化", "primary_tool": "Claude", "primary_category": "定型フロー自動化"}
+{"id": "1297", "decision": "NO", "reason": "改善予定段階"}
+{"id": "1298", "decision": "NO", "reason": "方針確立段階"}
+{"id": "1299", "decision": "YES", "reason": "点検報告書安定稼働", "summary": "Gemで点検報告書文章変換が安定稼働", "primary_tool": "Gemini", "primary_category": "議事録・文章作成"}
+{"id": "1300", "decision": "YES", "reason": "会議資料自動生成", "summary": "NotebookLMで既存資料から会議向け資料を自動生成", "primary_tool": "NotebookLM", "primary_category": "情報収集・リサーチ"}

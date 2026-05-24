@@ -1,0 +1,110 @@
+{"id": "0776", "decision": "NO", "reason": "理解深化のみ業務適用なし"}
+{"id": "0781", "decision": "NO", "reason": "使い分け理解段階"}
+{"id": "0782", "decision": "YES", "reason": "PDF変換で検索精度向上", "summary": "ClaudeでPDFをPNG化し間取り検索精度向上", "primary_tool": "Claude", "primary_category": "データ集計・分析"}
+{"id": "0783", "decision": "YES", "reason": "資料作成時間大幅短縮", "summary": "Claudeで資料・パワポ作成時間を大幅短縮", "primary_tool": "Claude", "primary_category": "資料・スライド作成"}
+{"id": "0785", "decision": "YES", "reason": "NotebookLM社内活用定着", "summary": "NotebookLMで発注書テキスト抽出を社内活用", "primary_tool": "NotebookLM", "primary_category": "データ集計・分析"}
+{"id": "0786", "decision": "YES", "reason": "Excel自動入力実現", "summary": "ClaudeでExcel商品企画書への自動入力を効率化", "primary_tool": "Claude", "primary_category": "データ集計・分析"}
+{"id": "0787", "decision": "NO", "reason": "進行中で適用未確定"}
+{"id": "0788", "decision": "NO", "reason": "検討中・実装未完了"}
+{"id": "0789", "decision": "NO", "reason": "比較検証のみ業務未適用"}
+{"id": "0790", "decision": "NO", "reason": "使い分け認識段階"}
+{"id": "0791", "decision": "NO", "reason": "方向性明確化のみ"}
+{"id": "0792", "decision": "NO", "reason": "可能性認識段階"}
+{"id": "0793", "decision": "NO", "reason": "活用開始のみ成果未確認"}
+{"id": "0794", "decision": "NO", "reason": "実装予定段階"}
+{"id": "0795", "decision": "NO", "reason": "理解深化のみ"}
+{"id": "0796", "decision": "NO", "reason": "方針転換段階"}
+{"id": "0797", "decision": "NO", "reason": "方向性明確化のみ"}
+{"id": "0798", "decision": "YES", "reason": "退職金計算自動化実装", "summary": "GASで退職金掛金計算を自動化し手作業削減", "primary_tool": "GAS", "primary_category": "定型フロー自動化"}
+{"id": "0799", "decision": "YES", "reason": "市場調査自動化構築", "summary": "Claude Codeで複数エージェント市場調査を自動化", "primary_tool": "Claude", "primary_category": "情報収集・リサーチ"}
+{"id": "0800", "decision": "NO", "reason": "理解段階"}
+{"id": "0801", "decision": "YES", "reason": "SNS自動投稿1000記事", "summary": "ClaudeでSNS自動投稿を構築し1000記事運営", "primary_tool": "Claude", "primary_category": "定型フロー自動化"}
+{"id": "0802", "decision": "NO", "reason": "今後推進予定段階"}
+{"id": "0803", "decision": "YES", "reason": "Difyワークフロー完成定着", "summary": "Difyで業務効率化ワークフロー構築し外注費削減", "primary_tool": "Dify", "primary_category": "定型フロー自動化"}
+{"id": "0804", "decision": "YES", "reason": "稟議書・営業リスト自動化", "summary": "Geminiで稟議書Excel展開と営業リスト抽出を自動化", "primary_tool": "Gemini", "primary_category": "定型フロー自動化"}
+{"id": "0806", "decision": "YES", "reason": "大量データ分類で高精度", "summary": "Claudeで5年分1000仕分けのデータ分類を実現", "primary_tool": "Claude", "primary_category": "データ集計・分析"}
+{"id": "0809", "decision": "YES", "reason": "ニュース自動配信構築", "summary": "GAS+Slack APIでニュース自動配信を実配信", "primary_tool": "GAS", "primary_category": "情報収集・リサーチ"}
+{"id": "0810", "decision": "YES", "reason": "PDF出力自動化で時短", "summary": "Claudeでアクセスレポート出力を自動化し時短", "primary_tool": "Claude", "primary_category": "資料・スライド作成"}
+{"id": "0813", "decision": "YES", "reason": "報告書チェック運用確立", "summary": "ChatGPTで報告書チェック業務の効率化を実現", "primary_tool": "ChatGPT", "primary_category": "議事録・文章作成"}
+{"id": "0814", "decision": "YES", "reason": "ショート動画20本同時生成", "summary": "Canva一括作成でショート動画20本を同時生成", "primary_tool": "Canva", "primary_category": "画像・動画生成"}
+{"id": "0816", "decision": "YES", "reason": "EC構築75%短縮", "summary": "ClaudeでEC構築期間を1.5ヶ月から3週間に短縮", "primary_tool": "Claude", "primary_category": "定型フロー自動化"}
+{"id": "0817", "decision": "NO", "reason": "比較検証段階"}
+{"id": "0818", "decision": "YES", "reason": "Codexで資料生成成功", "summary": "Codexでパワポ生成とExcel分析を実践", "primary_tool": "ChatGPT", "primary_category": "資料・スライド作成"}
+{"id": "0819", "decision": "YES", "reason": "履歴書分析で共通点抽出", "summary": "Claudeで履歴書分析し活躍者の志望動機を言語化", "primary_tool": "Claude", "primary_category": "データ集計・分析"}
+{"id": "0821", "decision": "NO", "reason": "未着手・移行提案段階"}
+{"id": "0823", "decision": "YES", "reason": "政府サイト検索効率化", "summary": "ChatGPT/Claudeメモリ活用で税務検索効率化", "primary_tool": "Claude", "primary_category": "情報収集・リサーチ"}
+{"id": "0825", "decision": "YES", "reason": "給与計算月2時間削減", "summary": "Claudeで給与計算集計を月2時間削減", "primary_tool": "Claude", "primary_category": "データ集計・分析"}
+{"id": "0832", "decision": "NO", "reason": "基礎習得段階"}
+{"id": "0833", "decision": "NO", "reason": "習慣化のみ具体成果薄"}
+{"id": "0834", "decision": "NO", "reason": "学習段階で未適用"}
+{"id": "0835", "decision": "YES", "reason": "日報・ニュース投稿自動化", "summary": "GASで日報生成とニュースSlack自動投稿を実装", "primary_tool": "GAS", "primary_category": "定型フロー自動化"}
+{"id": "0837", "decision": "NO", "reason": "方針転換段階"}
+{"id": "0838", "decision": "YES", "reason": "YouTube解説等仕組み構築", "summary": "ClaudeでYouTube文字起こし解説と販促物自動化", "primary_tool": "Claude", "primary_category": "定型フロー自動化"}
+{"id": "0839", "decision": "YES", "reason": "求人掲載フロー確定", "summary": "ChatGPT/Claude/Geminiで求人掲載業務フロー確立", "primary_tool": "ChatGPT", "primary_category": "資料・スライド作成"}
+{"id": "0840", "decision": "YES", "reason": "Clasp環境構築完了", "summary": "GASでタスク管理システムClasp自動アップロード構築", "primary_tool": "GAS", "primary_category": "定型フロー自動化"}
+{"id": "0841", "decision": "NO", "reason": "期待段階で適用未確定"}
+{"id": "0842", "decision": "YES", "reason": "マッチングサイト技術確定", "summary": "Claudeで遊休農地マッチングサイトをDjango実装", "primary_tool": "Claude", "primary_category": "定型フロー自動化"}
+{"id": "0843", "decision": "YES", "reason": "GAS等で業務効率大改善", "summary": "GAS/Gemini/Notionで通知書自動作成と議事録短縮", "primary_tool": "GAS", "primary_category": "定型フロー自動化"}
+{"id": "0844", "decision": "NO", "reason": "使い分け理解段階"}
+{"id": "0846", "decision": "NO", "reason": "情報整理基盤構築のみ"}
+{"id": "0848", "decision": "YES", "reason": "業務GEM実用レベル", "summary": "Geminiで父親の業務メール作成GEMを実用化", "primary_tool": "Gemini", "primary_category": "議事録・文章作成"}
+{"id": "0849", "decision": "YES", "reason": "工法比較表自動生成", "summary": "ChatGPTで工法比較表を半日から自動生成に短縮", "primary_tool": "ChatGPT", "primary_category": "資料・スライド作成"}
+{"id": "0851", "decision": "NO", "reason": "イメージ獲得段階"}
+{"id": "0853", "decision": "NO", "reason": "全体像把握段階"}
+{"id": "0854", "decision": "YES", "reason": "LINEリマインダー構築", "summary": "LINE×GAS×ChatGPTでリマインダーシステム構築", "primary_tool": "GAS", "primary_category": "定型フロー自動化"}
+{"id": "0855", "decision": "NO", "reason": "効率性実感段階"}
+{"id": "0856", "decision": "YES", "reason": "サムネ品質2-3倍向上", "summary": "GenSparkとCanvaでスライド・画像品質を向上", "primary_tool": "GenSpark", "primary_category": "資料・スライド作成"}
+{"id": "0857", "decision": "YES", "reason": "教育体系構築自走", "summary": "ChatGPT/NotebookLMで理念浸透教育体系を構築", "primary_tool": "ChatGPT", "primary_category": "議事録・文章作成"}
+{"id": "0858", "decision": "YES", "reason": "メール返信プロジェクト化", "summary": "ChatGPTでメール返信チェックをプロジェクト化", "primary_tool": "ChatGPT", "primary_category": "議事録・文章作成"}
+{"id": "0859", "decision": "NO", "reason": "見込み段階"}
+{"id": "0860", "decision": "YES", "reason": "目標資料作成可能化", "summary": "ChatGPTで新年度目標設定資料を最小指示で作成", "primary_tool": "ChatGPT", "primary_category": "資料・スライド作成"}
+{"id": "0861", "decision": "YES", "reason": "テレアポリスト2000件取得", "summary": "Claude Codeでテレアポリスト2000件を自動取得", "primary_tool": "Claude", "primary_category": "データ集計・分析"}
+{"id": "0862", "decision": "YES", "reason": "出勤簿自動化成功", "summary": "Googleフォーム×LINE通知連携で出勤簿自動化", "primary_tool": "Gemini", "primary_category": "定型フロー自動化"}
+{"id": "0864", "decision": "YES", "reason": "タスク管理ツール社内定着", "summary": "Claudeでタスク管理ツール構築し社内で定着", "primary_tool": "Claude", "primary_category": "定型フロー自動化"}
+{"id": "0866", "decision": "NO", "reason": "認識段階"}
+{"id": "0867", "decision": "NO", "reason": "イメージ明確化のみ"}
+{"id": "0868", "decision": "NO", "reason": "要件定義進捗段階"}
+{"id": "0870", "decision": "NO", "reason": "見通し段階で未稼働"}
+{"id": "0871", "decision": "YES", "reason": "議事録時短フロー確立", "summary": "ChatGPT/Geminiで議事録作成フローを確立し時短", "primary_tool": "ChatGPT", "primary_category": "議事録・文章作成"}
+{"id": "0872", "decision": "NO", "reason": "可読性向上のみ業務薄"}
+{"id": "0873", "decision": "YES", "reason": "社内ポータル開設", "summary": "GASで社内ポータルサイトを開発・開設", "primary_tool": "GAS", "primary_category": "定型フロー自動化"}
+{"id": "0874", "decision": "NO", "reason": "画像生成可能化のみ"}
+{"id": "0875", "decision": "NO", "reason": "スキル向上段階"}
+{"id": "0876", "decision": "NO", "reason": "検討・カスタマイズのみ"}
+{"id": "0877", "decision": "YES", "reason": "SNS自動投稿2分毎稼働", "summary": "ChatGPTでSNS自動投稿を2分毎に生成・公開", "primary_tool": "ChatGPT", "primary_category": "定型フロー自動化"}
+{"id": "0878", "decision": "NO", "reason": "見通し段階"}
+{"id": "0879", "decision": "NO", "reason": "活用案把握段階"}
+{"id": "0880", "decision": "NO", "reason": "認識段階"}
+{"id": "0881", "decision": "NO", "reason": "対話改善のみ"}
+{"id": "0882", "decision": "YES", "reason": "ペルソナサイト完成", "summary": "CodexでLPペルソナサイトを完成しAI組織化推進", "primary_tool": "Codex", "primary_category": "資料・スライド作成"}
+{"id": "0883", "decision": "NO", "reason": "方針確定のみ"}
+{"id": "0884", "decision": "YES", "reason": "業務の相棒として自走", "summary": "Claudeで行政契約協議や議事録作成を大幅削減", "primary_tool": "Claude", "primary_category": "議事録・文章作成"}
+{"id": "0887", "decision": "YES", "reason": "クラウドワークス応募5件", "summary": "Claudeでクラウドワークス応募文章精度向上5件", "primary_tool": "Claude", "primary_category": "議事録・文章作成"}
+{"id": "0888", "decision": "YES", "reason": "音声指示で記事10本生成", "summary": "Claude Codeで音声指示のみ記事10本自動生成", "primary_tool": "Claude", "primary_category": "議事録・文章作成"}
+{"id": "0889", "decision": "NO", "reason": "理解進行中段階"}
+{"id": "0892", "decision": "NO", "reason": "確認段階"}
+{"id": "0893", "decision": "NO", "reason": "方向性明確化のみ"}
+{"id": "0895", "decision": "NO", "reason": "知識理解段階"}
+{"id": "0896", "decision": "NO", "reason": "方向性認識段階"}
+{"id": "0898", "decision": "NO", "reason": "理解期待段階"}
+{"id": "0902", "decision": "NO", "reason": "方針明確化のみ"}
+{"id": "0904", "decision": "YES", "reason": "動画編集ツール自作完了", "summary": "Claude Codeで動画編集ツール自作しボタン1つ完了", "primary_tool": "Claude", "primary_category": "画像・動画生成"}
+{"id": "0909", "decision": "YES", "reason": "読書記録アプリ開発完了", "summary": "V0で読書記録アプリ開発し環境変数展開完了", "primary_tool": "V0", "primary_category": "その他"}
+{"id": "0910", "decision": "YES", "reason": "Gmail自動フラグ稼働", "summary": "GASでGmail自動フラグ通知の仕組み構築", "primary_tool": "GAS", "primary_category": "定型フロー自動化"}
+{"id": "0911", "decision": "NO", "reason": "整理・確認段階"}
+{"id": "0912", "decision": "NO", "reason": "基盤構築段階"}
+{"id": "0914", "decision": "YES", "reason": "夜間エージェント10個運用", "summary": "Claude Codeで夜間自動エージェント10個運用", "primary_tool": "Claude", "primary_category": "定型フロー自動化"}
+{"id": "0915", "decision": "YES", "reason": "課題A以上全合格", "summary": "ChatGPT/Geminiで実務通用品質に到達", "primary_tool": "ChatGPT", "primary_category": "データ集計・分析"}
+{"id": "0916", "decision": "NO", "reason": "方向性見え段階"}
+{"id": "0917", "decision": "YES", "reason": "ポータルサイト早期実装", "summary": "Claude Code+Vercelでポータルサイトを短期実装", "primary_tool": "Claude", "primary_category": "定型フロー自動化"}
+{"id": "0919", "decision": "YES", "reason": "複数Gem自作運用", "summary": "Geminiで商談分析等の自作Gem運用業務効率化", "primary_tool": "Gemini", "primary_category": "資料・スライド作成"}
+{"id": "0921", "decision": "YES", "reason": "キャンバス機能スライド化", "summary": "Geminiキャンバスでスライド化とエクスポート確立", "primary_tool": "Gemini", "primary_category": "資料・スライド作成"}
+{"id": "0925", "decision": "YES", "reason": "謝罪文自動化等実現", "summary": "NotebookLM/Geminiで謝罪文作成等を自動化", "primary_tool": "Gemini", "primary_category": "議事録・文章作成"}
+{"id": "0926", "decision": "YES", "reason": "投資判断ボット完成", "summary": "Difyで投資判断ボット開発し手作業ゼロ化", "primary_tool": "Dify", "primary_category": "情報収集・リサーチ"}
+{"id": "0929", "decision": "YES", "reason": "Peatix CSV自動化構築", "summary": "GASでPeatix CSVをスプレッドシート自動管理化", "primary_tool": "GAS", "primary_category": "定型フロー自動化"}
+{"id": "0930", "decision": "YES", "reason": "レポート2時間→15分", "summary": "Claudeで月次アクセス解析レポートを2時間→15分", "primary_tool": "Claude", "primary_category": "資料・スライド作成"}
+{"id": "0934", "decision": "YES", "reason": "顛末書Gem運用", "summary": "GenSparkで顛末書Gem運用しスライド分析統合", "primary_tool": "GenSpark", "primary_category": "資料・スライド作成"}
+{"id": "0935", "decision": "NO", "reason": "流れ習得段階"}
+{"id": "0942", "decision": "YES", "reason": "メール1時間→5分短縮", "summary": "ChatGPT/Geminiでメール返信を1時間→5分に短縮", "primary_tool": "ChatGPT", "primary_category": "議事録・文章作成"}
+{"id": "0945", "decision": "YES", "reason": "提案書黒塗り自動化", "summary": "Claude Codeで提案書黒塗り処理を自動化", "primary_tool": "Claude", "primary_category": "議事録・文章作成"}
+{"id": "0948", "decision": "YES", "reason": "NotebookLM社内活用開始", "summary": "NotebookLM社内情報共有とGeminiで記事作成", "primary_tool": "NotebookLM", "primary_category": "議事録・文章作成"}
