@@ -46,6 +46,7 @@
 | タイトル | ステータス | 元検証ログ | 更新日 |
 |:---|:---:|:---|:---:|
 | [LINEサポートのFAQ対応をAI化してみた](20260522_line-gas-spreadsheet-rag.md) | `draft` | `20260520_line-gas-spreadsheet-rag.md` | 2026-05-22 |
+| [YouTube検索トレンドの収集を、Claude CodeとBrowser Use CLIで1コマンドにした話](20260524_browser-use-cli-youtube-trend.md) | `draft` | `tools/20260514_sns-research-automation.md` | 2026-05-24 |
 
 ---
 
