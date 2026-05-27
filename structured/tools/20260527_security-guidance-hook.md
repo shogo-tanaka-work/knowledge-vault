@@ -120,6 +120,51 @@ HOOK=".../lab-secure-aidd-boilerplate/.claude/hooks/security_reminder_hook.py"
 
 ---
 
+## 4-2. 改造PoC: 監査ログ機能の追加（2026/05/27）
+
+初回確認で判明した「重複抑制で2件目以降の違反が静かに通る」「`/tmp/security-warnings-log.txt` は警告ログではない」問題への対処として、フックスクリプトを **B案: プロジェクト同梱版** で改造。
+
+### 変更点（差分概要）
+
+| ファイル | 変更 |
+|---|---|
+| `.claude/hooks/security_reminder_hook.py` | `DEBUG_LOG_FILE` を `.claude/logs/security-warnings.log` に。`CLAUDE_PROJECT_DIR` 環境変数優先、なければ `__file__` から推定。`main()` の警告ブロック直前に `debug_log("WARN ...")` 1行追加。 |
+| `.claude/logs/.gitkeep` | ディレクトリ確保 |
+| `.claude/logs/README.md` | 仕様・確認コマンド |
+| `.gitignore` | `.claude/logs/*.log` を明示追記（既存 `*.log` でカバーはされていたが意図を明確化） |
+
+### 設計判断
+
+- **記録するのはメタ情報1行のみ**（警告本文ではなく `session / tool / file / rule`）。grep しやすく、肥大化しない。
+- **重複抑制のチェックより前にログ書き込み**。stderr 警告は抑制されてもファイルには全件残る = 「画面では1回・ログには全件」の二段運用。
+- **書き込み失敗は握りつぶす**。ログ周りのトラブルで開発を止めない。
+- **`/tmp` ではなくプロジェクト同梱**。チームに配布したとき clone 直後から監査証跡が同じ場所に出る。`.gitignore` 済みなのでリポジトリは汚れない。
+
+### 改造後の動作確認
+
+8ケース再走（初回と同一入力）→ `.claude/logs/security-warnings.log` を `cat` で確認。
+
+```
+[2026-05-27 16:03:01.074] WARN session=u2 tool=Write file=.../src/a.ts rule=eval_injection
+[2026-05-27 16:03:01.105] WARN session=u3 tool=Edit  file=.../src/b.ts rule=innerHTML_xss
+[2026-05-27 16:03:01.137] WARN session=u4 tool=Write file=.../src/c.tsx rule=react_dangerously_set_html
+[2026-05-27 16:03:01.168] WARN session=u5 tool=Edit  file=.../src/d.js rule=document_write_xss
+[2026-05-27 16:03:01.199] WARN session=u6 tool=Write file=.../.github/workflows/x.yml rule=github_actions_workflow
+[2026-05-27 16:03:01.231] WARN session=u2 tool=Write file=.../src/a.ts rule=eval_injection   ← ★重複抑制下でも記録
+```
+
+- 違反した6ケース（2-7）すべてが記録された
+- ケース7 は `exit=0`（stderr警告は抑制）だがログには2件目の `eval_injection` が残った = **B案の意図どおりに機能**
+- exit code の挙動は改造前と同一（フックの判定ロジックには手を入れていない）
+
+### 残課題
+
+- ローテーション未実装（長期運用では `logrotate` 設定 or `tail -c` 系の自前ローテが要る）
+- セッションIDが Claude Code から渡される実値の仕様が未確認（このセッションで実起動して確認したい）
+- ログから「鳴った件数 / 最頻ルール」の週次サマリを `outputs/note/` に流すパイプライン候補
+
+---
+
 ## 5. 学び・気づき（途中メモ）
 
 - フックは **「文字列パターン」** で発火するため、危険APIの **解説ドキュメント** にも反応する。意図しないブロックを避けるなら、ドキュメントは `docs/` 配下に集約し matcher を絞るか、フック側で `description`/`comment` を除外する工夫が必要。
