@@ -335,6 +335,7 @@ Google（Google DeepMind / Google Cloud）
 
 - 2026/05/27: 一次情報リサーチ結果を元に初期メモを反映
 - 2026/05/28: 数十サイト横断ニュース収集システムのコスト試算を実施。詳細は `16_検証ラボ/lab-computer-use-3vendors/cost-estimation.md` 参照。Gemini 2.5 CU + context cache で1サイト約$0.05〜0.07、3社中最安
+- 2026/05/28: 「CU のデスクトップ操作 = 実質 Linux デスクトップ」「Windows/Mac 業務アプリは別途 VM 必要」「業務別ユースケースカタログ」を整理。詳細は Anthropic ログ（`20260527_anthropic-computer-use.md`）の §5・§8・§9 に集約。Google は主にブラウザ前提（`ENVIRONMENT_BROWSER`）でデスクトップ操作は公式想定外のため、ブラウザ完結業務に絞るのが筋。Windows 環境への実機検証は実施しない判断
 
 ---
 
