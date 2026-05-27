@@ -334,6 +334,7 @@ Google（Google DeepMind / Google Cloud）
 ✅ メモ・議論ログ
 
 - 2026/05/27: 一次情報リサーチ結果を元に初期メモを反映
+- 2026/05/28: 数十サイト横断ニュース収集システムのコスト試算を実施。詳細は `16_検証ラボ/lab-computer-use-3vendors/cost-estimation.md` 参照。Gemini 2.5 CU + context cache で1サイト約$0.05〜0.07、3社中最安
 
 ---
 

@@ -317,6 +317,7 @@ Anthropic（API 経由 / Amazon Bedrock / Google Cloud Vertex AI で提供）
 ✅ メモ・議論ログ
 
 - 2026/05/27: 一次情報リサーチ結果を元に初期メモを反映
+- 2026/05/28: 数十サイト横断ニュース収集システムのコスト試算を実施。詳細は `16_検証ラボ/lab-computer-use-3vendors/cost-estimation.md` 参照。Sonnet 4.6 + prompt cache で1サイト約$0.08〜0.10、Opus 4.7 は新トークナイザで+35%なのでさらに高め
 
 ---
 
