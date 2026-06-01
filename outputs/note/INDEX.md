@@ -47,6 +47,7 @@
 |:---|:---:|:---|:---:|
 | [LINEサポートのFAQ対応をAI化してみた](20260522_line-gas-spreadsheet-rag.md) | `draft` | `20260520_line-gas-spreadsheet-rag.md` | 2026-05-22 |
 | [YouTube検索トレンドの収集を、Claude CodeとBrowser Use CLIで1コマンドにした話](20260524_browser-use-cli-youtube-trend.md) | `draft` | `tools/20260514_sns-research-automation.md` | 2026-05-24 |
+| [AIに任せて、自分用のiOSアプリを実機まで作ってみた](20260601_claude-code-ios-app.md) | `draft` | `projects/20260601_claude-code-ios-app.md` | 2026-06-01 |
 
 ---
 
