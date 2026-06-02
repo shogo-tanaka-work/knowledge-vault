@@ -49,6 +49,7 @@
 | [YouTube検索トレンドの収集を、Claude CodeとBrowser Use CLIで1コマンドにした話](20260524_browser-use-cli-youtube-trend.md) | `draft` | `tools/20260514_sns-research-automation.md` | 2026-05-24 |
 | [AIに任せて、自分用のiOSアプリを実機まで作ってみた](20260601_claude-code-ios-app.md) | `draft` | `projects/20260601_claude-code-ios-app.md` | 2026-06-01 |
 | [数ヶ月検索に出なかった自社サイトを、Google検索とAI検索の両方に乗せた話](20260601_cloudflare-ai-search-seo.md) | `draft` | `16_検証ラボ/lab-shogoworks-search-aio/20260601_shogoworks-search-aio.md` | 2026-06-01 |
+| [バイブコーディングでVercelに載せて終わり、にしていませんか。$20のはずが$132だった請求書の話](20260602_vercel-cost-vibe-coding.md) | `draft` | `tools/20260602_vercel-cost-build-management.md` | 2026-06-02 |
 
 ---
 
