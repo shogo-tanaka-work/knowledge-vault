@@ -314,6 +314,93 @@ Hermes は「同一のエージェントコア・同一の設定/セッション
 
 ---
 
+## 11. 競合比較（Claude Code / Codex / Cloudflareとの違い）
+
+設計思想で割り切ると整理しやすい。**Hermes＝運用フレームワーク**、**Claude Code / Codex＝コーディングエージェント本体**、**Cloudflare（Agents SDK＋Workers AI）＝サーバレスでエージェントを“作る”土台**。レイヤーが異なる。Cloudflareはエッジ/サーバレス（Durable Objects上で起動）が思想で、「自前PCに常駐」という用途とは土俵が違う点に注意。
+
+### 機能単位の比較
+| 軸 | Hermes Agent | Claude Code (Agent SDK) | Codex (OpenAI) | Cloudflare Agents SDK |
+| --- | --- | --- | --- | --- |
+| 正体 | 常駐型・汎用業務エージェント基盤 | コーディングエージェント＋SDK | コーディングエージェント | エージェントを作るSDK/PaaS |
+| LLM | **自由**（OpenAI互換/ローカルOSS可） | Anthropic固定 | OpenAI固定 | Workers AI(OSS)＋外部API |
+| 本体ライセンス | **OSS(MIT)・無料** | 商用 | 商用 | SDK無料・実行はCF課金 |
+| ランニングコスト | **ローカルLLMなら0円**化可 | API従量（必須） | API従量（必須） | CF実行＋推論課金 |
+| 常駐のしやすさ | ◎ `gateway install`でsystemd常駐 | △ 自前で常駐ループ実装 | △ 同左 | ○ ただしサーバレス常駐 |
+| スケジューリング(cron) | **標準装備**（自然言語cron） | ✕ 自作 | ✕ 自作 | ○ Cron Triggers |
+| メッセージング連携 | **20+チャネル標準** | ✕ 自作 | ✕ 自作 | ✕ 自作 |
+| 永続メモリ/スキル | **標準装備** | メモリ/スキルあり | △ | 自前(Durable/KV) |
+| SDK/組み込み | Python(`AIAgent`)＋OpenAI互換API公開 | **SDK充実** | SDK/AgentKit | **SDK中心** |
+| サンドボックス | local/docker/ssh/modal等5種 | 権限制御あり | クラウド実行は隔離 | V8 isolate(強い分離) |
+| コーディング品質/IDE統合 | ○(汎用) | **◎** | **◎** | △ |
+
+### 「定期メール監視・SNS収集」での判断軸
+- **Claude Code Agent SDKで書く場合**: 常駐/スケジューラ/メール・SNS接続/通知配信/記憶DBを自分で実装。自由でコンパクトだが、**LLMはAnthropic従量課金が必ず発生**。監視のような「軽いが高頻度」なタスクほどAPIコストが積み上がる。
+- **Hermesが効く理由**: ①cron・メール/SNS連携・通知配信・記憶が“設定だけ”で揃い、配管をほぼ書かない ②**ローカルOSS LLMでランニングコストをゼロ化できる**（高頻度タスクで効く）③マルチユーザー共有＋権限分離が標準 ④モデル差し替えでロックインしない。
+- **Claude Code / Codexが勝つ場面**: タスクの中身が「コードを書く・直す・PRを出す」で、推論/コーディング品質が成果を左右する用途。量が少なくフロンティアモデル前提でAPI従量が苦にならない。
+
+### 落としどころ（推奨）
+> 監視・収集・定例配信などの**運用反復タスク → Hermesに常駐**（ローカル/安価モデルでコスト最小）。
+> コードを書く・難しい判断の**実装タスク → Claude Code / Codex**（必要に応じフロンティアモデル）。
+
+両者は排他ではない。HermesはコーディングCLIをPTYツールとして内部起動でき（Claude Code/Codexを呼べる）、MCPにも対応。**「常駐オーケストレーター＝Hermes、頭脳の一部＝Claude Code」のハイブリッド**が現実解。
+
+---
+
+## 12. 運用形態（サーバ常駐・起動モード）
+
+常駐の正体は **「gateway」という単一デーモンプロセス**。これが①メッセージング接続 ②APIエンドポイント ③cronスケジューラ を内包する。「常駐させる＝gatewayを起動する」。以下の3モードは排他ではなく、gateway常駐の上に同時に乗る。
+
+### ① systemd / launchd でデーモン化（常駐の基本形）
+```bash
+hermes gateway install                 # user常駐サービス化（Linux=systemd / mac=launchd）
+sudo hermes gateway install --system   # Linux: ブート時のシステムサービス
+hermes gateway start / stop / status
+```
+gatewayは**60秒ごとにcronスケジューラをtick**し、各チャネルの着信も待ち受ける。
+
+### ② HTTPエンドポイントを立てて呼び出す（API Server / SDK的利用）
+OpenAI互換のHTTPサーバを公開できる。別アプリや自作UIからプロンプトをPOST →フルツールで処理して結果を返す。
+```bash
+# ~/.hermes/.env
+API_SERVER_ENABLED=true
+API_SERVER_KEY=change-me
+```
+```bash
+hermes gateway   # → [API Server] listening on http://127.0.0.1:8642
+curl http://localhost:8642/v1/chat/completions \
+  -H "Authorization: Bearer change-me" \
+  -d '{"model":"hermes-agent","messages":[{"role":"user","content":"今日の未読メールを要約して"}]}'
+```
+- 主要エンドポイント: `/v1/chat/completions`・`/v1/responses`（サーバ側で会話状態保持）・`/v1/runs`（実行投入＋SSE進捗購読）・`/api/jobs`（外部からcronジョブCRUD）。
+- Pythonから直接埋め込むなら `from run_agent import AIAgent` も可能。
+
+### ③ cronで無人実行＋自動承認
+gateway内蔵スケジューラ（OSのcronではない）。自然言語でも組める。
+```bash
+hermes cron create "every 1d at 09:00" "未読メールを要約してTelegramに送って"
+# チャットで「毎朝9時にAIニュースを要約して送って」と言うだけでも可
+```
+無人で承認なしに進めるには：
+```yaml
+# ~/.hermes/config.yaml
+approvals:
+  cron_mode: approve   # cron実行が危険コマンドに当たった時、自動承認（既定は deny）
+```
+- `cron_mode: approve` でも **`rm -rf /`・fork bomb等のハードラインブロックは無効化不可**（最悪の事故は構造的に防止）。
+- 「無人＋自動承認」は任意コマンド実行を許す状態 →**terminalバックエンドをdocker/ssh等で隔離し、本番資産と同居させない**のが鉄則。
+- **no-agent（スクリプトのみ）モード**もあり、LLMを使わず定型スクリプトを定期実行し標準出力を配信できる（定型監視に最も安全＆無料）。
+
+### 3モードの使い分け
+| 起動形態 | Hermesの機能 | 向くユースケース |
+| --- | --- | --- |
+| systemdでデーモン化 | `gateway install`（常駐の土台） | 常時稼働の前提 |
+| エンドポイント立てて呼ぶ | API Server（OpenAI互換HTTP）＋Pythonライブラリ | 別アプリ/自作UIから呼ぶ、SDK的利用 |
+| cronで無人＋自動承認 | 内蔵cron ＋ `cron_mode: approve` | メール監視・SNS収集・定例配信 |
+
+当方の「専用機に常駐させ、メール監視・SNS収集を無人で回す」用途は **①＋③（必要なら②）** の組み合わせがベストフィット。
+
+---
+
 ## 📚 関連リソース
 
 ### 公式ドキュメント
@@ -358,3 +445,4 @@ Hermes は「同一のエージェントコア・同一の設定/セッション
 | 2026/06/05 | ファイル作成（init） |
 | 2026/06/05 | Browser Use CLI＋公式llms-full.txt調査結果を全セクションに反映（update） |
 | 2026/06/05 | ステータスを「完了」に変更、総合評価・導入判定を確定（finalize） |
+| 2026/06/05 | 「11. 競合比較（Claude Code/Codex/Cloudflare）」「12. 運用形態（起動・常駐モード）」を追記 |

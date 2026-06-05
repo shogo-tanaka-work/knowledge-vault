@@ -515,8 +515,181 @@ footer{padding:24px 56px 40px;color:var(--muted);font-size:12px;border-top:1px s
 <li>MCP連携で当方の既存MCP（Notion/Linear/Gmail等）をHermesから使えるか。</li>
 </ul>
 <hr>
-<h2 id="_38">📚 関連リソース</h2>
-<h3 id="_39">公式ドキュメント</h3>
+<h2 id="11-claude-code-codex-cloudflare">11. 競合比較（Claude Code / Codex / Cloudflareとの違い）</h2>
+<p>設計思想で割り切ると整理しやすい。<strong>Hermes＝運用フレームワーク</strong>、<strong>Claude Code / Codex＝コーディングエージェント本体</strong>、<strong>Cloudflare（Agents SDK＋Workers AI）＝サーバレスでエージェントを“作る”土台</strong>。レイヤーが異なる。Cloudflareはエッジ/サーバレス（Durable Objects上で起動）が思想で、「自前PCに常駐」という用途とは土俵が違う点に注意。</p>
+<h3 id="_38">機能単位の比較</h3>
+<table>
+<thead>
+<tr>
+<th>軸</th>
+<th>Hermes Agent</th>
+<th>Claude Code (Agent SDK)</th>
+<th>Codex (OpenAI)</th>
+<th>Cloudflare Agents SDK</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>正体</td>
+<td>常駐型・汎用業務エージェント基盤</td>
+<td>コーディングエージェント＋SDK</td>
+<td>コーディングエージェント</td>
+<td>エージェントを作るSDK/PaaS</td>
+</tr>
+<tr>
+<td>LLM</td>
+<td><strong>自由</strong>（OpenAI互換/ローカルOSS可）</td>
+<td>Anthropic固定</td>
+<td>OpenAI固定</td>
+<td>Workers AI(OSS)＋外部API</td>
+</tr>
+<tr>
+<td>本体ライセンス</td>
+<td><strong>OSS(MIT)・無料</strong></td>
+<td>商用</td>
+<td>商用</td>
+<td>SDK無料・実行はCF課金</td>
+</tr>
+<tr>
+<td>ランニングコスト</td>
+<td><strong>ローカルLLMなら0円</strong>化可</td>
+<td>API従量（必須）</td>
+<td>API従量（必須）</td>
+<td>CF実行＋推論課金</td>
+</tr>
+<tr>
+<td>常駐のしやすさ</td>
+<td>◎ <code>gateway install</code>でsystemd常駐</td>
+<td>△ 自前で常駐ループ実装</td>
+<td>△ 同左</td>
+<td>○ ただしサーバレス常駐</td>
+</tr>
+<tr>
+<td>スケジューリング(cron)</td>
+<td><strong>標準装備</strong>（自然言語cron）</td>
+<td>✕ 自作</td>
+<td>✕ 自作</td>
+<td>○ Cron Triggers</td>
+</tr>
+<tr>
+<td>メッセージング連携</td>
+<td><strong>20+チャネル標準</strong></td>
+<td>✕ 自作</td>
+<td>✕ 自作</td>
+<td>✕ 自作</td>
+</tr>
+<tr>
+<td>永続メモリ/スキル</td>
+<td><strong>標準装備</strong></td>
+<td>メモリ/スキルあり</td>
+<td>△</td>
+<td>自前(Durable/KV)</td>
+</tr>
+<tr>
+<td>SDK/組み込み</td>
+<td>Python(<code>AIAgent</code>)＋OpenAI互換API公開</td>
+<td><strong>SDK充実</strong></td>
+<td>SDK/AgentKit</td>
+<td><strong>SDK中心</strong></td>
+</tr>
+<tr>
+<td>サンドボックス</td>
+<td>local/docker/ssh/modal等5種</td>
+<td>権限制御あり</td>
+<td>クラウド実行は隔離</td>
+<td>V8 isolate(強い分離)</td>
+</tr>
+<tr>
+<td>コーディング品質/IDE統合</td>
+<td>○(汎用)</td>
+<td><strong>◎</strong></td>
+<td><strong>◎</strong></td>
+<td>△</td>
+</tr>
+</tbody>
+</table>
+<h3 id="sns">「定期メール監視・SNS収集」での判断軸</h3>
+<ul>
+<li><strong>Claude Code Agent SDKで書く場合</strong>: 常駐/スケジューラ/メール・SNS接続/通知配信/記憶DBを自分で実装。自由でコンパクトだが、<strong>LLMはAnthropic従量課金が必ず発生</strong>。監視のような「軽いが高頻度」なタスクほどAPIコストが積み上がる。</li>
+<li><strong>Hermesが効く理由</strong>: ①cron・メール/SNS連携・通知配信・記憶が“設定だけ”で揃い、配管をほぼ書かない ②<strong>ローカルOSS LLMでランニングコストをゼロ化できる</strong>（高頻度タスクで効く）③マルチユーザー共有＋権限分離が標準 ④モデル差し替えでロックインしない。</li>
+<li><strong>Claude Code / Codexが勝つ場面</strong>: タスクの中身が「コードを書く・直す・PRを出す」で、推論/コーディング品質が成果を左右する用途。量が少なくフロンティアモデル前提でAPI従量が苦にならない。</li>
+</ul>
+<h3 id="_39">落としどころ（推奨）</h3>
+<blockquote>
+<p>監視・収集・定例配信などの<strong>運用反復タスク → Hermesに常駐</strong>（ローカル/安価モデルでコスト最小）。
+コードを書く・難しい判断の<strong>実装タスク → Claude Code / Codex</strong>（必要に応じフロンティアモデル）。</p>
+</blockquote>
+<p>両者は排他ではない。HermesはコーディングCLIをPTYツールとして内部起動でき（Claude Code/Codexを呼べる）、MCPにも対応。<strong>「常駐オーケストレーター＝Hermes、頭脳の一部＝Claude Code」のハイブリッド</strong>が現実解。</p>
+<hr>
+<h2 id="12">12. 運用形態（サーバ常駐・起動モード）</h2>
+<p>常駐の正体は <strong>「gateway」という単一デーモンプロセス</strong>。これが①メッセージング接続 ②APIエンドポイント ③cronスケジューラ を内包する。「常駐させる＝gatewayを起動する」。以下の3モードは排他ではなく、gateway常駐の上に同時に乗る。</p>
+<h3 id="1-systemd-launchd">① systemd / launchd でデーモン化（常駐の基本形）</h3>
+<pre><code class="language-bash">hermes gateway install                 # user常駐サービス化（Linux=systemd / mac=launchd）
+sudo hermes gateway install --system   # Linux: ブート時のシステムサービス
+hermes gateway start / stop / status
+</code></pre>
+<p>gatewayは<strong>60秒ごとにcronスケジューラをtick</strong>し、各チャネルの着信も待ち受ける。</p>
+<h3 id="2-httpapi-server-sdk">② HTTPエンドポイントを立てて呼び出す（API Server / SDK的利用）</h3>
+<p>OpenAI互換のHTTPサーバを公開できる。別アプリや自作UIからプロンプトをPOST →フルツールで処理して結果を返す。</p>
+<pre><code class="language-bash"># ~/.hermes/.env
+API_SERVER_ENABLED=true
+API_SERVER_KEY=change-me
+</code></pre>
+<pre><code class="language-bash">hermes gateway   # → [API Server] listening on http://127.0.0.1:8642
+curl http://localhost:8642/v1/chat/completions \
+  -H &quot;Authorization: Bearer change-me&quot; \
+  -d '{&quot;model&quot;:&quot;hermes-agent&quot;,&quot;messages&quot;:[{&quot;role&quot;:&quot;user&quot;,&quot;content&quot;:&quot;今日の未読メールを要約して&quot;}]}'
+</code></pre>
+<ul>
+<li>主要エンドポイント: <code>/v1/chat/completions</code>・<code>/v1/responses</code>（サーバ側で会話状態保持）・<code>/v1/runs</code>（実行投入＋SSE進捗購読）・<code>/api/jobs</code>（外部からcronジョブCRUD）。</li>
+<li>Pythonから直接埋め込むなら <code>from run_agent import AIAgent</code> も可能。</li>
+</ul>
+<h3 id="3-cron">③ cronで無人実行＋自動承認</h3>
+<p>gateway内蔵スケジューラ（OSのcronではない）。自然言語でも組める。</p>
+<pre><code class="language-bash">hermes cron create &quot;every 1d at 09:00&quot; &quot;未読メールを要約してTelegramに送って&quot;
+# チャットで「毎朝9時にAIニュースを要約して送って」と言うだけでも可
+</code></pre>
+<p>無人で承認なしに進めるには：</p>
+<pre><code class="language-yaml"># ~/.hermes/config.yaml
+approvals:
+  cron_mode: approve   # cron実行が危険コマンドに当たった時、自動承認（既定は deny）
+</code></pre>
+<ul>
+<li><code>cron_mode: approve</code> でも <strong><code>rm -rf /</code>・fork bomb等のハードラインブロックは無効化不可</strong>（最悪の事故は構造的に防止）。</li>
+<li>「無人＋自動承認」は任意コマンド実行を許す状態 →<strong>terminalバックエンドをdocker/ssh等で隔離し、本番資産と同居させない</strong>のが鉄則。</li>
+<li><strong>no-agent（スクリプトのみ）モード</strong>もあり、LLMを使わず定型スクリプトを定期実行し標準出力を配信できる（定型監視に最も安全＆無料）。</li>
+</ul>
+<h3 id="3_2">3モードの使い分け</h3>
+<table>
+<thead>
+<tr>
+<th>起動形態</th>
+<th>Hermesの機能</th>
+<th>向くユースケース</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>systemdでデーモン化</td>
+<td><code>gateway install</code>（常駐の土台）</td>
+<td>常時稼働の前提</td>
+</tr>
+<tr>
+<td>エンドポイント立てて呼ぶ</td>
+<td>API Server（OpenAI互換HTTP）＋Pythonライブラリ</td>
+<td>別アプリ/自作UIから呼ぶ、SDK的利用</td>
+</tr>
+<tr>
+<td>cronで無人＋自動承認</td>
+<td>内蔵cron ＋ <code>cron_mode: approve</code></td>
+<td>メール監視・SNS収集・定例配信</td>
+</tr>
+</tbody>
+</table>
+<p>当方の「専用機に常駐させ、メール監視・SNS収集を無人で回す」用途は <strong>①＋③（必要なら②）</strong> の組み合わせがベストフィット。</p>
+<hr>
+<h2 id="_40">📚 関連リソース</h2>
+<h3 id="_41">公式ドキュメント</h3>
 <ul>
 <li>公式サイト: https://hermes-agent.nousresearch.com/</li>
 <li>ドキュメント: https://hermes-agent.nousresearch.com/docs</li>
@@ -527,7 +700,7 @@ footer{padding:24px 56px 40px;color:var(--muted);font-size:12px;border-top:1px s
 <li>Nous Chat: https://chat.nousresearch.com</li>
 <li>Discord: https://discord.gg/NousResearch</li>
 </ul>
-<h3 id="_40">調査した主なドキュメントページ（サイトマップ）</h3>
+<h3 id="_42">調査した主なドキュメントページ（サイトマップ）</h3>
 <ul>
 <li>Getting Started: installation / quickstart / learning-path / updating / termux / nix-setup</li>
 <li>User Guide: cli / tui / configuration / configuring-models / sessions / profiles / git-worktrees / docker / security / checkpoints-and-rollback / windows-native / desktop</li>
@@ -537,25 +710,25 @@ footer{padding:24px 56px 40px;color:var(--muted);font-size:12px;border-top:1px s
 <li>Developer Guide: contributing / architecture / agent-loop / prompt-assembly / gateway-internals / adding-tools / adding-providers / creating-skills など</li>
 <li>Reference: cli-commands / slash-commands / environment-variables / tools-reference / toolsets-reference / model-catalog / skills-catalog / faq</li>
 </ul>
-<h3 id="_41">社内関連ドキュメント</h3>
+<h3 id="_43">社内関連ドキュメント</h3>
 <ul>
 <li><span class="wikilink">skills-directory-layout</span>（.agents/.claude スキル共通化）— Hermesの agentskills.io 互換と関連</li>
 <li>mcp-usage-strategy スキル（MCPとCLIの使い分け）— HermesのMCP連携と直結</li>
 <li>browser-use-googletrends スキル（本調査で使用したBrowser Use CLI）</li>
 </ul>
-<h3 id="_42">検証データ・ログ</h3>
+<h3 id="_44">検証データ・ログ</h3>
 <ul>
 <li>取得元一次データ: /tmp/hermes-llms-full.txt（公式全文ダンプ・61,352行）、/tmp/hermes-home.png（トップページキャプチャ）</li>
 </ul>
 <hr>
-<h2 id="_43">✅ メモ・議論ログ</h2>
+<h2 id="_45">✅ メモ・議論ログ</h2>
 <ul>
 <li>調査は2026/06/05、Browser Use CLI（ローカル）＋curlで実施。実インストール・実行は未実施の机上評価。</li>
 <li>ドキュメントのWindows対応（ネイティブ/WSL2）に記述差あり。導入時は実機で要確認。</li>
 <li>Nous Portalの料金は公開ページに金額明示なし → 別途portalで確認するタスクを残す。</li>
 </ul>
 <hr>
-<h2 id="_44">📝 更新ログ</h2>
+<h2 id="_46">📝 更新ログ</h2>
 <table>
 <thead>
 <tr>
@@ -575,6 +748,10 @@ footer{padding:24px 56px 40px;color:var(--muted);font-size:12px;border-top:1px s
 <tr>
 <td>2026/06/05</td>
 <td>ステータスを「完了」に変更、総合評価・導入判定を確定（finalize）</td>
+</tr>
+<tr>
+<td>2026/06/05</td>
+<td>「11. 競合比較（Claude Code/Codex/Cloudflare）」「12. 運用形態（起動・常駐モード）」を追記</td>
 </tr>
 </tbody>
 </table>
