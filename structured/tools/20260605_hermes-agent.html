@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hermes Agent 検証レポート | Nous Research</title>
+<style>
+:root{--navy:#1f3a5f;--navy2:#2c5282;--accent:#3182ce;--bg:#f7f9fc;--line:#e2e8f0;--ink:#1a202c;--muted:#64748b;}
+*{box-sizing:border-box;}
+body{font-family:"Hiragino Kaku Gothic ProN","Yu Gothic",Meiryo,-apple-system,sans-serif;color:var(--ink);background:var(--bg);margin:0;line-height:1.8;}
+.wrap{max-width:960px;margin:0 auto;background:#fff;box-shadow:0 1px 24px rgba(31,58,95,.08);}
+header.cover{background:linear-gradient(135deg,var(--navy),var(--navy2));color:#fff;padding:48px 56px 40px;}
+header.cover .kicker{letter-spacing:.18em;font-size:12px;opacity:.85;text-transform:uppercase;}
+header.cover h1{font-size:30px;margin:.3em 0 .2em;line-height:1.35;}
+header.cover .lead{opacity:.92;font-size:15px;margin:0;}
+.meta{padding:18px 56px;background:#eef3f9;border-bottom:1px solid var(--line);display:flex;flex-wrap:wrap;gap:8px;}
+.meta-badge{background:#fff;border:1px solid var(--line);color:var(--navy);font-size:12px;padding:5px 12px;border-radius:999px;white-space:nowrap;}
+main{padding:8px 56px 56px;}
+h1{font-size:24px;}
+h2{font-size:20px;color:var(--navy);border-bottom:2px solid var(--navy);padding-bottom:8px;margin-top:42px;}
+h3{font-size:16px;color:var(--navy2);margin-top:28px;border-left:4px solid var(--accent);padding-left:10px;}
+h4{font-size:14px;color:#334155;margin-top:20px;}
+p,li{font-size:14.5px;}
+a{color:var(--accent);}
+hr{border:0;border-top:1px solid var(--line);margin:32px 0;}
+blockquote{border-left:4px solid var(--accent);background:#f0f6ff;margin:16px 0;padding:10px 18px;color:#334155;border-radius:0 6px 6px 0;}
+code{background:#eef2f7;padding:2px 6px;border-radius:4px;font-size:13px;font-family:"SF Mono",Menlo,Consolas,monospace;}
+pre{background:#1e293b;color:#e2e8f0;padding:16px 18px;border-radius:8px;overflow-x:auto;font-size:13px;}
+pre code{background:none;color:inherit;padding:0;}
+table{border-collapse:collapse;width:100%;margin:18px 0;font-size:13.5px;box-shadow:0 1px 3px rgba(0,0,0,.05);}
+th{background:var(--navy);color:#fff;text-align:left;padding:10px 12px;font-weight:600;}
+td{border-bottom:1px solid var(--line);padding:9px 12px;vertical-align:top;}
+tr:nth-child(even) td{background:#f8fafc;}
+ul,ol{padding-left:22px;}
+li{margin:4px 0;}
+.wikilink{background:#fef3c7;border-radius:4px;padding:1px 6px;font-size:13px;color:#92400e;}
+strong{color:#0f2747;}
+footer{padding:24px 56px 40px;color:var(--muted);font-size:12px;border-top:1px solid var(--line);background:#f8fafc;}
+@media print{body{background:#fff;}.wrap{box-shadow:none;max-width:none;}h2{break-after:avoid;}table,pre,blockquote{break-inside:avoid;}}
+@media(max-width:640px){header.cover,.meta,main,footer{padding-left:22px;padding-right:22px;}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="cover">
+  <div class="kicker">AI Tool Verification Report</div>
+  <h1>Hermes Agent 機能調査レポート</h1>
+  <p class="lead">Nous Research / オープンソース自律AIエージェント基盤 — 機能・業務活用・導入判定</p>
+</header>
+<div class="meta"><span class='meta-badge'>ステータス: 完了</span><span class='meta-badge'>作成日: 2026/06/05</span><span class='meta-badge'>最終更新: 2026/06/05</span></div>
+<main>
+<h1 id="hermes-agent">Hermes Agent 検証ログ</h1>
+<hr>
+<h2 id="_1">📋 検証概要</h2>
+<ul>
+<li><strong>ツール/サービス名</strong>: Hermes Agent（Nous Research）</li>
+<li><strong>検証対象</strong>: 新ツール（オープンソースの自律AIエージェント基盤）</li>
+<li><strong>バージョン/リリース日</strong>: v0.15.2（2026年時点・MITライセンス）</li>
+<li><strong>検証期間</strong>: 2026/06/05（公開ドキュメント・公開サイトの机上調査のみ）</li>
+<li><strong>検証担当者</strong>: 田中省伍</li>
+<li><strong>検証ステータス</strong>: 完了</li>
+<li><strong>調査手段</strong>: Browser Use CLI で公開サイトを巡回 ＋ 公開されている <code>/llms-full.txt</code>（全61,352行のドキュメント全文ダンプ）を取得・精読。実際のインストール・実行は未実施（机上調査）。</li>
+</ul>
+<hr>
+<h2 id="1">1. 背景と検証目的</h2>
+<h3 id="_2">なぜこの検証を行うのか</h3>
+<ul>
+<li>「Hermes Agent とは何がどこまでできるのか」を、エージェント本体だけでなく CLI / WebUI / Desktop / メッセージング連携まで含めて業務目線で把握するため。</li>
+<li>Claude Code・Devin・OpenHands といった既存コーディングエージェントとの位置づけの違いを明確にし、自社・顧客の業務自動化で使えるかを判断するため。</li>
+</ul>
+<h3 id="_3">解決したい課題</h3>
+<ul>
+<li>AIエージェントを「IDE内のコーディング補助」から「サーバー常駐・複数チャネル運用の業務エージェント」へ広げたい。</li>
+<li>補助金リサーチ・SNS発信・定例レポートなど、当方が抱える反復業務をエージェントに常駐委譲できるかを見極めたい。</li>
+</ul>
+<h3 id="_4">期待される効果・ビジネスインパクト</h3>
+<ul>
+<li>MITライセンスのOSSで、LLM API課金以外のソフト費用ゼロ。セルフホストで自社サーバー常駐エージェントを構築できる可能性。</li>
+<li>Telegram/Slack/Discord/Email など普段のチャネルから自然言語で業務指示 → 自動実行 → 定例化（cron）まで一気通貫にできる。</li>
+</ul>
+<hr>
+<h2 id="2">2. ツール/機能の基本情報</h2>
+<h3 id="_5">概要</h3>
+<p>Hermes Agent は Nous Research が提供する<strong>オープンソース（MITライセンス）の自律型AIエージェント</strong>。公式の位置づけは「IDEに縛られたコーディング副操縦士でも、単一APIをラップしたチャットボットでもない」「自分のサーバー上に常駐し、学んだことを記憶し、長く動かすほど賢くなるエージェント」。</p>
+<p>特徴を一言でいうと「<strong>どこにでも住む（Lives Where You Do）／長く動かすほど育つ（Grows the Longer It Runs）常駐型エージェント</strong>」。コーディング特化ではなく、Web調査・ブラウザ操作・画像生成・音声・定例自動化まで含む汎用業務エージェント。</p>
+<h3 id="_6">提供元</h3>
+<ul>
+<li><strong>Nous Research</strong>（https://nousresearch.com ）。自社で Hermes 4 系（Hermes-4-70B / 405B）など独自モデルも開発しているAI研究組織。</li>
+<li>リポジトリ: https://github.com/NousResearch/hermes-agent （MIT License・2026）</li>
+<li>公式サイト: https://hermes-agent.nousresearch.com/</li>
+</ul>
+<h3 id="4">主要機能（4つのインターフェース）</h3>
+<p>Hermes は「同一のエージェントコア・同一の設定/セッション/スキル/メモリ」を、複数のフロントエンドから操作する設計。CLIで設定したものがDesktopにもWebにも反映され、状態を共有する。</p>
+<ol>
+<li><strong>CLI / TUI</strong>（<code>hermes</code>, <code>hermes --tui</code>）: ターミナルUI本体。マルチライン編集、スラッシュコマンド補完、ストリーミング、割り込み&amp;リダイレクト、バックグラウンドセッション、git worktree並列実行。</li>
+<li><strong>Web Dashboard</strong>（<code>hermes dashboard</code> → <code>http://127.0.0.1:9119</code>）: ブラウザ管理UI。設定/APIキー/セッション/ログ/cronをGUI管理。Chatタブはxterm.js経由でTUIをそのまま埋め込み。<strong>完全ローカル実行</strong>（データはlocalhostから出ない）。</li>
+<li><strong>Desktop App</strong>（macOS/Windows/Linux・Electron製）: チャット中心のネイティブGUI。ファイルブラウザ、プレビューレール、音声、設定UI、マルチ会話、Agents/Command Centerによるオーケストレーション面。</li>
+<li><strong>Messaging Gateway</strong>: 単一の常駐プロセスが Telegram, Discord, Slack, WhatsApp, Signal, SMS, Email, Matrix, Mattermost, Teams, LINE, Home Assistant ほか20+チャネルに接続。1インスタンスを複数人・複数チャネルで共有。</li>
+</ol>
+<h3 id="_7">技術スタック・アーキテクチャ</h3>
+<ul>
+<li>実装は Python（<code>run_agent.py</code> の <code>AIAgent</code> クラスが中核）。CLI/Gateway/Desktop/Dashboard すべて同じコアを駆動。</li>
+<li>セッションは SQLite（<code>~/.hermes/state.db</code>）に保存（メタ情報・履歴・全文検索インデックス）。</li>
+<li>LLMは<strong>OpenAI互換API</strong>なら何でも接続可。OpenRouter / Nous Portal / OpenAI / Anthropic / Google / z.ai / Kimi / MiniMax、ローカル（Ollama/vLLM/llama.cpp/SGLang）まで。</li>
+<li>Gateway は60秒ごとにcronスケジューラをtick。各プラットフォームadapter→per-chatセッションストア→AIAgentの流れ。</li>
+<li>設定は <code>~/.hermes/config.yaml</code>、秘密情報は <code>~/.hermes/.env</code>(0600) に分離。</li>
+</ul>
+<hr>
+<h2 id="3">3. 検証方法</h2>
+<h3 id="_8">検証環境</h3>
+<ul>
+<li><strong>使用アカウント</strong>: なし（未ログイン・公開ページのみ）</li>
+<li><strong>プラン/エディション</strong>: OSS本体（無料）。Nous Portal等の有料サブスクは未契約。</li>
+<li><strong>検証環境</strong>: 机上調査（Browser Use CLIによる公開サイト巡回＋公式ドキュメント全文の取得・精読）。実インストール・実行は未実施。</li>
+</ul>
+<h3 id="_9">検証シナリオ</h3>
+<ol>
+<li>トップページ（https://hermes-agent.nousresearch.com/ ）を開き、ナビ/フッター/CTAから導線（DOCS / PORTAL / DESKTOP APP / GitHub / Discord）を抽出。</li>
+<li><code>/docs</code> を開き、ドキュメントサイトの全ナビゲーション構造を取得。</li>
+<li>公開されている <code>/docs/assets/files/llms-full-*.txt</code>（LLM向け全文ダンプ・約61,000行）を取得し、機能セクションを系統的に精読。</li>
+<li>機能ごとに「できること」と「業務活用アイデア」を抽出。</li>
+</ol>
+<h3 id="_10">検証データ・サンプル</h3>
+<ul>
+<li>取得した一次資料: トップページHTML/テキスト、<code>/docs</code> ナビ構造、<code>llms-full.txt</code>（全文）、トップページのスクリーンショット（/tmp/hermes-home.png）。</li>
+</ul>
+<h3 id="_11">前提条件・制約事項</h3>
+<ul>
+<li>公開ドキュメントベースの机上評価。実機での精度・安定性・コスト実測は未実施（「定量的評価」は公称値ベース）。</li>
+<li>Nous Portal の具体的な料金プラン・金額は本サイト上には明示されておらず（portal.nousresearch.com 側で要ログイン/サインアップ）、本ログでは「（要ログイン・未検証）」とする。</li>
+</ul>
+<hr>
+<h2 id="4_1">4. 検証結果</h2>
+<h3 id="_12">定性的評価</h3>
+<h4 id="_13">機能面の評価（機能ごとに「できること／業務活用」）</h4>
+<p><strong>A. エージェント本体（自律実行）</strong>
+- できること: 自然言語タスクを受け、<code>web_search</code>/<code>web_extract</code>/<code>terminal</code>/<code>read_file</code>/<code>patch</code>/<code>browser_*</code>/<code>vision_analyze</code>/<code>image_generate</code>/<code>text_to_speech</code>/<code>memory</code>/<code>delegate_task</code>/<code>execute_code</code>/<code>cronjob</code>/<code>send_message</code> などのツールをループで自律実行。toolsetは <code>web,terminal,skills</code> のように選択可能。
+- 業務活用: 「最新のGRPO学習手法を調べて要約して」のような調査タスク、ファイル横断分析、定例レポート生成などをエンドツーエンドで委譲。</p>
+<p><strong>B. 永続メモリ &amp; スキル（“育つ”中核）</strong>
+- できること: <strong>メモリ</strong>＝事実（ユーザー/プロジェクト/環境の知識、<code>MEMORY.md</code>/<code>USER.md</code>）を関連度ベースで自動想起。<strong>スキル</strong>＝手順（やり方の段階的手順書）を類似タスク時に想起。agentskills.io オープン標準互換、progressive disclosureでトークン節約。
+- 業務活用: 当方の knowledge-vault / SNS発信フォーマット / 補助金リサーチ手順などを「スキル」として持たせ、繰り返すほど運用が固まる。当方既存の <code>.claude/skills</code> 運用思想と親和性が高い。</p>
+<p><strong>C. スケジュール自動化（cron）</strong>
+- できること: 自然言語またはcron式で定期実行。ジョブにスキルを紐付け、結果を任意プラットフォームへ配信、pause/resume/edit対応。Gatewayが60秒ごとに評価。
+- 業務活用: 毎朝のデイリーブリーフィング、定例バックアップ、補助金の月次チェック、SNSネタの定期リサーチを無人運用。</p>
+<p><strong>D. サブエージェント委譲 &amp; 並列化</strong>
+- できること: <code>delegate_task</code> で独立コンテキスト・制限付きツールセット・専用ターミナルを持つ子エージェントを生成（既定3並列・設定可）。<code>execute_code</code> でPythonからHermesツールをRPC呼び出しし多段ワークフローを1ターンに圧縮。
+- 業務活用: 「複数観点の並列調査」「大量ファイルの分担処理」をゼロコンテキストコストのパイプラインで実行。</p>
+<p><strong>E. サンドボックス（5バックエンド）</strong>
+- できること: terminalバックエンドを local / docker / ssh / singularity / modal / daytona から選択。コンテナはread-onlyルートFS・全capability drop・特権昇格禁止・PID上限256・namespace分離でハードニング。Dockerは1コンテナをセッション全体で永続共有（pip installが持続）。
+- 業務活用: 信頼できないコード実行や顧客環境を汚さないリモート実行。SSHバックエンドは「エージェントが自分のコードを改変できない」分離構成として推奨。</p>
+<p><strong>F. フル Web &amp; ブラウザ操作</strong>
+- できること: Web検索/抽出、ブラウザ自動化（Browserbase/Browser Use cloud/ローカルChrome等CDP接続）、ビジョン、画像生成（FAL.ai・9モデル）、TTS（10プロバイダ、Edge TTSは無料）、マルチモデル推論。
+- 業務活用: フォーム入力・情報抽出の自動化、画像生成、音声応答。当方のBrowser Use CLI運用と用途が重なる。</p>
+<p><strong>G. マルチチャネル常駐（Messaging Gateway）</strong>
+- できること: 20+チャネル（Telegram/Discord/Slack/WhatsApp/Signal/SMS/Email/Matrix/Mattermost/Teams/LINE/Home Assistant 等）に単一プロセスで接続。プラットフォームごとにVoice/Images/Files/Threads/Reactions/Typing/Streaming対応度が異なる（Telegram/Discord/Slack/Matrix/Feishuがフル対応寄り）。1インスタンスを複数人で共有可。
+- 業務活用: 普段使うチャットから業務指示。チーム共有のアシスタントBot、Home Assistant連携で音声/家電操作も。</p>
+<p><strong>H. 連携・拡張（MCP/API/IDE）</strong>
+- できること: 任意のMCPサーバーをstdio/HTTPで接続（GitHub/DB/社内API等）。OpenAI互換APIサーバーとして公開（Open WebUI/LobeChat/LibreChat接続）。ACP対応エディタ（VS Code/Zed/JetBrains）にエージェント・差分・ターミナルを表示。プラグイン機構（tools/hooks/memory provider/context engine）。
+- 業務活用: 既存の社内ツール群をMCP経由で接続し、Hermesを“ハブ”化。当方の mcp-usage-strategy（MCPとCLIの使い分け）の知見と直結。</p>
+<p><strong>I. その他注目機能</strong>
+- Web Dashboard内に <strong>150+設定項目のフォームエディタ</strong>、APIキー管理、セッション全文検索（FTS5）、ログのライブtail。
+- <strong>チェックポイント/ロールバック</strong>（ファイル変更前に自動スナップショット、<code>/rollback</code>）。
+- <strong>バッチ処理</strong>（数百〜数千プロンプトを並列実行しShareGPT形式のtrajectory生成 → 学習データ/評価向け）。
+- <strong>Personality/SOUL.md</strong> による人格カスタマイズ、Skins/Themes。
+- <strong>プロンプトキャッシュ</strong>（Claude系で1時間プレフィックスキャッシュ・常時ON・設定不要）。</p>
+<h4 id="uiux">操作性・UI/UX</h4>
+<ul>
+<li>インストールはワンライナー（<code>curl ... install.sh | bash</code>、Windowsは <code>iex (irm install.ps1)</code>）。<code>hermes setup --portal</code> 一発でモデル＋ツールゲートウェイまで構成完了を謳う。</li>
+<li>CLIはステータスバー（モデル/トークン/コンテキスト充填率/コスト/経過時間/YOLO警告）など作り込みが厚い。Claude Code利用者には馴染みやすい思想。</li>
+<li>4インターフェースが状態共有で相互レジューム可能（CLIで開始→Desktopで再開、等）。</li>
+</ul>
+<h4 id="_14">出力品質</h4>
+<ul>
+<li>出力品質は使用するLLM依存（Hermes自体はエージェントランタイム）。公式は agent用途に Claude Sonnet 4.6 / GPT-5.5 Pro / Gemini 3 Pro / DeepSeek V4 Pro 等のフロンティアモデルを推奨。自社モデル Hermes 4 は「チャット/推論向けでツールコールのループには不向き」と公式が明言（agent用途には非推奨）。</li>
+</ul>
+<h4 id="_15">実用性</h4>
+<ul>
+<li>「サーバー常駐＋複数チャネル＋定例自動化＋記憶」という組み合わせは、コーディング補助型エージェント（Claude Code/Cursor等）とは別レイヤーの実用性。業務自動化OS的な使い方に向く。</li>
+</ul>
+<h3 id="_16">定量的評価</h3>
+<h4 id="_17">導入コスト</h4>
+<table>
+<thead>
+<tr>
+<th>項目</th>
+<th>内容</th>
+<th>金額/工数</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>初期設定時間</td>
+<td>ワンライナーインストール＋<code>hermes setup --portal</code></td>
+<td>公称「2分以内」</td>
+</tr>
+<tr>
+<td>学習時間</td>
+<td>CLI基本操作（Claude Code経験者なら低）</td>
+<td>数十分〜（体感未実測）</td>
+</tr>
+<tr>
+<td>初期費用</td>
+<td>ソフトウェア本体</td>
+<td>0円（MIT OSS）</td>
+</tr>
+</tbody>
+</table>
+<h4 id="_18">運用コスト</h4>
+<table>
+<thead>
+<tr>
+<th>項目</th>
+<th>内容</th>
+<th>金額</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>月額利用料</td>
+<td>Hermes Agent本体</td>
+<td>0円（OSS）</td>
+</tr>
+<tr>
+<td>従量課金</td>
+<td>接続したLLMプロバイダのAPI課金のみ</td>
+<td>プロバイダ依存（ローカルモデルなら0円）</td>
+</tr>
+<tr>
+<td>追加オプション</td>
+<td>Nous Portal サブスク（300+モデル＋Tool Gateway一括）</td>
+<td>（要ログイン・未検証／portal側で確認要）</td>
+</tr>
+</tbody>
+</table>
+<h4 id="_19">パフォーマンス</h4>
+<table>
+<thead>
+<tr>
+<th>項目</th>
+<th>測定結果</th>
+<th>備考</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>処理速度</td>
+<td>（情報なし）</td>
+<td>机上調査のため未実測</td>
+</tr>
+<tr>
+<td>同時処理数</td>
+<td>サブエージェント既定3並列（設定可）／バックグラウンドセッション複数</td>
+<td>公称</td>
+</tr>
+<tr>
+<td>コンテナ既定</td>
+<td>CPU1コア/メモリ5GB/ディスク50GB</td>
+<td>container_* で変更可</td>
+</tr>
+</tbody>
+</table>
+<h4 id="roi">ROI試算</h4>
+<ul>
+<li><strong>削減できる工数</strong>: 定例リサーチ/レポート/SNSネタ収集の無人化により、反復作業の時間削減が期待（具体値は要PoC）。</li>
+<li><strong>コスト削減額</strong>: 本体無料＋ローカルモデル併用で、SaaS型エージェント費用を圧縮可能。</li>
+<li><strong>投資回収期間</strong>: ソフト費用ゼロのため、API課金を上回る工数削減が出れば即回収（要実測）。</li>
+</ul>
+<hr>
+<h2 id="5">5. 比較・優位性分析</h2>
+<h3 id="_20">既存ツール/類似サービスとの比較</h3>
+<table>
+<thead>
+<tr>
+<th>項目</th>
+<th>Hermes Agent</th>
+<th>Claude Code</th>
+<th>Devin / Cursor等</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>位置づけ</td>
+<td>サーバー常駐の汎用業務エージェント</td>
+<td>ターミナル/IDEのコーディングエージェント</td>
+<td>コーディング自律/IDE統合</td>
+</tr>
+<tr>
+<td>ライセンス/料金</td>
+<td>OSS(MIT)・本体無料</td>
+<td>商用（API/サブスク）</td>
+<td>商用</td>
+</tr>
+<tr>
+<td>モデル</td>
+<td>任意のOpenAI互換（マルチプロバイダ・ローカル可）</td>
+<td>Anthropic中心</td>
+<td>各社</td>
+</tr>
+<tr>
+<td>チャネル</td>
+<td>CLI/TUI/Web/Desktop/20+メッセージング</td>
+<td>CLI/IDE/Web/Desktop</td>
+<td>主にIDE/Web</td>
+</tr>
+<tr>
+<td>常駐・cron</td>
+<td>◎（Gateway常駐＋自然言語cron）</td>
+<td>△</td>
+<td>△</td>
+</tr>
+<tr>
+<td>記憶/スキル</td>
+<td>◎（永続メモリ＋agentskills.io互換）</td>
+<td>◎（CLAUDE.md/メモリ/スキル）</td>
+<td>○</td>
+</tr>
+<tr>
+<td>セルフホスト</td>
+<td>◎</td>
+<td>×</td>
+<td>×</td>
+</tr>
+</tbody>
+</table>
+<h3 id="_21">優位性</h3>
+<ul>
+<li><strong>OSS・セルフホスト・マルチプロバイダ</strong>：ベンダーロックインを避けつつローカルモデルで完全無料運用も可能。</li>
+<li><strong>常駐＋マルチチャネル＋cron</strong>：チャットUIから業務を“住まわせる”運用がしやすい。</li>
+<li>4インターフェース状態共有・MCP/ACP/API互換で既存エコシステムに溶け込む。</li>
+</ul>
+<h3 id="_22">劣位性・懸念点</h3>
+<ul>
+<li>コーディング特化IDE統合の作り込みは専用ツール（Cursor/Claude Code）に一日の長。Hermesはコード兼汎用ゆえ、純コーディング用途では比較検証が必要。</li>
+<li>自社開発・運用責任が自分側（OSS常駐＝サーバー/セキュリティ/アップデート管理は自己責任）。</li>
+<li>ドキュメント上、WindowsネイティブとWSL2前提の記述が混在（FAQは「ネイティブ不可・WSL2前提」、インストール節はネイティブWindows対応を明記）。バージョンにより差異がある可能性 → 実機確認推奨。</li>
+</ul>
+<hr>
+<h2 id="6">6. リスク評価</h2>
+<h3 id="_23">セキュリティ</h3>
+<table>
+<thead>
+<tr>
+<th>評価項目</th>
+<th>評価</th>
+<th>詳細</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>データ保管場所</td>
+<td>◎ローカル</td>
+<td>会話/メモリ/スキルは <code>~/.hermes/</code> にローカル保存。テレメトリ/解析の収集なし。APIは設定したLLMプロバイダにのみ送信。</td>
+</tr>
+<tr>
+<td>認可制御</td>
+<td>◎</td>
+<td>Gatewayは既定で全拒否（allowlist or DMペアリング必須）。admin/userの2層権限。</td>
+</tr>
+<tr>
+<td>危険コマンド承認</td>
+<td>◎</td>
+<td>危険パターンに承認プロンプト（manual/smart/off）。<code>rm -rf /</code>・fork bomb・<code>mkfs</code>等は<strong>ハードライン・ブロックリスト</strong>でYOLOでも実行不可。</td>
+</tr>
+<tr>
+<td>コンテナ分離</td>
+<td>◎</td>
+<td>read-onlyルート・cap全drop・特権昇格禁止・namespace分離。</td>
+</tr>
+<tr>
+<td>認証情報管理</td>
+<td>○</td>
+<td><code>.env</code>(0600)に分離。Nous PortalはOAuthのrefresh tokenのみ保存し短命JWTを都度発行。</td>
+</tr>
+</tbody>
+</table>
+<h3 id="_24">プライバシー・倫理面</h3>
+<ul>
+<li>ローカル完結・テレメトリなしはプライバシー上有利。一方、ブラウザ操作/メッセージング自動化は対象サービスの規約順守が前提。</li>
+</ul>
+<h3 id="_25">ベンダーロックインリスク</h3>
+<ul>
+<li>低い。OSS＋OpenAI互換マルチプロバイダ＋ローカルモデルで脱ロックイン可能。ただしNous Portalの便利さに寄せると一定の依存は生じる。</li>
+</ul>
+<h3 id="_26">技術的リスク</h3>
+<ul>
+<li>常駐サービスとしての運用（systemd/launchd）、セキュリティ更新、MCP/外部キー管理は自己責任。<code>--yolo</code>/<code>approvals.mode: off</code>の誤用で破壊的操作のリスク（ハードラインで最悪は防止）。</li>
+</ul>
+<hr>
+<h2 id="7">7. 連携性・拡張性</h2>
+<h3 id="_27">既存システムとの連携</h3>
+<table>
+<thead>
+<tr>
+<th>連携先</th>
+<th>方法</th>
+<th>難易度</th>
+<th>備考</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>任意の社内ツール/GitHub/DB</td>
+<td>MCP（stdio/HTTP）</td>
+<td>低〜中</td>
+<td>per-serverツールフィルタ・sampling対応</td>
+</tr>
+<tr>
+<td>既存フロントエンド</td>
+<td>OpenAI互換APIサーバー</td>
+<td>低</td>
+<td>Open WebUI/LobeChat/LibreChat接続</td>
+</tr>
+<tr>
+<td>IDE</td>
+<td>ACP</td>
+<td>低</td>
+<td>VS Code/Zed/JetBrains</td>
+</tr>
+<tr>
+<td>メッセージング</td>
+<td>Gateway adapter</td>
+<td>低</td>
+<td>20+チャネル</td>
+</tr>
+<tr>
+<td>Home Assistant</td>
+<td>ha_* ツール</td>
+<td>中</td>
+<td>家電/IoT操作</td>
+</tr>
+</tbody>
+</table>
+<h3 id="api">API/統合オプション</h3>
+<ul>
+<li>OpenAI互換エンドポイント公開、MCPクライアント/サーバー両対応、Pythonライブラリとして <code>from run_agent import AIAgent</code> で組み込み可能。</li>
+</ul>
+<h3 id="_28">拡張性・カスタマイズ性</h3>
+<ul>
+<li>プラグイン3種（general/メモリプロバイダ/context engine）、カスタムツール/フック、SOUL.mdによる人格、quick_commands（LLMを介さない即時シェルコマンド）、Skins。</li>
+</ul>
+<hr>
+<h2 id="8">8. 実際の使用例・サンプル</h2>
+<h3 id="1-bot">ユースケース1: 毎朝のデイリーブリーフィングBot</h3>
+<p><strong>シナリオ</strong>: Gateway常駐＋cronで毎朝、指定トピックをWeb調査し要約をTelegram配信。
+<strong>入力</strong>: 自然言語cron「毎朝7時に最新のAIエージェント動向を調べて要約して送って」。
+<strong>出力</strong>: 要約メッセージが指定チャネルに自動配信。
+<strong>評価</strong>: 当方の「技術ブログ発信」「SNS発信」のネタ収集に転用可能（要PoC）。</p>
+<h3 id="2_1">ユースケース2: チーム共有アシスタント</h3>
+<p><strong>シナリオ</strong>: 1インスタンスをallowlist/ペアリングで複数メンバーに開放。Slack/Discordから業務指示。
+<strong>評価</strong>: admin/user権限分離で安全に共有可能。</p>
+<h3 id="3_1">ユースケース3: サンドボックス委譲リサーチ</h3>
+<p><strong>シナリオ</strong>: <code>delegate_task</code>で複数観点を並列調査、<code>execute_code</code>でPython集計を1ターンに圧縮、SSH/Dockerバックエンドで隔離実行。
+<strong>評価</strong>: 当方の補助金リサーチ/スクレイピング系タスクの並列化に有望。</p>
+<h3 id="_29">スクリーンショット・デモ</h3>
+<ul>
+<li>トップページキャプチャ: /tmp/hermes-home.png（「THE AGENT THAT GROWS WITH YOU」「OPEN SOURCE • MIT LICENSE」、インストール手順、6つの特徴カードを確認）。</li>
+</ul>
+<hr>
+<h2 id="9">9. 学びとナレッジ</h2>
+<h3 id="_30">発見したこと</h3>
+<ul>
+<li>Hermesは「コーディングエージェント」ではなく「<strong>サーバー常駐の汎用業務エージェントOS</strong>」。CLI/Web/Desktop/メッセージングが同一コアを共有する設計が肝。</li>
+<li>公式が <code>/llms.txt</code> と <code>/llms-full.txt</code>（全文ダンプ）を公開しており、AIエージェントによる調査が極めて容易（机上調査がほぼ完結）。LLMO/AIO観点でも参考になる実装。</li>
+<li>自社モデル Hermes 4 を「agent用途には非推奨」と公式が明言しているのは誠実。エージェント基盤とモデルを分離して考える設計思想が明確。</li>
+</ul>
+<h3 id="_31">うまくいったこと</h3>
+<ul>
+<li>Browser Use CLI でサイト構造を抽出 → <code>/docs</code> の <code>llms-full.txt</code> を <code>curl</code> で取得する流れが効率的。SPA相手でも公開txtダンプがあれば全機能を網羅できた。</li>
+</ul>
+<h3 id="_32">うまくいかなかったこと</h3>
+<ul>
+<li>Nous Portal の具体的な料金は公開トップ/ドキュメントには金額の明示がなく、portal側の要ログイン領域のため未確認（スコープ上スキップ）。</li>
+</ul>
+<h3 id="tips">Tips・ベストプラクティス</h3>
+<ul>
+<li>任意サイト調査では、まず <code>/llms.txt</code>・<code>/llms-full.txt</code>・<code>/sitemap.xml</code>・<code>/robots.txt</code> を確認すると、ブラウザ巡回せずに全体像を取得できる場合がある。</li>
+<li>Hermes導入時は <code>hermes setup --portal</code> が最短だが、脱ロックイン重視ならOpenRouter or ローカルモデル＋個別ツールキーの構成も可。</li>
+<li>常駐運用は必ずallowlist/ペアリングを設定し、<code>--yolo</code>/<code>approvals.mode: off</code>は信頼環境のみ。</li>
+</ul>
+<h3 id="faq">よくあるエラーと対処法（公式FAQより）</h3>
+<ul>
+<li><code>hermes: command not found</code> → シェルのPATH再読込（<code>source ~/.bashrc</code>）。</li>
+<li>ローカルモデルでタイムアウト → <code>HERMES_STREAM_READ_TIMEOUT=1800</code> 等。</li>
+<li>WSL2からWindows Chrome操作 → <code>/browser connect</code>より<code>chrome-devtools-mcp</code>のMCPブリッジ推奨。</li>
+</ul>
+<hr>
+<h2 id="10">10. 判定と今後のアクション</h2>
+<h3 id="_33">総合評価</h3>
+<p>⭐️⭐️⭐️⭐️☆（4.0／5・<strong>机上調査時点</strong>）</p>
+<h3 id="_34">導入判定</h3>
+<ul>
+<li>☐ 即座に導入推奨</li>
+<li>✅ 条件付きで導入可</li>
+<li>☐ 追加検証が必要</li>
+<li>☐ 導入見送り</li>
+</ul>
+<h3 id="_35">判定理由</h3>
+<ul>
+<li>OSS(MIT)・セルフホスト・マルチプロバイダ・常駐＋cron＋マルチチャネルという構成は、当方の「業務自動化OS／発信／補助金リサーチ」の方向性と高い親和性。本体無料でPoCコストが低く、試す価値が大きい。</li>
+<li>一方、実機での精度・安定性・運用負荷・Nous Portal料金は未実測。常駐運用のセキュリティ/保守責任が自分側に来る点を踏まえ「条件付き導入可」。</li>
+</ul>
+<h3 id="_36">次のステップ</h3>
+<ul>
+<li>✅ 追加PoC実施（検証領域: ローカル/OpenRouter接続での実インストール＆<code>hermes setup</code>、cronで定例リサーチBotを1本構築）</li>
+<li>☐ MVP開発</li>
+<li>☐ パイロット導入</li>
+<li>☐ 社内展開ロードマップ作成</li>
+<li>☐ 検証終了</li>
+</ul>
+<h3 id="_37">追加で検証したい項目</h3>
+<ul>
+<li>Nous Portal の料金プラン・モデル従量と、OpenRouter直/ローカルモデルとのコスト比較。</li>
+<li><code>delegate_task</code>/<code>execute_code</code> の並列リサーチ実測（補助金リサーチskillの移植可否）。</li>
+<li>Desktop/Web DashboardのUX実測と、既存 <code>.claude/skills</code> 資産（agentskills.io互換）の流用可否。</li>
+<li>MCP連携で当方の既存MCP（Notion/Linear/Gmail等）をHermesから使えるか。</li>
+</ul>
+<hr>
+<h2 id="_38">📚 関連リソース</h2>
+<h3 id="_39">公式ドキュメント</h3>
+<ul>
+<li>公式サイト: https://hermes-agent.nousresearch.com/</li>
+<li>ドキュメント: https://hermes-agent.nousresearch.com/docs</li>
+<li>LLM向け全文ダンプ: https://hermes-agent.nousresearch.com/docs/llms.txt ／ /llms-full.txt</li>
+<li>Desktopダウンロード: https://hermes-agent.nousresearch.com/desktop</li>
+<li>GitHub: https://github.com/NousResearch/hermes-agent</li>
+<li>Nous Portal: https://portal.nousresearch.com/ （要ログイン・料金未確認）</li>
+<li>Nous Chat: https://chat.nousresearch.com</li>
+<li>Discord: https://discord.gg/NousResearch</li>
+</ul>
+<h3 id="_40">調査した主なドキュメントページ（サイトマップ）</h3>
+<ul>
+<li>Getting Started: installation / quickstart / learning-path / updating / termux / nix-setup</li>
+<li>User Guide: cli / tui / configuration / configuring-models / sessions / profiles / git-worktrees / docker / security / checkpoints-and-rollback / windows-native / desktop</li>
+<li>Features: overview / tools / skills / curator / memory / context-files / personality / plugins / cron / delegation / kanban / goals / code-execution / hooks / batch-processing / voice-mode / browser / vision / image-generation / tts / mcp / acp / api-server / honcho / provider-routing / fallback-providers / credential-pools / web-dashboard / web-search / x-search / computer-use / deliverable-mode / lsp / tool-gateway / subscription-proxy</li>
+<li>Messaging: index ＋ telegram/discord/slack/whatsapp/signal/email/sms/matrix/mattermost/homeassistant/teams/line/feishu/wecom/weixin/dingtalk/qq/yuanbao/bluebubbles/google_chat/ntfy/webhooks/open-webui</li>
+<li>Integrations: index / providers / nous-portal</li>
+<li>Developer Guide: contributing / architecture / agent-loop / prompt-assembly / gateway-internals / adding-tools / adding-providers / creating-skills など</li>
+<li>Reference: cli-commands / slash-commands / environment-variables / tools-reference / toolsets-reference / model-catalog / skills-catalog / faq</li>
+</ul>
+<h3 id="_41">社内関連ドキュメント</h3>
+<ul>
+<li><span class="wikilink">skills-directory-layout</span>（.agents/.claude スキル共通化）— Hermesの agentskills.io 互換と関連</li>
+<li>mcp-usage-strategy スキル（MCPとCLIの使い分け）— HermesのMCP連携と直結</li>
+<li>browser-use-googletrends スキル（本調査で使用したBrowser Use CLI）</li>
+</ul>
+<h3 id="_42">検証データ・ログ</h3>
+<ul>
+<li>取得元一次データ: /tmp/hermes-llms-full.txt（公式全文ダンプ・61,352行）、/tmp/hermes-home.png（トップページキャプチャ）</li>
+</ul>
+<hr>
+<h2 id="_43">✅ メモ・議論ログ</h2>
+<ul>
+<li>調査は2026/06/05、Browser Use CLI（ローカル）＋curlで実施。実インストール・実行は未実施の机上評価。</li>
+<li>ドキュメントのWindows対応（ネイティブ/WSL2）に記述差あり。導入時は実機で要確認。</li>
+<li>Nous Portalの料金は公開ページに金額明示なし → 別途portalで確認するタスクを残す。</li>
+</ul>
+<hr>
+<h2 id="_44">📝 更新ログ</h2>
+<table>
+<thead>
+<tr>
+<th>日時</th>
+<th>更新内容の概要</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>2026/06/05</td>
+<td>ファイル作成（init）</td>
+</tr>
+<tr>
+<td>2026/06/05</td>
+<td>Browser Use CLI＋公式llms-full.txt調査結果を全セクションに反映（update）</td>
+</tr>
+<tr>
+<td>2026/06/05</td>
+<td>ステータスを「完了」に変更、総合評価・導入判定を確定（finalize）</td>
+</tr>
+</tbody>
+</table>
+</main>
+<footer>
+  本レポートは公開ドキュメント（公式サイト・docs / llms-full.txt）に基づく机上調査です。実機での精度・安定性・料金は別途PoCで検証予定。<br>
+  作成: 田中省伍（shogoworks） / 2026-06-05
+</footer>
+</div>
+</body>
+</html>
