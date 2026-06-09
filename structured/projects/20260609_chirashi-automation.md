@@ -127,7 +127,23 @@
 - トクバイ検索の `bargain_keyword` は郵便番号・地名・チェーン名を受け付ける。郵便番号が近い順で最精度
 - Gemini 2.0 Flash は 2026/06/01 でサービス終了済み。移行先は Gemini 2.5 Flash-Lite（$0.10/$0.40 per 1M）
 - GPT-5 nano は推論モデル（o 系）のため `max_tokens` は非対応、`max_completion_tokens` を使う
-- Hermes Agent は Nous Research が 2026/02 にリリースした OSS エージェントフレームワーク。任意の LLM をバックエンドに接続できる
+- Hermes Agent（Nous Research、2026/02リリース）の正確な位置付け:
+  - LangGraph（グラフ型ステートマシン）や Strands（軽量モデル駆動）とは**別カテゴリ**
+  - 「長期稼働ランタイム + 自己改善」が設計思想。使うほどスキルが蓄積される
+  - **3層メモリ内蔵**: Skills System（Markdown化手順） + セッション横断永続記憶（FTS5+LLM要約） + ユーザーモデリング
+  - Discord/Slack/Telegram をネイティブ統合。Socket Modeで常駐サーバー不要
+  - v0.16（2026/06/05）でmacOS/Windows/Linux デスクトップアプリ + Web管理パネル正式リリース
+  - 現在の agent.py はバニラ OpenAI function calling（Hermes 未導入）。コメントの「インストール後に差し替える」が未実施
+  - Hermes を正式導入すればセッションメモリ問題・チャンネル統合・スキル蓄積が全て解決する
+
+### フレームワーク選定の考え方（2026年時点）
+
+| ユースケース | 推奨 |
+|---|---|
+| 長期稼働エージェント・Discord/Slack統合 | **Hermes Agent** |
+| 複雑な決定論的フロー・enterprise | LangGraph |
+| AWS環境・ツール数千規模 | AWS Strands |
+| ノーコード寄り・外部サービス連携 | n8n |
 
 ---
 
@@ -217,6 +233,9 @@
 ### 参考資料
 
 - Hermes Agent（Nous Research）: https://hermes-agent.org / https://github.com/NousResearch/hermes-agent
+- Hermes v0.16「The Surface Release」（2026/06/05）: Desktop + Web管理パネル正式化
+- 2026年フレームワーク比較: https://qubittool.com/blog/ai-agent-framework-comparison-2026
+- Discord/Slack統合（Composio経由）: https://composio.dev/toolkits/discord/framework/hermes-agent
 - GPT-5 nano 料金: $0.05/$0.40 per 1M tokens（Vision 対応・推論モデル）
 - Gemini 2.5 Flash-Lite: $0.10/$0.40 per 1M tokens（Gemini 2.0 Flash の後継）
 - zipcloud 郵便番号 API: https://zipcloud.ibsnet.co.jp/api/search?zipcode=XXXXXXX
@@ -243,3 +262,4 @@
 |---|---|
 | 2026/06/09 | ファイル作成（init） |
 | 2026/06/09 | Discord Webhook通知実装・6/9実行結果（75ステップ、画像30枚）を反映（update） |
+| 2026/06/09 | Hermes Agent の正確な位置付け・フレームワーク比較・Discord統合パターンを追記（update） |
