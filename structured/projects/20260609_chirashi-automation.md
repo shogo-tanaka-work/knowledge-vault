@@ -2,7 +2,7 @@
 
 > ステータス: 進行中
 > 作成日: 2026/06/09
-> 最終更新: 2026/06/09
+> 最終更新: 2026/06/09（2回目）
 > ファイルパス: /Users/shogo/Documents/ai-business-os/15_ナレッジ基盤/vault/structured/projects/20260609_chirashi-automation.md
 
 ---
@@ -43,6 +43,16 @@
 - MacBook 上で 42 ステップ完走（画像21枚取得）を確認。将来 Ubuntu 常駐 PC への移行予定
 - 成果物: `16_検証ラボ/lab-chirasshi_automation/agent/`（agent.py, tools/, .env）
 
+### フェーズ3: 通知機能強化（Discord Webhook）
+
+- `agent/tools/file_tools.py` の `notify()` に Discord Webhook 送信ブロックを追加
+- `DISCORD_WEBHOOK_URL` 環境変数を読み取り、設定されていれば Webhook POST を実行
+- メッセージ 2000 文字超過時は末尾を「…(省略)」で自動トリム（Discord の制限対応）
+- 優先順位: Discord → LINE Notify → ターミナル出力
+- `.env.example` に `DISCORD_WEBHOOK_URL=` 項目を追記
+- 標準ライブラリ（`urllib.request`）のみで実装。追加依存なし
+- `SKILL.md` の Step 7 を「完了報告 & Discord通知」に更新し設定方法を記載
+
 ### 実装した主要コンポーネント
 
 - `scripts/list_stores.js`: トクバイ店舗一覧抽出 + 多層スーパー判定（WHITELIST 30+チェーン・ブラックリスト・店名正規化）
@@ -71,6 +81,8 @@
 - Hermes Agent ベースのエージェントループが 42 ステップ完走（画像21枚取得成功）
 - ヨークフーズ HP からの直接取得（browser-use 不要・curl のみ）も実装
 - 多層スーパー判定で業種無差別の327件から食品スーパー26件を正確に絞り込み
+- 2026/06/09 実行: 75 ステップ完走、チラシ画像 28 枚 + ヨーク直取得 2 枚（計 30 枚）取得済み
+- Discord Webhook 通知実装完了（`DISCORD_WEBHOOK_URL` 環境変数で有効化）
 
 ### 定量的な成果
 
@@ -139,9 +151,10 @@
 ### 未解決の課題
 
 - Hermes Agent のセットアップ（MacBook 上は動作確認済み、Ubuntu 移行は未実施）
-- LINE/メール通知の設定
+- Discord Webhook URL の発行・`.env` への設定（コード実装済み・URL未設定）
 - チラシ有無を事前判定して取得対象を絞り込む仕組み
 - 複数郵便番号エリアでの動作確認
+- 6/9 実行で Markdown ファイル（今日の特売.md）が未生成（Vision解析フェーズで停止した模様）
 
 ---
 
@@ -171,9 +184,10 @@
 
 ### 次のアクション
 
+- [ ] Discord Webhook URL を発行して `agent/.env` に設定（`DISCORD_WEBHOOK_URL=https://...`）
 - [ ] Hermes Agent のセットアップ（MacBook 環境で完成させてから Ubuntu に移植）
 - [ ] Ubuntu 常駐 PC への移行・cron 設定（毎朝 7:00 実行）
-- [ ] LINE Notify トークン取得 → 通知設定
+- [ ] 6/9 の Vision 解析フェーズ停止原因の調査（画像 30 枚はある・Markdown が未生成）
 - [ ] 西友・サミット・オーケー 高円寺等の固定店舗チラシの安定取得を追検証
 - [ ] イトーヨーカドー HP のチラシ URL パターンを調査
 - [ ] Note/Zenn 記事化（コード非公開・「やれる技術とやっていい行為は別」という判断軸の記事）
@@ -228,3 +242,4 @@
 | 日時 | 更新内容の概要 |
 |---|---|
 | 2026/06/09 | ファイル作成（init） |
+| 2026/06/09 | Discord Webhook通知実装・6/9実行結果（75ステップ、画像30枚）を反映（update） |
